@@ -330,20 +330,29 @@ document.addEventListener("DOMContentLoaded", function () {
   // JSON Beautifier
   const jsonInput = document.getElementById("jsonInput");
   const jsonOutput = document.getElementById("jsonOutput");
+  const jsonTreeOutput = document.getElementById("jsonTreeOutput");
   const beautifyJsonBtn = document.getElementById("beautifyJsonBtn");
   const minifyJsonBtn = document.getElementById("minifyJsonBtn");
   const clearJsonBtn = document.getElementById("clearJsonBtn");
   const copyJsonBtn = document.getElementById("copyJsonBtn");
+  const copyTreeJsonBtn = document.getElementById("copyTreeJsonBtn");
+  const showTreeJsonBtn = document.getElementById("showTreeJsonBtn");
 
-  if (jsonInput && jsonOutput) {
+  if (jsonInput) {
     beautifyJsonBtn.addEventListener("click", function () {
       try {
         const parsed = JSON.parse(jsonInput.value);
         const beautified = JSON.stringify(parsed, null, 2);
         jsonOutput.textContent = beautified;
+        jsonTreeOutput.innerHTML = "";
+        jsonTreeOutput.style.display = "none";
+        jsonOutput.style.display = "block";
+        copyTreeJsonBtn.style.display = "none";
+        copyJsonBtn.style.display = "inline-block";
         hljs.highlightElement(jsonOutput);
       } catch (error) {
         jsonOutput.textContent = `Error: ${error.message}`;
+        jsonTreeOutput.innerHTML = "";
       }
     });
 
@@ -352,31 +361,139 @@ document.addEventListener("DOMContentLoaded", function () {
         const parsed = JSON.parse(jsonInput.value);
         const minified = JSON.stringify(parsed);
         jsonOutput.textContent = minified;
+        jsonTreeOutput.innerHTML = "";
+        jsonTreeOutput.style.display = "none";
+        jsonOutput.style.display = "block";
+        copyTreeJsonBtn.style.display = "none";
+        copyJsonBtn.style.display = "inline-block";
         hljs.highlightElement(jsonOutput);
       } catch (error) {
         jsonOutput.textContent = `Error: ${error.message}`;
+        jsonTreeOutput.innerHTML = "";
+      }
+    });
+
+    showTreeJsonBtn.addEventListener("click", function () {
+      try {
+        const parsed = JSON.parse(jsonInput.value);
+        jsonTreeOutput.innerHTML = "";
+        createJsonTree(parsed, jsonTreeOutput);
+        jsonOutput.style.display = "none";
+        jsonTreeOutput.style.display = "block";
+        copyJsonBtn.style.display = "none";
+        copyTreeJsonBtn.style.display = "inline-block";
+      } catch (error) {
+        jsonTreeOutput.innerHTML = `<div class="error">Error: ${error.message}</div>`;
       }
     });
 
     clearJsonBtn.addEventListener("click", function () {
       jsonInput.value = "";
       jsonOutput.textContent = "";
+      jsonTreeOutput.innerHTML = "";
     });
 
     copyJsonBtn.addEventListener("click", function () {
       copyToClipboard(jsonOutput.textContent, this);
     });
+
+    copyTreeJsonBtn.addEventListener("click", function () {
+      // Create a text representation of the tree
+      const treeText = jsonTreeOutput.innerText;
+      copyToClipboard(treeText, this);
+    });
+
+    function createJsonTree(data, container) {
+      if (typeof data === "object" && data !== null) {
+        const isArray = Array.isArray(data);
+        const wrapper = document.createElement("div");
+        wrapper.className = "json-node";
+
+        const header = document.createElement("div");
+        header.className = "json-node-header";
+
+        const expandBtn = document.createElement("button");
+        expandBtn.className = "expand-btn";
+        expandBtn.innerHTML = '<i class="fas fa-caret-right"></i>';
+        expandBtn.onclick = function () {
+          const content = this.parentNode.nextElementSibling;
+          if (content.style.display === "none") {
+            content.style.display = "block";
+            this.innerHTML = '<i class="fas fa-caret-down"></i>';
+          } else {
+            content.style.display = "none";
+            this.innerHTML = '<i class="fas fa-caret-right"></i>';
+          }
+        };
+        header.appendChild(expandBtn);
+
+        const typeBadge = document.createElement("span");
+        typeBadge.className = "json-type-badge";
+        typeBadge.textContent = isArray ? "Array" : "Object";
+        header.appendChild(typeBadge);
+
+        const sizeBadge = document.createElement("span");
+        sizeBadge.className = "json-size-badge";
+        sizeBadge.textContent = isArray
+          ? `(${data.length} items)`
+          : `(${Object.keys(data).length} properties)`;
+        header.appendChild(sizeBadge);
+
+        wrapper.appendChild(header);
+
+        const content = document.createElement("div");
+        content.className = "json-node-content";
+        content.style.display = "none";
+
+        for (const key in data) {
+          const item = document.createElement("div");
+          item.className = "json-node-item";
+
+          const keySpan = document.createElement("span");
+          keySpan.className = "json-key";
+          keySpan.textContent = isArray ? `[${key}]` : `${key}:`;
+          item.appendChild(keySpan);
+
+          if (typeof data[key] === "object" && data[key] !== null) {
+            createJsonTree(data[key], item);
+          } else {
+            const valueSpan = document.createElement("span");
+            valueSpan.className = "json-value";
+            valueSpan.textContent =
+              typeof data[key] === "string"
+                ? `"${data[key]}"`
+                : String(data[key]);
+            valueSpan.classList.add(`json-value-${typeof data[key]}`);
+            item.appendChild(valueSpan);
+          }
+
+          content.appendChild(item);
+        }
+
+        wrapper.appendChild(content);
+        container.appendChild(wrapper);
+      } else {
+        const valueSpan = document.createElement("span");
+        valueSpan.className = `json-value json-value-${typeof data}`;
+        valueSpan.textContent =
+          typeof data === "string" ? `"${data}"` : String(data);
+        container.appendChild(valueSpan);
+      }
+    }
   }
 
   // XML Beautifier
   const xmlInput = document.getElementById("xmlInput");
   const xmlOutput = document.getElementById("xmlOutput");
+  const xmlTreeOutput = document.getElementById("xmlTreeOutput");
   const beautifyXmlBtn = document.getElementById("beautifyXmlBtn");
   const minifyXmlBtn = document.getElementById("minifyXmlBtn");
   const clearXmlBtn = document.getElementById("clearXmlBtn");
   const copyXmlBtn = document.getElementById("copyXmlBtn");
+  const copyTreeXmlBtn = document.getElementById("copyTreeXmlBtn");
+  const showTreeXmlBtn = document.getElementById("showTreeXmlBtn");
 
-  if (xmlInput && xmlOutput) {
+  if (xmlInput) {
     beautifyXmlBtn.addEventListener("click", function () {
       try {
         const beautified = html_beautify(xmlInput.value, {
@@ -386,38 +503,191 @@ document.addEventListener("DOMContentLoaded", function () {
           preserve_newlines: false,
           indent_scripts: "normal",
         });
-
         xmlOutput.textContent = beautified;
+        xmlTreeOutput.innerHTML = "";
+        xmlTreeOutput.style.display = "none";
+        xmlOutput.style.display = "block";
+        copyTreeXmlBtn.style.display = "none";
+        copyXmlBtn.style.display = "inline-block";
         hljs.highlightElement(xmlOutput);
       } catch (error) {
         xmlOutput.textContent = `Error: ${error.message}`;
+        xmlTreeOutput.innerHTML = "";
       }
     });
 
     minifyXmlBtn.addEventListener("click", function () {
       try {
-        // Simple XML minification (remove whitespace between tags)
         const minified = xmlInput.value
           .replace(/>\s+</g, "><")
           .replace(/\s+</g, "<")
           .replace(/>\s+/g, ">")
           .trim();
-
         xmlOutput.textContent = minified;
+        xmlTreeOutput.innerHTML = "";
+        xmlTreeOutput.style.display = "none";
+        xmlOutput.style.display = "block";
+        copyTreeXmlBtn.style.display = "none";
+        copyXmlBtn.style.display = "inline-block";
         hljs.highlightElement(xmlOutput);
       } catch (error) {
         xmlOutput.textContent = `Error: ${error.message}`;
+        xmlTreeOutput.innerHTML = "";
+      }
+    });
+
+    showTreeXmlBtn.addEventListener("click", function () {
+      try {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(xmlInput.value, "text/xml");
+        if (xmlDoc.getElementsByTagName("parsererror").length > 0) {
+          throw new Error("Invalid XML");
+        }
+        xmlTreeOutput.innerHTML = "";
+        createXmlTree(xmlDoc.documentElement, xmlTreeOutput);
+        xmlOutput.style.display = "none";
+        xmlTreeOutput.style.display = "block";
+        copyXmlBtn.style.display = "none";
+        copyTreeXmlBtn.style.display = "inline-block";
+      } catch (error) {
+        xmlTreeOutput.innerHTML = `<div class="error">Error: ${error.message}</div>`;
       }
     });
 
     clearXmlBtn.addEventListener("click", function () {
       xmlInput.value = "";
       xmlOutput.textContent = "";
+      xmlTreeOutput.innerHTML = "";
     });
 
     copyXmlBtn.addEventListener("click", function () {
       copyToClipboard(xmlOutput.textContent, this);
     });
+
+    copyTreeXmlBtn.addEventListener("click", function () {
+      const treeText = xmlTreeOutput.innerText;
+      copyToClipboard(treeText, this);
+    });
+
+    function createXmlTree(node, container, level = 0) {
+      const item = document.createElement("div");
+      item.className = "xml-node";
+      item.style.marginLeft = `${level * 15}px`;
+
+      // Create node header
+      const header = document.createElement("div");
+      header.className = "xml-node-header";
+
+      // Add expand/collapse button if node has element children
+      const hasElementChildren = Array.from(node.childNodes).some(
+        (child) => child.nodeType === Node.ELEMENT_NODE
+      );
+
+      if (hasElementChildren) {
+        const expandBtn = document.createElement("button");
+        expandBtn.className = "expand-btn";
+        expandBtn.innerHTML = '<i class="fas fa-caret-right"></i>';
+        expandBtn.onclick = function () {
+          const content =
+            this.closest(".xml-node").querySelector(".xml-node-children");
+          if (content.style.display === "none") {
+            content.style.display = "block";
+            this.innerHTML = '<i class="fas fa-caret-down"></i>';
+          } else {
+            content.style.display = "none";
+            this.innerHTML = '<i class="fas fa-caret-right"></i>';
+          }
+        };
+        header.appendChild(expandBtn);
+      } else {
+        const spacer = document.createElement("span");
+        spacer.className = "expand-spacer";
+        spacer.innerHTML = "&nbsp;&nbsp;";
+        header.appendChild(spacer);
+      }
+
+      // Add tag
+      const tagSpan = document.createElement("span");
+      tagSpan.className = "xml-tag";
+      tagSpan.innerHTML = `&lt;${node.nodeName}&gt;`;
+      header.appendChild(tagSpan);
+
+      // Add attributes toggle if node has attributes
+      if (node.attributes && node.attributes.length > 0) {
+        const attrToggle = document.createElement("button");
+        attrToggle.className = "attr-toggle-btn";
+        attrToggle.innerHTML = '<i class="fas fa-list-ul"></i>';
+        attrToggle.title = "Show Attributes";
+        attrToggle.onclick = function (e) {
+          e.stopPropagation();
+          const attrContainer = this.nextElementSibling;
+          if (attrContainer.style.display === "none") {
+            attrContainer.style.display = "block";
+            this.innerHTML = '<i class="fas fa-list-ul"></i>';
+            this.title = "Hide Attributes";
+          } else {
+            attrContainer.style.display = "none";
+            this.innerHTML = '<i class="fas fa-list-ul"></i>';
+            this.title = "Show Attributes";
+          }
+        };
+        header.appendChild(attrToggle);
+
+        // Create attributes container
+        const attrContainer = document.createElement("div");
+        attrContainer.className = "xml-attributes";
+        attrContainer.style.display = "none";
+
+        for (let i = 0; i < node.attributes.length; i++) {
+          const attr = node.attributes[i];
+          const attrItem = document.createElement("div");
+          attrItem.className = "xml-attribute";
+
+          const attrName = document.createElement("span");
+          attrName.className = "xml-attr-name";
+          attrName.textContent = attr.name;
+          attrItem.appendChild(attrName);
+
+          const attrValue = document.createElement("span");
+          attrValue.className = "xml-attr-value";
+          attrValue.textContent = `="${attr.value}"`;
+          attrItem.appendChild(attrValue);
+
+          attrContainer.appendChild(attrItem);
+        }
+        header.appendChild(attrContainer);
+      }
+
+      item.appendChild(header);
+
+      // Handle child nodes
+      const childrenContainer = document.createElement("div");
+      childrenContainer.className = "xml-node-children";
+      childrenContainer.style.display = hasElementChildren ? "none" : "block";
+
+      let hasTextContent = false;
+      for (let i = 0; i < node.childNodes.length; i++) {
+        const child = node.childNodes[i];
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          createXmlTree(child, childrenContainer, level + 1);
+        } else if (
+          child.nodeType === Node.TEXT_NODE &&
+          child.nodeValue.trim() !== ""
+        ) {
+          hasTextContent = true;
+          const textItem = document.createElement("div");
+          textItem.className = "xml-text-content";
+          textItem.textContent = child.nodeValue.trim();
+          childrenContainer.appendChild(textItem);
+        }
+      }
+
+      if (hasElementChildren || hasTextContent) {
+        item.appendChild(childrenContainer);
+      }
+
+      container.appendChild(item);
+    }
   }
 
   // HTML Beautifier

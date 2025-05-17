@@ -291,12 +291,11 @@ textarea.input-field {
 }
 
 .col-2 {
-    flex-grow: 1;
-    flex-shrink: 0; /* <--- prevents shrinking */
-    flex-basis: 0;
-    min-width: 0; /* allows overflow to be handled gracefully */
-  }
-  
+  flex-grow: 1;
+  flex-shrink: 0; /* <--- prevents shrinking */
+  flex-basis: 0;
+  min-width: 0; /* allows overflow to be handled gracefully */
+}
 
 .grid-2 {
   display: grid;
@@ -555,4 +554,157 @@ code {
   .flex-row {
     flex-direction: column;
   }
+}
+
+/* Tree View Styles */
+.tree-view {
+  display: none;
+  font-family: var(--font-family-mono);
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 10px;
+  background: var(--color-bg-secondary);
+  border-radius: var(--border-radius);
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+/* JSON Tree Styles */
+.json-node {
+  margin-bottom: 4px;
+}
+
+.json-node-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 2px 0;
+}
+
+.json-node-content {
+  margin-left: 20px;
+  border-left: 1px dashed var(--color-border);
+  padding-left: 10px;
+}
+
+.json-node-item {
+  margin: 4px 0;
+}
+
+.json-type-badge {
+  display: inline-block;
+  background: var(--color-primary);
+  color: white;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 8px 0 4px;
+}
+
+.json-size-badge {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.json-key {
+  color: var(--color-primary);
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+.json-value {
+  font-style: italic;
+}
+
+.json-value-string {
+  color: var(--color-success);
+}
+
+.json-value-number {
+  color: var(--color-info);
+}
+
+.json-value-boolean {
+  color: var(--color-warning);
+}
+
+.json-value-null {
+  color: var(--color-danger);
+}
+
+.json-value-undefined {
+  color: var(--color-text-secondary);
+}
+
+/* XML Tree Styles */
+.xml-node {
+  margin-bottom: 6px;
+}
+
+.xml-node-header {
+  display: flex;
+  align-items: center;
+  padding: 2px 0;
+}
+
+.xml-node-children {
+  margin-left: 15px;
+  border-left: 1px dashed var(--color-border);
+  padding-left: 10px;
+}
+
+.xml-tag {
+  color: var(--color-primary);
+  font-weight: bold;
+}
+
+.xml-attributes {
+  margin-left: 25px;
+  padding: 5px 0;
+}
+
+.xml-attribute {
+  margin: 2px 0;
+}
+
+.xml-attr-name {
+  color: var(--color-info);
+  margin-right: 4px;
+}
+
+.xml-attr-value {
+  color: var(--color-success);
+}
+
+.xml-text-content {
+  color: var(--color-text);
+  font-style: italic;
+  margin: 4px 0;
+}
+
+/* Common Tree Controls */
+.expand-btn,
+.attr-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0 4px;
+  margin-right: 4px;
+  font-size: 12px;
+}
+
+.expand-btn:hover,
+.attr-toggle-btn:hover {
+  color: var(--color-primary);
+}
+
+.expand-spacer {
+  display: inline-block;
+  width: 24px;
+}
+
+.error {
+  color: var(--color-danger);
+  padding: 10px;
 }
