@@ -1,1724 +1,1858 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pocket</title>
-    <link
-      rel="icon"
-      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%236366f1'/%3E%3Ctext x='50%' y='50%' font-size='48' font-weight='bold' fill='white' text-anchor='middle' dy='.35em'%3EP%3C/text%3E%3C/svg%3E"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-html.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.7/beautify-css.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<html lang="en" class="dark">
 
-  <body>
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <a href="#" class="logo" onclick="location.reload(); return false;">
-          Pocket
-        </a>
-        <button class="theme-toggle" id="themeToggle">
-          <i class="fas fa-moon"></i>
-        </button>
-      </div>
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+   <title>Pocket - Handy Online Tools</title>
+   <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>'>
 
-      <div class="tool-categories">
-        <div class="category">
-          <div class="category-title">Image Tools</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="imageCompressor">
-              <i class="fas fa-compress"></i> Image Compressor
-            </li>
-            <li class="tool-item" data-tool="imageConverter">
-              <i class="fas fa-exchange-alt"></i> Image Converter
-            </li>
-          </ul>
-        </div>
+   <script>
+      console.log = function () { };
+      console.warn = function () { };
+      console.error = function () { };
+      console.info = function () { };
+      console.debug = function () { };
+   </script>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+   <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-okaidia.min.css" rel="stylesheet" />
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+   <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-html.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/js-beautify/1.14.11/beautify-css.min.js"></script>
+   <link rel="stylesheet" href="style.css" />
+</head>
 
-        <div class="category">
-          <div class="category-title">Code Tools</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="jsonBeautifier">
-              <i class="fas fa-code"></i> JSON Beautifier
-            </li>
-            <li class="tool-item" data-tool="xmlBeautifier">
-              <i class="fas fa-code"></i> XML Beautifier
-            </li>
-            <li class="tool-item" data-tool="syntaxHighlighter">
-              <i class="fas fa-highlighter"></i> Syntax Highlighter
-            </li>
-            <li class="tool-item" data-tool="htmlBeautifier">
-              <i class="fab fa-html5"></i> HTML Beautifier
-            </li>
-            <li class="tool-item" data-tool="cssBeautifier">
-              <i class="fab fa-css3-alt"></i> CSS Beautifier
-            </li>
-            <li class="tool-item" data-tool="jsBeautifier">
-              <i class="fab fa-js"></i> JS Beautifier
-            </li>
-            <li class="tool-item" data-tool="hashGenerator">
-              <i class="fas fa-hashtag"></i> Hash Generator
-            </li>
-            <li class="tool-item" data-tool="aesEncryptor">
-              <i class="fas fa-lock"></i> AES Encrypt/Decrypt
-            </li>
-          </ul>
-        </div>
-
-        <div class="category">
-          <div class="category-title">Text Tools</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="textCompare">
-              <i class="fas fa-not-equal"></i> Text Comparison
-            </li>
-            <li class="tool-item" data-tool="base64Tool">
-              <i class="fas fa-exchange-alt"></i> Base64 Encoder/Decoder
-            </li>
-            <li class="tool-item" data-tool="urlEncodeTool">
-              <i class="fas fa-link"></i> URL Encoder/Decoder
-            </li>
-            <li class="tool-item" data-tool="markdownPreview">
-              <i class="fab fa-markdown"></i> Markdown Previewer
-            </li>
-            <li class="tool-item" data-tool="textCase">
-              <i class="fas fa-font"></i> Text Case Converter
-            </li>
-            <li class="tool-item" data-tool="wordCount">
-              <i class="fas fa-calculator"></i> Word Count
-            </li>
-            <li class="tool-item" data-tool="loremIpsumGenerator">
-              <i class="fas fa-scroll"></i> Lorem Ipsum Generator
-            </li>
-          </ul>
-        </div>
-
-        <div class="category">
-          <div class="category-title">Generators</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="qrGenerator">
-              <i class="fas fa-qrcode"></i> QR Code Generator
-            </li>
-            <li class="tool-item" data-tool="uuidGenerator">
-              <i class="fas fa-fingerprint"></i> UUID Generator
-            </li>
-            <li class="tool-item" data-tool="passwordGenerator">
-              <i class="fas fa-key"></i> Password Generator
-            </li>
-            <li class="tool-item" data-tool="unitConverter">
-              <i class="fas fa-balance-scale"></i> Unit Converter
-            </li>
-          </ul>
-        </div>
-
-        <div class="category">
-          <div class="category-title">Color Tools</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="colorPicker">
-              <i class="fas fa-palette"></i> Color Picker
-            </li>
-          </ul>
-        </div>
-
-        <div class="category">
-          <div class="category-title">Date & Time</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="timestampConverter">
-              <i class="fas fa-clock"></i> Timestamp Converter
-            </li>
-            <li class="tool-item" data-tool="timezoneConverter">
-              <i class="fas fa-globe"></i> Timezone Converter
-            </li>
-          </ul>
-        </div>
-
-        <div class="category">
-          <div class="category-title">Testing Tools</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="regexTester">
-              <i class="fas fa-search"></i> RegEx Tester
-            </li>
-          </ul>
-        </div>
-
-        <div class="category">
-          <div class="category-title">Network Tools</div>
-          <ul class="tools-list">
-            <li class="tool-item" data-tool="networkTools">
-              <i class="fas fa-network-wired"></i> Network Tools
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <main>
-      <div class="topbar">
-        <h1 class="topbar-title" id="currentToolTitle">Welcome to Pocket</h1>
-        <div class="topbar-actions" id="toolbarActions">
-          <!-- Action buttons will be added dynamically -->
-        </div>
-      </div>
-
-      <div class="content-area">
-        <!-- Welcome screen -->
-        <div class="tool-container active" id="welcomeScreen">
-          <div class="welcome-container">
-            <h2>Developer's Toolkit</h2>
-            <p>
-              Welcome to Pocket, your comprehensive toolkit. Choose a tool from
-              the sidebar or explore the popular tools below.
-            </p>
-
-            <div class="tools-grid">
-              <div class="tool-card" data-tool="jsonBeautifier">
-                <i class="fas fa-code"></i>
-                <h3>JSON Beautifier</h3>
-                <p>Format and validate JSON data</p>
-              </div>
-              <div class="tool-card" data-tool="imageCompressor">
-                <i class="fas fa-compress"></i>
-                <h3>Image Compressor</h3>
-                <p>Optimize images for the web</p>
-              </div>
-              <div class="tool-card" data-tool="colorPicker">
-                <i class="fas fa-palette"></i>
-                <h3>Color Picker</h3>
-                <p>Create and convert colors</p>
-              </div>
-              <div class="tool-card" data-tool="passwordGenerator">
-                <i class="fas fa-key"></i>
-                <h3>Password Generator</h3>
-                <p>Create secure passwords</p>
-              </div>
-              <div class="tool-card" data-tool="markdownPreview">
-                <i class="fab fa-markdown"></i>
-                <h3>Markdown Preview</h3>
-                <p>Render markdown in real-time</p>
-              </div>
-              <div class="tool-card" data-tool="regexTester">
-                <i class="fas fa-search"></i>
-                <h3>RegEx Tester</h3>
-                <p>Test regular expressions</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Image Compressor -->
-        <div class="tool-container" id="imageCompressor">
-          <div class="input-group">
-            <label class="input-label">Select Image</label>
-            <input
-              type="file"
-              class="input-field"
-              id="imageCompressorInput"
-              accept="image/*"
-            />
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Quality (1-100)</label>
-            <input
-              type="range"
-              min="1"
-              max="100"
-              value="80"
-              class="input-field"
-              id="compressionQuality"
-            />
-            <div id="qualityValue">80%</div>
-          </div>
-
-          <button class="btn btn-primary" id="compressImageBtn">
-            <i class="fas fa-compress"></i> Compress Image
-          </button>
-
-          <div class="flex-row" style="margin-top: 1.5rem">
-            <div class="col-2">
-              <div class="input-label">Original Image</div>
-              <div
-                class="card"
-                style="
-                  height: 300px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <img
-                  id="originalImage"
-                  style="max-width: 100%; max-height: 100%"
-                />
-              </div>
-              <div
-                id="originalSize"
-                style="margin-top: 0.5rem; text-align: center"
-              ></div>
-            </div>
-            <div class="col-2">
-              <div class="input-label">Compressed Image</div>
-              <div
-                class="card"
-                style="
-                  height: 300px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <img
-                  id="compressedImage"
-                  style="max-width: 100%; max-height: 100%"
-                />
-              </div>
-              <div
-                id="compressedSize"
-                style="margin-top: 0.5rem; text-align: center"
-              ></div>
-            </div>
-          </div>
-
-          <div style="margin-top: 1rem; text-align: center">
-            <a
-              id="downloadCompressed"
-              class="btn btn-primary"
-              style="display: none"
-            >
-              <i class="fas fa-download"></i> Download Compressed Image
+<body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+   <div class="min-h-screen flex">
+      <div id="sidebar"
+         class="bg-white dark:bg-gray-800 shadow-sm flex flex-col border-r border-gray-200 dark:border-gray-700">
+         <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <a href="#" onclick="window.location.hash = 'dashboard'; window.location.reload(true); return false;"
+               class="flex items-center space-x-2 sidebar-item cursor-pointer">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-500" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                     d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+               </svg>
+               <span class="text-xl font-bold sidebar-item-text">Pocket</span>
+               <span class="sidebar-tooltip">Reload Pocket Tools</span>
             </a>
-          </div>
-        </div>
-
-        <!-- Image Converter -->
-        <div class="tool-container" id="imageConverter">
-          <div class="input-group">
-            <label class="input-label">Select Image</label>
-            <input
-              type="file"
-              class="input-field"
-              id="imageConverterInput"
-              accept="image/*"
-            />
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Convert To</label>
-            <select class="input-field" id="convertFormat">
-              <option value="image/jpeg">JPEG</option>
-              <option value="image/png">PNG</option>
-              <option value="image/webp">WebP</option>
-              <option value="image/gif">GIF</option>
-            </select>
-          </div>
-
-          <button class="btn btn-primary" id="convertImageBtn">
-            <i class="fas fa-exchange-alt"></i> Convert Image
-          </button>
-
-          <div class="flex-row" style="margin-top: 1.5rem">
-            <div class="col-2">
-              <div class="input-label">Original Image</div>
-              <div
-                class="card"
-                style="
-                  height: 300px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <img
-                  id="originalConvertImage"
-                  style="max-width: 100%; max-height: 100%"
-                />
-              </div>
-              <div
-                id="originalConvertInfo"
-                style="margin-top: 0.5rem; text-align: center"
-              ></div>
-            </div>
-            <div class="col-2">
-              <div class="input-label">Converted Image</div>
-              <div
-                class="card"
-                style="
-                  height: 300px;
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                "
-              >
-                <img
-                  id="convertedImage"
-                  style="max-width: 100%; max-height: 100%"
-                />
-              </div>
-              <div
-                id="convertedInfo"
-                style="margin-top: 0.5rem; text-align: center"
-              ></div>
-            </div>
-          </div>
-
-          <div style="margin-top: 1rem; text-align: center">
-            <a
-              id="downloadConverted"
-              class="btn btn-primary"
-              style="display: none"
-            >
-              <i class="fas fa-download"></i> Download Converted Image
-            </a>
-          </div>
-        </div>
-
-        <!-- JSON Beautifier -->
-        <div class="tool-container" id="jsonBeautifier">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input JSON</label>
-                <textarea
-                  class="input-field"
-                  id="jsonInput"
-                  placeholder="Paste your JSON here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="beautifyJsonBtn">
-                  <i class="fas fa-magic"></i> Beautify
-                </button>
-                <button class="btn btn-outline" id="minifyJsonBtn">
-                  <i class="fas fa-compress-alt"></i> Minify
-                </button>
-                <button class="btn btn-outline" id="showTreeJsonBtn">
-                  <i class="fas fa-project-diagram"></i> Tree View
-                </button>
-                <button class="btn btn-outline" id="clearJsonBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Output</label>
-                <div class="result-area">
-                  <pre><code id="jsonOutput" class="language-json"></code></pre>
-                  <div id="jsonTreeOutput" class="tree-view"></div>
-                </div>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-outline" id="copyJsonBtn">
-                  <i class="fas fa-copy"></i> Copy Result
-                </button>
-                <button
-                  class="btn btn-outline"
-                  id="copyTreeJsonBtn"
-                  style="display: none"
-                >
-                  <i class="fas fa-copy"></i> Copy Tree
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- XML Beautifier -->
-        <div class="tool-container" id="xmlBeautifier">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input XML</label>
-                <textarea
-                  class="input-field"
-                  id="xmlInput"
-                  placeholder="Paste your XML here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="beautifyXmlBtn">
-                  <i class="fas fa-magic"></i> Beautify
-                </button>
-                <button class="btn btn-outline" id="minifyXmlBtn">
-                  <i class="fas fa-compress-alt"></i> Minify
-                </button>
-                <button class="btn btn-outline" id="showTreeXmlBtn">
-                  <i class="fas fa-project-diagram"></i> Tree View
-                </button>
-                <button class="btn btn-outline" id="clearXmlBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Output</label>
-                <div class="result-area">
-                  <pre><code id="xmlOutput" class="language-xml"></code></pre>
-                  <div id="xmlTreeOutput" class="tree-view"></div>
-                </div>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-outline" id="copyXmlBtn">
-                  <i class="fas fa-copy"></i> Copy Result
-                </button>
-                <button
-                  class="btn btn-outline"
-                  id="copyTreeXmlBtn"
-                  style="display: none"
-                >
-                  <i class="fas fa-copy"></i> Copy Tree
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- HTML Beautifier -->
-        <div class="tool-container" id="htmlBeautifier">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input HTML</label>
-                <textarea
-                  class="input-field"
-                  id="htmlInput"
-                  placeholder="Paste your HTML here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="beautifyHtmlBtn">
-                  <i class="fas fa-magic"></i> Beautify
-                </button>
-                <button class="btn btn-outline" id="minifyHtmlBtn">
-                  <i class="fas fa-compress-alt"></i> Minify
-                </button>
-                <button class="btn btn-outline" id="clearHtmlBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Formatted Output</label>
-                <div class="result-area">
-                  <pre><code id="htmlOutput" class="language-html"></code></pre>
-                </div>
-              </div>
-              <button class="btn btn-outline" id="copyHtmlBtn">
-                <i class="fas fa-copy"></i> Copy Result
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- CSS Beautifier -->
-        <div class="tool-container" id="cssBeautifier">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input CSS</label>
-                <textarea
-                  class="input-field"
-                  id="cssInput"
-                  placeholder="Paste your CSS here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="beautifyCssBtn">
-                  <i class="fas fa-magic"></i> Beautify
-                </button>
-                <button class="btn btn-outline" id="minifyCssBtn">
-                  <i class="fas fa-compress-alt"></i> Minify
-                </button>
-                <button class="btn btn-outline" id="clearCssBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Formatted Output</label>
-                <div class="result-area">
-                  <pre><code id="cssOutput" class="language-css"></code></pre>
-                </div>
-              </div>
-              <button class="btn btn-outline" id="copyCssBtn">
-                <i class="fas fa-copy"></i> Copy Result
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- JS Beautifier -->
-        <div class="tool-container" id="jsBeautifier">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input JavaScript</label>
-                <textarea
-                  class="input-field"
-                  id="jsInput"
-                  placeholder="Paste your JavaScript here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="beautifyJsBtn">
-                  <i class="fas fa-magic"></i> Beautify
-                </button>
-                <button class="btn btn-outline" id="minifyJsBtn">
-                  <i class="fas fa-compress-alt"></i> Minify
-                </button>
-                <button class="btn btn-outline" id="clearJsBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Formatted Output</label>
-                <div class="result-area">
-                  <pre><code id="jsOutput" class="language-javascript"></code></pre>
-                </div>
-              </div>
-              <button class="btn btn-outline" id="copyJsBtn">
-                <i class="fas fa-copy"></i> Copy Result
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Text Comparison -->
-        <div class="tool-container" id="textCompare">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Text 1</label>
-                <textarea
-                  class="input-field"
-                  id="text1Input"
-                  placeholder="Enter first text..."
-                ></textarea>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Text 2</label>
-                <textarea
-                  class="input-field"
-                  id="text2Input"
-                  placeholder="Enter second text..."
-                ></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="option-group">
-            <button class="btn btn-primary" id="compareTextBtn">
-              <i class="fas fa-not-equal"></i> Compare Texts
+            <button id="sidebar-toggle" class="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700">
+               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+               </svg>
             </button>
-            <button class="btn btn-outline" id="clearCompareBtn">
-              <i class="fas fa-trash"></i> Clear
-            </button>
-          </div>
-          <div class="input-group">
-            <label class="input-label">Comparison Result</label>
-            <div class="result-area" id="compareResult"></div>
-          </div>
-        </div>
-
-        <!-- Syntax Highlighter -->
-        <div class="tool-container" id="syntaxHighlighter">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input Code</label>
-                <textarea
-                  class="input-field"
-                  id="codeInput"
-                  placeholder="Paste your code here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <label class="input-label">Language:</label>
-                <select class="input-field" id="codeLanguage">
-                  <option value="javascript">JavaScript</option>
-                  <option value="html">HTML</option>
-                  <option value="css">CSS</option>
-                  <option value="python">Python</option>
-                  <option value="java">Java</option>
-                  <option value="csharp">C#</option>
-                  <option value="php">PHP</option>
-                  <option value="go">Go</option>
-                  <option value="ruby">Ruby</option>
-                  <option value="swift">Swift</option>
-                  <option value="sql">SQL</option>
-                  <option value="typescript">TypeScript</option>
-                  <option value="bash">Bash</option>
-                  <option value="json">JSON</option>
-                  <option value="xml">XML</option>
-                </select>
-                <button class="btn btn-primary" id="highlightCodeBtn">
-                  <i class="fas fa-highlighter"></i> Highlight
-                </button>
-                <button class="btn btn-outline" id="clearCodeBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
+         </div>
+         <div class="p-4 border-b border-gray-200 dark:border-gray-700">
+            <div class="relative">
+               <input type="text" id="tool-search" placeholder="Search..."
+                  class="w-full px-3 py-2 pl-10 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600" />
+               <button id="tool-search-icon-btn" aria-label="Search tools"
+                  class="absolute left-3 top-2.5 p-0 bg-transparent border-none">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+               </button>
             </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Highlighted Code</label>
-                <div class="result-area" id="highlightedCode"></div>
-              </div>
-              <button class="btn btn-outline" id="copyCodeBtn">
-                <i class="fas fa-copy"></i> Copy Highlighted Code
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Base64 Tool -->
-        <div class="tool-container" id="base64Tool">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input</label>
-                <textarea
-                  class="input-field"
-                  id="base64Input"
-                  placeholder="Enter text to encode or base64 to decode..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="encodeBase64Btn">
-                  <i class="fas fa-arrow-right"></i> Encode to Base64
-                </button>
-                <button class="btn btn-primary" id="decodeBase64Btn">
-                  <i class="fas fa-arrow-left"></i> Decode from Base64
-                </button>
-                <button class="btn btn-outline" id="clearBase64Btn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Output</label>
-                <div class="result-area" id="base64Output"></div>
-              </div>
-              <button class="btn btn-outline" id="copyBase64Btn">
-                <i class="fas fa-copy"></i> Copy Result
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- URL Encode Tool -->
-        <div class="tool-container" id="urlEncodeTool">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input</label>
-                <textarea
-                  class="input-field"
-                  id="urlInput"
-                  placeholder="Enter text to encode or URL encoded string to decode..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="encodeUrlBtn">
-                  <i class="fas fa-arrow-right"></i> URL Encode
-                </button>
-                <button class="btn btn-primary" id="decodeUrlBtn">
-                  <i class="fas fa-arrow-left"></i> URL Decode
-                </button>
-                <button class="btn btn-outline" id="clearUrlBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Output</label>
-                <div class="result-area" id="urlOutput"></div>
-              </div>
-              <button class="btn btn-outline" id="copyUrlBtn">
-                <i class="fas fa-copy"></i> Copy Result
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- QR Code Generator -->
-        <div class="tool-container" id="qrGenerator">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Text or URL</label>
-                <textarea
-                  class="input-field"
-                  id="qrInput"
-                  placeholder="Enter text or URL to generate QR code..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <div class="input-group">
-                  <label class="input-label">QR Code Size</label>
-                  <input
-                    type="range"
-                    min="100"
-                    max="400"
-                    value="200"
-                    class="input-field"
-                    id="qrSize"
-                  />
-                  <div id="qrSizeValue">200 x 200</div>
-                </div>
-                <button class="btn btn-primary" id="generateQRBtn">
-                  <i class="fas fa-qrcode"></i> Generate QR Code
-                </button>
-                <button class="btn btn-outline" id="clearQRBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">QR Code</label>
-                <div
-                  class="card"
-                  style="
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    min-height: 250px;
-                  "
-                >
-                  <div id="qrcode"></div>
-                </div>
-              </div>
-              <button
-                class="btn btn-outline"
-                id="downloadQRBtn"
-                style="display: none"
-              >
-                <i class="fas fa-download"></i> Download QR Code
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Markdown Previewer -->
-        <div class="tool-container" id="markdownPreview">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Markdown Input</label>
-                <textarea
-                  class="input-field"
-                  id="mdInput"
-                  placeholder="# Enter Markdown here..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-outline" id="clearMdBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-                <button class="btn btn-outline" id="copyMdHtmlBtn">
-                  <i class="fas fa-copy"></i> Copy HTML
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Preview</label>
-                <div class="md-preview" id="mdPreview"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- UUID Generator -->
-        <div class="tool-container" id="uuidGenerator">
-          <div class="input-group">
-            <label class="input-label">UUID Version</label>
-            <select class="input-field" id="uuidVersion">
-              <option value="v4">Version 4 (Random)</option>
-              <option value="v1">Version 1 (Time-based)</option>
-            </select>
-          </div>
-
-          <div class="option-group">
-            <button class="btn btn-primary" id="generateUuidBtn">
-              <i class="fas fa-fingerprint"></i> Generate UUID
-            </button>
-            <div class="checkbox-group">
-              <input type="checkbox" id="uppercaseUuid" />
-              <label for="uppercaseUuid">Uppercase</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="noDashesUuid" />
-              <label for="noDashesUuid">No Dashes</label>
-            </div>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Generated UUID</label>
-            <input type="text" class="input-field" id="uuidOutput" readonly />
-          </div>
-
-          <div class="option-group">
-            <button class="btn btn-outline" id="copyUuidBtn">
-              <i class="fas fa-copy"></i> Copy UUID
-            </button>
-            <button class="btn btn-primary" id="bulkUuidBtn">
-              <i class="fas fa-list"></i> Generate Multiple
-            </button>
-          </div>
-
-          <div class="input-group" id="bulkUuidGroup" style="display: none">
-            <label class="input-label">Number of UUIDs (1-100)</label>
-            <input
-              type="number"
-              min="1"
-              max="100"
-              value="10"
-              class="input-field"
-              id="uuidCount"
-            />
-            <div
-              class="result-area"
-              id="bulkUuidResult"
-              style="margin-top: 1rem"
-            ></div>
-            <button
-              class="btn btn-outline"
-              id="copyBulkUuidBtn"
-              style="margin-top: 0.5rem"
-            >
-              <i class="fas fa-copy"></i> Copy All UUIDs
-            </button>
-          </div>
-        </div>
-
-        <!-- Password Generator -->
-        <div class="tool-container" id="passwordGenerator">
-          <div class="input-group">
-            <label class="input-label">Password Length</label>
-            <input
-              type="range"
-              min="6"
-              max="64"
-              value="16"
-              class="input-field"
-              id="passwordLength"
-            />
-            <div id="passwordLengthValue">16 characters</div>
-          </div>
-
-          <div class="option-group">
-            <div class="checkbox-group">
-              <input type="checkbox" id="includeUppercase" checked />
-              <label for="includeUppercase">Uppercase (A-Z)</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="includeLowercase" checked />
-              <label for="includeLowercase">Lowercase (a-z)</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="includeNumbers" checked />
-              <label for="includeNumbers">Numbers (0-9)</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="includeSymbols" checked />
-              <label for="includeSymbols">Symbols (!@#$...)</label>
-            </div>
-            <div class="checkbox-group">
-              <input type="checkbox" id="excludeSimilar" />
-              <label for="excludeSimilar"
-                >Exclude Similar Characters (i, l, 1, o, 0)</label
-              >
-            </div>
-          </div>
-
-          <button class="btn btn-primary" id="generatePasswordBtn">
-            <i class="fas fa-key"></i> Generate Password
-          </button>
-
-          <div class="input-group" style="margin-top: 1.5rem">
-            <label class="input-label">Generated Password</label>
-            <div class="flex-row" style="align-items: center">
-              <input
-                type="text"
-                class="input-field"
-                id="passwordOutput"
-                readonly
-              />
-              <button
-                class="btn btn-outline"
-                id="togglePasswordBtn"
-                style="margin-left: 0.5rem"
-              >
-                <i class="fas fa-eye"></i>
-              </button>
-            </div>
-            <div class="password-strength" id="passwordStrength"></div>
-            <div
-              id="passwordStrengthText"
-              style="
-                margin-top: 0.25rem;
-                font-size: 0.875rem;
-                color: var(--text-muted);
-              "
-            ></div>
-          </div>
-
-          <div class="option-group" style="margin-top: 1rem">
-            <button class="btn btn-outline" id="copyPasswordBtn">
-              <i class="fas fa-copy"></i> Copy Password
-            </button>
-          </div>
-        </div>
-
-        <!-- Color Picker -->
-        <div class="tool-container" id="colorPicker">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="color-preview" id="colorPreview"></div>
-              <div class="input-group">
-                <label class="input-label">Color Input</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="colorInput"
-                  placeholder="Enter hex, rgb, hsl value or color name..."
-                />
-                <input
-                  type="color"
-                  id="colorPickerInput"
-                  style="margin-top: 0.5rem; width: 100%"
-                />
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="applyColorBtn">
-                  <i class="fas fa-check"></i> Apply Color
-                </button>
-                <button class="btn btn-outline" id="randomColorBtn">
-                  <i class="fas fa-random"></i> Random Color
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Color Values</label>
-                <div class="card">
-                  <div class="input-group" style="margin-bottom: 0.5rem">
-                    <label class="input-label">HEX</label>
-                    <input
-                      type="text"
-                      class="input-field"
-                      id="hexOutput"
-                      readonly
-                    />
-                  </div>
-                  <div class="input-group" style="margin-bottom: 0.5rem">
-                    <label class="input-label">RGB</label>
-                    <input
-                      type="text"
-                      class="input-field"
-                      id="rgbOutput"
-                      readonly
-                    />
-                  </div>
-                  <div class="input-group" style="margin-bottom: 0.5rem">
-                    <label class="input-label">HSL</label>
-                    <input
-                      type="text"
-                      class="input-field"
-                      id="hslOutput"
-                      readonly
-                    />
-                  </div>
-                  <div class="input-group">
-                    <label class="input-label">Color Name</label>
-                    <input
-                      type="text"
-                      class="input-field"
-                      id="nameOutput"
-                      readonly
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="input-group" style="margin-top: 1rem">
-                <label class="input-label">Color Adjustments</label>
-                <div class="card">
-                  <div class="input-group" style="margin-bottom: 0.5rem">
-                    <label class="input-label">Saturation</label>
-                    <input
-                      type="range"
-                      min="-100"
-                      max="100"
-                      value="0"
-                      class="color-slider"
-                      id="saturationSlider"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Timestamp Converter -->
-        <div class="tool-container" id="timestampConverter">
-          <div class="grid-2">
-            <div class="input-group">
-              <label class="input-label">Current Timestamp</label>
-              <input
-                type="text"
-                class="input-field"
-                id="currentTimestamp"
-                readonly
-              />
-              <div style="text-align: right; margin-top: 0.5rem">
-                <button class="btn btn-outline" id="copyCurrentTimestampBtn">
-                  <i class="fas fa-copy"></i> Copy
-                </button>
-              </div>
-            </div>
-            <div class="input-group">
-              <label class="input-label">Current Date & Time</label>
-              <input
-                type="text"
-                class="input-field"
-                id="currentDateTime"
-                readonly
-              />
-              <div style="text-align: right; margin-top: 0.5rem">
-                <button class="btn btn-outline" id="copyCurrentDateBtn">
-                  <i class="fas fa-copy"></i> Copy
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div class="flex-row" style="margin-top: 1rem">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Convert Timestamp to Date</label>
-                <input
-                  type="number"
-                  class="input-field"
-                  id="timestampInput"
-                  placeholder="Enter Unix timestamp..."
-                />
-                <button
-                  class="btn btn-primary"
-                  id="convertTimestampBtn"
-                  style="margin-top: 0.5rem"
-                >
-                  <i class="fas fa-arrow-down"></i> Convert
-                </button>
-                <div
-                  class="result-area"
-                  id="timestampResult"
-                  style="margin-top: 1rem"
-                ></div>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Convert Date to Timestamp</label>
-                <input
-                  type="datetime-local"
-                  class="input-field"
-                  id="dateInput"
-                />
-                <button
-                  class="btn btn-primary"
-                  id="convertDateBtn"
-                  style="margin-top: 0.5rem"
-                >
-                  <i class="fas fa-arrow-down"></i> Convert
-                </button>
-                <div
-                  class="result-area"
-                  id="dateResult"
-                  style="margin-top: 1rem"
-                ></div>
-              </div>
-            </div>
-          </div>
-
-          <div class="input-group" style="margin-top: 1.5rem">
-            <label class="input-label">Timestamp Format Reference</label>
-            <div class="card">
-              <div class="grid-3">
-                <div><strong>Seconds:</strong> Unix timestamp</div>
-                <div><strong>Milliseconds:</strong> JavaScript timestamp</div>
-                <div><strong>Microseconds:</strong> Python timestamp</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- RegEx Tester -->
-        <div class="tool-container" id="regexTester">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Regular Expression</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="regexInput"
-                  placeholder="Enter regular expression..."
-                />
-              </div>
-              <div class="option-group">
-                <div class="checkbox-group">
-                  <input type="checkbox" id="regexGlobal" checked />
-                  <label for="regexGlobal">Global (g)</label>
-                </div>
-                <div class="checkbox-group">
-                  <input type="checkbox" id="regexCase" />
-                  <label for="regexCase">Case Insensitive (i)</label>
-                </div>
-                <div class="checkbox-group">
-                  <input type="checkbox" id="regexMultiline" />
-                  <label for="regexMultiline">Multiline (m)</label>
-                </div>
-              </div>
-              <div class="input-group">
-                <label class="input-label">Test String</label>
-                <textarea
-                  class="input-field"
-                  id="regexTestString"
-                  placeholder="Enter text to test against the regular expression..."
-                ></textarea>
-              </div>
-              <button class="btn btn-primary" id="testRegexBtn">
-                <i class="fas fa-search"></i> Test Regular Expression
-              </button>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Results</label>
-                <div class="result-area" id="regexResult"></div>
-              </div>
-              <div class="input-group">
-                <label class="input-label">Matches</label>
-                <div class="result-area" id="regexMatches"></div>
-              </div>
-              <div class="input-group">
-                <label class="input-label">Highlighted Text</label>
-                <div class="result-area" id="regexHighlighted"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Text Case Converter -->
-        <div class="tool-container" id="textCase">
-          <div class="input-group">
-            <label class="input-label">Input Text</label>
-            <textarea
-              class="input-field"
-              id="caseInput"
-              placeholder="Enter text to convert case..."
-            ></textarea>
-          </div>
-
-          <div class="option-group">
-            <button class="btn btn-outline" id="upperCaseBtn">UPPERCASE</button>
-            <button class="btn btn-outline" id="lowerCaseBtn">lowercase</button>
-            <button class="btn btn-outline" id="titleCaseBtn">
-              Title Case
-            </button>
-            <button class="btn btn-outline" id="sentenceCaseBtn">
-              Sentence case
-            </button>
-            <button class="btn btn-outline" id="camelCaseBtn">camelCase</button>
-            <button class="btn btn-outline" id="pascalCaseBtn">
-              PascalCase
-            </button>
-            <button class="btn btn-outline" id="snakeCaseBtn">
-              snake_case
-            </button>
-            <button class="btn btn-outline" id="kebabCaseBtn">
-              kebab-case
-            </button>
-            <button class="btn btn-outline" id="toggleCaseBtn">
-              tOGGLE cASE
-            </button>
-          </div>
-
-          <div class="input-group">
-            <label class="input-label">Result</label>
-            <textarea class="input-field" id="caseOutput" readonly></textarea>
-          </div>
-
-          <div class="option-group">
-            <button class="btn btn-outline" id="copyCaseBtn">
-              <i class="fas fa-copy"></i> Copy Result
-            </button>
-            <button class="btn btn-outline" id="clearCaseBtn">
-              <i class="fas fa-trash"></i> Clear
-            </button>
-          </div>
-        </div>
-
-        <!-- Word Count -->
-        <div class="tool-container" id="wordCount">
-          <div class="input-group">
-            <label class="input-label">Input Text</label>
-            <textarea
-              class="input-field"
-              id="countInput"
-              placeholder="Enter or paste text to analyze..."
-            ></textarea>
-          </div>
-
-          <div class="option-group">
-            <button class="btn btn-primary" id="analyzeTextBtn">
-              <i class="fas fa-calculator"></i> Analyze Text
-            </button>
-            <button class="btn btn-outline" id="clearCountBtn">
-              <i class="fas fa-trash"></i> Clear
-            </button>
-          </div>
-
-          <div class="grid-3" style="margin-top: 1.5rem">
-            <div class="stat-card">
-              <div class="stat-value" id="characterCount">0</div>
-              <div class="stat-label">Characters</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="wordCountValue">0</div>
-              <div class="stat-label">Words</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="sentenceCount">0</div>
-              <div class="stat-label">Sentences</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="paragraphCount">0</div>
-              <div class="stat-label">Paragraphs</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="lineCount">0</div>
-              <div class="stat-label">Lines</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-value" id="readingTime">0</div>
-              <div class="stat-label">Reading Time</div>
-            </div>
-          </div>
-
-          <div class="input-group" style="margin-top: 1rem">
-            <label class="input-label">Common Words</label>
-            <div class="result-area" id="commonWords"></div>
-          </div>
-        </div>
-
-        <!-- Network Tools -->
-        <div class="tool-container" id="networkTools">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">IP Address Information</label>
-                <div class="card">
-                  <div class="input-group" style="margin-bottom: 0.5rem">
-                    <label class="input-label">Your IP Address</label>
-                    <input
-                      type="text"
-                      class="input-field"
-                      id="clientIp"
-                      readonly
-                    />
-                  </div>
-                  <div class="input-group">
-                    <label class="input-label">Location</label>
-                    <input
-                      type="text"
-                      class="input-field"
-                      id="ipLocation"
-                      readonly
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="input-group">
-                <label class="input-label">IP Lookup</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="ipLookupInput"
-                  placeholder="Enter IP address or domain..."
-                />
-                <button
-                  class="btn btn-primary"
-                  id="ipLookupBtn"
-                  style="margin-top: 0.5rem"
-                >
-                  <i class="fas fa-search"></i> Lookup
-                </button>
-                <div
-                  class="result-area"
-                  id="ipLookupResult"
-                  style="margin-top: 1rem"
-                ></div>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">DNS Lookup</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="dnsInput"
-                  placeholder="Enter domain..."
-                />
-                <button
-                  class="btn btn-primary"
-                  id="dnsLookupBtn"
-                  style="margin-top: 0.5rem"
-                >
-                  <i class="fas fa-server"></i> DNS Lookup
-                </button>
-                <div
-                  class="result-area"
-                  id="dnsResult"
-                  style="margin-top: 1rem"
-                ></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lorem Ipsum -->
-        <div class="tool-container" id="loremIpsumGenerator">
-          <div class="input-group">
-            <label class="input-label">Lorem Ipsum Generator</label>
-            <div class="card">
-              <div class="flex-row">
-                <div class="input-group">
-                  <label class="input-label">Paragraphs</label>
-                  <input
-                    type="number"
-                    class="input-field"
-                    id="loremParagraphCount"
-                    min="1"
-                    max="20"
-                    value="3"
-                  />
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Sentences per Paragraph</label>
-                  <input
-                    type="number"
-                    class="input-field"
-                    id="sentencesPerParagraph"
-                    min="1"
-                    max="20"
-                    value="5"
-                  />
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Words per Sentence</label>
-                  <input
-                    type="number"
-                    class="input-field"
-                    id="wordsPerSentence"
-                    min="3"
-                    max="50"
-                    value="10"
-                  />
-                </div>
-              </div>
-              <button class="btn btn-primary" id="generateLoremBtn">
-                <i class="fas fa-scroll"></i> Generate Lorem Ipsum
-              </button>
-              <div
-                class="result-area"
-                id="loremResult"
-                style="margin-top: 1rem"
-              ></div>
-              <div style="text-align: right; margin-top: 0.5rem">
-                <button class="btn btn-outline" id="copyLoremBtn">
-                  <i class="fas fa-copy"></i> Copy
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Time Zone Converter -->
-        <div class="tool-container" id="timezoneConverter">
-          <div class="flex-row" style="flex-wrap: wrap">
-            <!-- Column 1 -->
-            <div class="col-2">
-              <div class="flex-col">
-                <div class="input-group">
-                  <label class="input-label">Current Time</label>
-                  <input
-                    type="text"
-                    class="input-field"
-                    id="currentTime"
-                    readonly
-                  />
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Your Timezone</label>
-                  <input
-                    type="text"
-                    class="input-field"
-                    id="localTimezone"
-                    readonly
-                  />
-                </div>
-
-                <div class="input-group">
-                  <label class="input-label">World Clocks</label>
-                  <div class="result-area" id="worldClocks"></div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Column 2 -->
-            <div class="col-2">
-              <div class="flex-col">
-                <div class="input-group">
-                  <label class="input-label">Date & Time</label>
-                  <input
-                    type="datetime-local"
-                    class="input-field"
-                    id="fromDateTime"
-                  />
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Convert From</label>
-                  <select class="input-field" id="fromTimezone">
-                    <option value="local">Your Timezone</option>
-                    <!-- Options will be populated by JavaScript -->
-                  </select>
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Convert To</label>
-                  <select class="input-field" id="toTimezone">
-                    <!-- Options will be populated by JavaScript -->
-                  </select>
-                </div>
-                <div class="input-group">
-                  <button class="btn btn-primary" id="convertTimezoneBtn">
-                    <i class="fas fa-exchange-alt"></i> Convert
-                  </button>
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Result</label>
-                  <input
-                    type="text"
-                    class="input-field"
-                    id="convertedTime"
-                    readonly
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Unit Converter -->
-        <div class="tool-container" id="unitConverter">
-          <div class="flex-row" style="flex-wrap: wrap">
-            <!-- Column 1 -->
-            <div class="col-2">
-              <div class="flex-col">
-                <div class="input-group">
-                  <label class="input-label">Conversion Type</label>
-                  <select class="input-field" id="conversionType">
-                    <option value="length">Length</option>
-                    <option value="weight">Weight</option>
-                    <option value="volume">Volume</option>
-                    <option value="temperature">Temperature</option>
-                    <option value="currency">Currency</option>
-                    <option value="data">Data Storage</option>
-                  </select>
-                </div>
-                <div class="input-group">
-                  <label class="input-label">From Unit</label>
-                  <select class="input-field" id="fromUnit"></select>
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Value</label>
-                  <input
-                    type="number"
-                    class="input-field"
-                    id="fromValue"
-                    placeholder="Enter value..."
-                  />
-                </div>
-              </div>
-            </div>
-
-            <!-- Column 2 -->
-            <div class="col-2">
-              <div class="flex-col">
-                <div class="input-group">
-                  <label class="input-label">To Unit</label>
-                  <select class="input-field" id="toUnit"></select>
-                </div>
-                <div class="input-group" style="margin-top: 2rem">
-                  <button class="btn btn-primary" id="convertUnitBtn">
-                    <i class="fas fa-exchange-alt"></i> Convert
-                  </button>
-                </div>
-                <div class="input-group" style="margin-top: 1rem">
-                  <label class="input-label">Result</label>
-                  <input
-                    type="text"
-                    class="input-field"
-                    id="convertedValue"
-                    readonly
-                  />
-                </div>
-                <div class="input-group">
-                  <label class="input-label">Common Conversions</label>
-                  <div class="result-area" id="commonConversions"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hash Generator -->
-        <div class="tool-container" id="hashGenerator">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input Text</label>
-                <textarea
-                  class="input-field"
-                  id="hashInput"
-                  placeholder="Enter text to hash..."
-                ></textarea>
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="generateHashBtn">
-                  <i class="fas fa-hashtag"></i> Generate Hash
-                </button>
-                <button class="btn btn-outline" id="clearHashBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Hash Algorithm</label>
-                <select class="input-field" id="hashAlgorithm">
-                  <option value="md5">MD5</option>
-                  <option value="sha1">SHA-1</option>
-                  <option value="sha256">SHA-256</option>
-                  <option value="sha512">SHA-512</option>
-                  <option value="ripemd160">RIPEMD-160</option>
-                </select>
-              </div>
-              <div class="input-group">
-                <label class="input-label">Hash Result</label>
-                <textarea
-                  class="input-field"
-                  id="hashResult"
-                  readonly
-                  style="min-height: 120px"
-                ></textarea>
-              </div>
-              <div style="text-align: right; margin-top: 0.5rem">
-                <button class="btn btn-outline" id="copyHashBtn">
-                  <i class="fas fa-copy"></i> Copy
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Aes Encryptor -->
-        <div class="tool-container" id="aesEncryptor">
-          <div class="flex-row">
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Input Text</label>
-                <textarea
-                  class="input-field"
-                  id="aesInput"
-                  placeholder="Enter text to encrypt/decrypt..."
-                ></textarea>
-              </div>
-              <div class="input-group">
-                <label class="input-label">Secret Key</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="aesKey"
-                  placeholder="Enter secret key..."
-                />
-              </div>
-              <div class="option-group">
-                <button class="btn btn-primary" id="encryptBtn">
-                  <i class="fas fa-lock"></i> Encrypt
-                </button>
-                <button class="btn btn-primary" id="decryptBtn">
-                  <i class="fas fa-unlock"></i> Decrypt
-                </button>
-                <button class="btn btn-outline" id="clearAesBtn">
-                  <i class="fas fa-trash"></i> Clear
-                </button>
-              </div>
-            </div>
-            <div class="col-2">
-              <div class="input-group">
-                <label class="input-label">Operation</label>
-                <input
-                  type="text"
-                  class="input-field"
-                  id="aesOperation"
-                  readonly
-                />
-              </div>
-              <div class="input-group">
-                <label class="input-label">Result</label>
-                <textarea
-                  class="input-field"
-                  id="aesResult"
-                  readonly
-                  style="min-height: 150px"
-                ></textarea>
-              </div>
-              <div style="text-align: right; margin-top: 0.5rem">
-                <button class="btn btn-outline" id="copyAesBtn">
-                  <i class="fas fa-copy"></i> Copy
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+         </div>
+         <div class="flex-grow overflow-y-auto sidebar-scroll">
+            <nav class="p-2 space-y-1">
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Graphics Tools</span>
+                     <span class="sidebar-tooltip">Graphics Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="svg-viewer"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                              <path stroke-linecap="round" stroke-linejoin="round"
+                                 d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                           </svg>
+                           <span class="sidebar-item-text">SVG Viewer</span>
+                           <span class="sidebar-tooltip">SVG Viewer</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Image Tools</span>
+                     <span class="sidebar-tooltip">Image Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="image-compressor"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                           </svg>
+                           <span class="sidebar-item-text">Image Compressor</span>
+                           <span class="sidebar-tooltip">Image Compressor</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="image-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                           </svg>
+                           <span class="sidebar-item-text">Image Converter</span>
+                           <span class="sidebar-tooltip">Image Converter</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Code Tools</span>
+                     <span class="sidebar-tooltip">Code Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="json-beautifier"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M6 9v6m-2 0a2 2 0 002 2h.5M6 9H4a2 2 0 012-2h.5M18 15v-6m2 0a2 2 0 00-2-2h-.5m2 8a2 2 0 01-2 2h-.5" />
+                           </svg>
+                           <span class="sidebar-item-text">JSON Formatter</span>
+                           <span class="sidebar-tooltip">JSON Formatter</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="xml-beautifier"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                              viewBox="0 0 512 512" fill="currentColor">
+                              <g transform="translate(62.077867, 42.666667)">
+                                 <path
+                                    d="M257.922133,7.10542736e-15 L23.2554667,7.10542736e-15 L23.2554667,234.666667 L65.9221333,234.666667 L65.9221333,192 L65.9221333,169.6 L65.9221333,42.6666667 L240.215467,42.6666667 L321.922133,124.373333 L321.922133,169.6 L321.922133,192 L321.922133,234.666667 L364.5888,234.666667 L364.5888,106.666667 L257.922133,7.10542736e-15 L257.922133,7.10542736e-15 Z M95.936,277.568 L65.728,319.338667 L35.904,277.568 L2.34666667,277.568 L47.3813333,339.946667 L-2.13162821e-14,405.696 L34.0693333,405.696 L64.2986667,362.922667 L94.6773333,405.696 L129.472,405.696 L82.3893333,340.672 L128.938667,277.568 L95.936,277.568 Z M231.0848,346.606933 C228.9088,353.284267 226.4128,361.924267 223.575467,372.462933 C220.759467,361.796267 218.263467,353.1776 216.1728,346.606933 L194.0288,277.3376 L151.255467,277.3376 L151.255467,405.4656 L177.922133,405.4656 L177.922133,301.742933 C180.866133,312.7936 183.447467,321.646933 185.602133,328.3456 L210.562133,405.4656 L235.330133,405.4656 L261.015467,326.1696 C263.6608,318.084267 266.0288,309.956267 268.055467,301.742933 L268.055467,405.4656 L295.831467,405.4656 L295.831467,277.3376 L253.527467,277.3376 L231.0848,346.606933 Z M324.951467,277.568 L324.951467,405.696 L408.855467,405.696 L408.855467,383.082667 L353.815467,383.082667 L353.815467,277.568 L324.951467,277.568 Z">
+                                 </path>
+                              </g>
+                           </svg>
+                           <span class="sidebar-item-text">XML Formatter</span>
+                           <span class="sidebar-tooltip">XML Formatter</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="syntax-highlighter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                           </svg>
+                           <span class="sidebar-item-text">Syntax Highlighter</span>
+                           <span class="sidebar-tooltip">Syntax Highlighter</span>
+                        </button>
+                     </li>
+                     <li hidden="hidden">
+                        <button data-tool="html-beautifier"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                              viewBox="0 0 512 512" fill="currentColor">
+                              <g>
+                                 <path class="st0"
+                                    d="M378.413,0H208.297h-13.182L185.8,9.314L57.02,138.102l-9.314,9.314v13.176v265.514 c0,47.36,38.528,85.895,85.896,85.895h244.811c47.353,0,85.881-38.535,85.881-85.895V85.896C464.294,38.528,425.766,0,378.413,0z M432.497,426.105c0,29.877-24.214,54.091-54.084,54.091H133.602c-29.884,0-54.098-24.214-54.098-54.091V160.591h83.716 c24.885,0,45.077-20.178,45.077-45.07V31.804h170.116c29.87,0,54.084,24.214,54.084,54.092V426.105z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M163.164,253.19c-5.097,0-8.867,3.652-8.867,9.482v23.453c0,0.489-0.251,0.734-0.726,0.734h-26.993 c-0.475,0-0.726-0.245-0.726-0.734v-23.453c0-5.831-3.771-9.482-8.868-9.482c-5.222,0-8.993,3.652-8.993,9.482v65.144 c0,5.83,3.645,9.475,8.868,9.475c5.111,0,8.993-3.645,8.993-9.475v-24.305c0-0.489,0.251-0.734,0.726,0.734h26.993 c0.475,0,0.726,0.244,0.726,0.734v24.305c0,5.83,3.77,9.475,8.867,9.475c5.223,0,8.993-3.645,8.993-9.475v-65.144 C172.157,256.841,168.387,253.19,163.164,253.19z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M235.249,253.923h-47.284c-5.46,0-8.993,3.282-8.993,8.023c0,4.615,3.533,7.897,8.993,7.897h13.978 c0.488,0,0.726,0.244,0.726,0.726v57.247c0,5.711,3.771,9.475,8.882,9.475c5.223,0,8.993-3.764,8.993-9.475v-57.247 c0-0.482,0.237-0.726,0.726-0.726h13.978c5.46,0,8.993-3.282,8.993-7.897C244.242,257.204,240.709,253.923,235.249,253.923z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M318.253,253.19c-5.348,0-8.267,2.919-10.934,9.238l-17.26,39.862h-0.489l-17.623-39.862 c-2.794-6.319-5.712-9.238-11.06-9.238c-5.948,0-9.845,4.134-9.845,10.697v64.781c0,5.467,3.408,8.623,8.268,8.623 c4.622,0,8.029-3.156,8.029-8.623v-39.868h0.6l12.89,29.653c2.541,5.837,4.608,7.541,8.742,7.541c4.133,0,6.2-1.704,8.756-7.541 l12.764-29.653h0.601v39.868c0,5.467,3.281,8.623,8.141,8.623c4.874,0,8.156-3.156,8.156-8.623v-64.781 C327.987,257.323,324.216,253.19,318.253,253.19z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M389.36,320.645h-29.408c-0.489,0-0.726-0.244-0.726-0.734v-57.24c0-5.712-3.77-9.482-8.867-9.482 c-5.237,0-8.993,3.77-8.993,9.482v64.899c0,5.349,3.518,8.993,8.993,8.993h39.002c5.475,0,8.994-3.282,8.994-8.022 C398.354,323.926,394.835,320.645,389.36,320.645z">
+                                 </path>
+                              </g>
+                           </svg>
+                           <span class="sidebar-item-text">HTML Beautifier</span>
+                           <span class="sidebar-tooltip">HTML Beautifier</span>
+                        </button>
+                     </li>
+                     <li hidden="hidden">
+                        <button data-tool="css-beautifier"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                              viewBox="0 0 512 512" fill="currentColor">
+                              <g>
+                                 <path class="st0"
+                                    d="M378.413,0H208.297h-13.182L185.8,9.314L57.02,138.102l-9.314,9.314v13.176v265.514 c0,47.36,38.528,85.895,85.896,85.895h244.811c47.353,0,85.881-38.535,85.881-85.895V85.896C464.294,38.528,425.766,0,378.413,0z M432.497,426.105c0,29.877-24.214,54.091-54.084,54.091H133.602c-29.884,0-54.098-24.214-54.098-54.091V160.591h83.716 c24.885,0,45.077-20.178,45.077-45.07V31.804h170.116c29.87,0,54.084,24.214,54.084,54.092V426.105z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M169.574,268.949c5.837,0,9.104,2.171,12.499,6.786c2.709,3.805,5.432,5.167,8.825,5.167 c5.028,0,9.105-3.673,9.105-8.965c0-2.171-0.684-4.078-1.774-5.977c-4.622-8.288-14.802-14.669-28.655-14.669 c-16.171,0-28.124,7.603-33.012,22.685c-1.899,6.11-2.57,10.865-2.57,24.989c0,14.125,0.67,18.881,2.57,24.99 c4.888,15.081,16.841,22.685,33.012,22.685c13.853,0,24.033-6.382,28.655-14.67c1.09-1.899,1.774-3.805,1.774-5.976 c0-5.3-4.078-8.965-9.105-8.965c-3.393,0-6.116,1.361-8.825,5.16c-3.394,4.622-6.662,6.794-12.499,6.794 c-7.471,0-11.814-3.938-13.853-10.187c-1.089-3.393-1.494-6.654-1.494-19.83c0-13.175,0.406-16.436,1.494-19.829 C157.76,272.887,162.103,268.949,169.574,268.949z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M255.149,289.595l-4.888-0.684c-10.725-1.494-14.398-5.02-14.398-10.187c0-5.837,4.343-9.915,12.498-9.915 c5.698,0,11.409,1.634,15.892,3.805c1.899,0.95,3.938,1.494,5.837,1.494c4.888,0,8.7-3.666,8.7-8.693 c0-3.261-1.494-5.977-4.762-8.016c-5.432-3.394-15.612-6.11-25.806-6.11c-19.97,0-32.733,11.269-32.733,28.25 c0,16.304,10.32,25.13,29.2,27.713l4.901,0.677c10.99,1.494,14.258,4.888,14.258,10.32c0,6.389-5.306,10.872-15.082,10.872 c-6.787,0-12.219-1.767-19.83-5.977c-1.634-0.956-3.672-1.634-5.837-1.634c-5.166,0-8.965,3.938-8.965,8.832 c0,3.254,1.634,6.382,4.748,8.42c6.116,3.799,16.031,7.876,29.074,7.876c24.032,0,36.266-12.358,36.266-29.067 C284.223,300.865,274.307,292.311,255.149,289.595z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M338.697,289.595l-4.888-0.684c-10.738-1.494-14.398-5.02-14.398-10.187c0-5.837,4.344-9.915,12.484-9.915 c5.712,0,11.423,1.634,15.892,3.805c1.913,0.95,3.952,1.494,5.851,1.494c4.887,0,8.686-3.666,8.686-8.693 c0-3.261-1.494-5.977-4.748-8.016c-5.432-3.394-15.626-6.11-25.806-6.11c-19.969,0-32.733,11.269-32.733,28.25 c0,16.304,10.32,25.13,29.2,27.713l4.888,0.677c11.004,1.494,14.258,4.888,14.258,10.32c0,6.389-5.292,10.872-15.068,10.872 c-6.8,0-12.232-1.767-19.829-5.977c-1.634-0.956-3.673-1.634-5.851-1.634c-5.153,0-8.965,3.938-8.965,8.832 c0,3.254,1.634,6.382,4.762,8.42c6.117,3.799,16.032,7.876,29.06,7.876c24.047,0,36.266-12.358,36.266-29.067 C367.758,300.865,357.843,292.311,338.697,289.595z">
+                                 </path>
+                              </g>
+                           </svg>
+                           <span class="sidebar-item-text">CSS Beautifier</span>
+                           <span class="sidebar-tooltip">CSS Beautifier</span>
+                        </button>
+                     </li>
+                     <li hidden="hidden">
+                        <button data-tool="js-beautifier"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                              viewBox="0 0 512 512" fill="currentColor">
+                              <g>
+                                 <path class="st0"
+                                    d="M378.413,0H208.297h-13.182L185.8,9.314L57.02,138.102l-9.314,9.314v13.176v265.514 c0,47.36,38.528,85.895,85.896,85.895h244.811c47.353,0,85.881-38.535,85.881-85.895V85.896C464.294,38.528,425.766,0,378.413,0z M432.497,426.105c0,29.877-24.214,54.091-54.084,54.091H133.602c-29.884,0-54.098-24.214-54.098-54.091V160.591h83.716 c24.885,0,45.077-20.178,45.077-45.07V31.804h170.116c29.87,0,54.084,24.214,54.084,54.092V426.105z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M225.334,251.968c-5.711,0-9.915,4.078-9.915,10.592v50.803c0,11.409-5.027,15.62-12.638,15.62 c-2.988,0-6.102-0.95-8.281-2.444c-2.988-2.039-5.166-2.989-7.61-2.989c-5.027,0-8.826,3.666-8.826,8.42 c0,2.444,0.95,4.888,2.723,6.927c3.798,4.35,12.763,7.743,21.324,7.743c21.184,0,33.278-11.954,33.278-34.639V262.56 C235.389,256.046,231.171,251.968,225.334,251.968z">
+                                 </path>
+                                 <path class="st0"
+                                    d="M293.257,289.595l-4.888-0.684c-10.738-1.494-14.397-5.02-14.397-10.187c0-5.837,4.343-9.915,12.484-9.915 c5.711,0,11.423,1.634,15.891,3.805c1.913,0.95,3.953,1.494,5.852,1.494c4.888,0,8.686-3.666,8.686-8.693 c0-3.261-1.494-5.977-4.748-8.016c-5.432-3.394-15.627-6.11-25.806-6.11c-19.97,0-32.733,11.269-32.733,28.25 c0,16.304,10.32,25.13,29.199,27.713l4.888,0.677c11.004,1.494,14.258,4.888,14.258,10.32c0,6.389-5.293,10.872-15.067,10.872 c-6.801,0-12.234-1.767-19.83-5.977c-1.634-0.956-3.673-1.634-5.851-1.634c-5.153,0-8.965,3.938-8.965,8.832 c0,3.254,1.634,6.382,4.762,8.42c6.116,3.799,16.031,7.876,29.06,7.876c24.047,0,36.266-12.358,36.266-29.067 C322.317,300.865,312.403,292.311,293.257,289.595z">
+                                 </path>
+                              </g>
+                           </svg>
+                           <span class="sidebar-item-text">JS Beautifier</span>
+                           <span class="sidebar-tooltip">JS Beautifier</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="hash-generator"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                           </svg>
+                           <span class="sidebar-item-text">Hash Generator</span>
+                           <span class="sidebar-tooltip">Hash Generator</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="aes-encrypt-decrypt"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                           </svg>
+                           <span class="sidebar-item-text">AES Encrypt/Decrypt</span>
+                           <span class="sidebar-tooltip">AES Encrypt/Decrypt</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Text Tools</span>
+                     <span class="sidebar-tooltip">Text Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="text-comparison"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                           </svg>
+                           <span class="sidebar-item-text">Text Comparison</span>
+                           <span class="sidebar-tooltip">Text Comparison</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="base64-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500"
+                              viewBox="0 0 100 100" fill="currentColor">
+                              <text x="50" y="60" /* Adjusted baseline for better visual centering of B64 */
+                                 font-family="Arial, Helvetica, sans-serif" font-size="50" /* Adjusted for good fit and
+                                 legibility */ font-weight="bold" text-anchor="middle">
+                                 B64
+                              </text>
+                           </svg>
+                           <span class="sidebar-item-text">Base64 Encoder/Decoder</span>
+                           <span class="sidebar-tooltip">Base64 Encoder/Decoder</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="url-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                           </svg>
+                           <span class="sidebar-item-text">URL Encoder/Decoder</span>
+                           <span class="sidebar-tooltip">URL Encoder/Decoder</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="markdown-previewer"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M9.663 17h4.673M9.337 11h5.326M16.663 7H7.337M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                           </svg>
+                           <span class="sidebar-item-text">Markdown Previewer</span>
+                           <span class="sidebar-tooltip">Markdown Previewer</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="text-case-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2A8.001 8.001 0 0019.419 15m0 0H15" />
+                           </svg>
+                           <span class="sidebar-item-text">Text Case Converter</span>
+                           <span class="sidebar-tooltip">Text Case Converter</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="word-count"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                           </svg>
+                           <span class="sidebar-item-text">Word Count</span>
+                           <span class="sidebar-tooltip">Word Count</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="lorem-ipsum"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                           </svg>
+                           <span class="sidebar-item-text">Lorem Ipsum Generator</span>
+                           <span class="sidebar-tooltip">Lorem Ipsum Generator</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Generators</span>
+                     <span class="sidebar-tooltip">Generators</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="qr-generator"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                           </svg>
+                           <span class="sidebar-item-text">QR Code Generator</span>
+                           <span class="sidebar-tooltip">QR Code Generator</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="uuid-generator"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2A8.001 8.001 0 0019.419 15m0 0H15" />
+                           </svg>
+                           <span class="sidebar-item-text">UUID Generator</span>
+                           <span class="sidebar-tooltip">UUID Generator</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="password-generator"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                           </svg>
+                           <span class="sidebar-item-text">Password Generator</span>
+                           <span class="sidebar-tooltip">Password Generator</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Unit Converter</span>
+                     <span class="sidebar-tooltip">Unit Converter</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="unit-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                           </svg>
+                           <span class="sidebar-item-text">Unit Converter</span>
+                           <span class="sidebar-tooltip">Unit Converter</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Color Tools</span>
+                     <span class="sidebar-tooltip">Color Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="color-picker"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                           </svg>
+                           <span class="sidebar-item-text">Color Picker</span>
+                           <span class="sidebar-tooltip">Color Picker</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Date & Time</span>
+                     <span class="sidebar-tooltip">Date & Time</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="timestamp-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                           </svg>
+                           <span class="sidebar-item-text">Timestamp Converter</span>
+                           <span class="sidebar-tooltip">Timestamp Converter</span>
+                        </button>
+                     </li>
+                     <li>
+                        <button data-tool="timezone-converter"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                           </svg>
+                           <span class="sidebar-item-text">Timezone Converter</span>
+                           <span class="sidebar-tooltip">Timezone Converter</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Testing Tools</span>
+                     <span class="sidebar-tooltip">Testing Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="regex-tester"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 10l4 4m0-4l-4 4" />
+                           </svg>
+                           <span class="sidebar-item-text">RegEx Tester</span>
+                           <span class="sidebar-tooltip">RegEx Tester</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+               <div>
+                  <h3
+                     class="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider dark:text-gray-400 sidebar-item">
+                     <span class="sidebar-item-text">Network Tools</span>
+                     <span class="sidebar-tooltip">Network Tools</span>
+                  </h3>
+                  <ul>
+                     <li>
+                        <button data-tool="network-tools"
+                           class="w-full text-left px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-100 dark:hover:bg-gray-700 flex items-center sidebar-item">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-blue-500" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                           </svg>
+                           <span class="sidebar-item-text">Network Tools</span>
+                           <span class="sidebar-tooltip">Network Tools</span>
+                        </button>
+                     </li>
+                  </ul>
+               </div>
+            </nav>
+         </div>
       </div>
-    </main>
+      <div class="flex-1 flex flex-col">
+         <header class="bg-white dark:bg-gray-800 shadow-sm md:hidden">
+            <div class="px-4 py-3 flex items-center justify-between">
+               <button id="mobile-sidebar-toggle" class="p-1 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16M4 18h16" />
+                  </svg>
+               </button>
+               <div class="flex items-center space-x-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24"
+                     stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                  <h1 class="text-xl font-bold">Pocket</h1>
+               </div>
+               <div class="w-6"></div>
+            </div>
+         </header>
+         <main class="flex-grow p-4 md:p-6 overflow-y-auto">
+            <div id="dashboard-content" class="tool-content active">
+               <!-- Dashboard content will be dynamically generated -->
+            </div>
+            <div id="svg-viewer-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                           d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                     </svg>
+                     SVG Viewer
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="svg-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">SVG Code</label>
+                        <textarea id="svg-input" rows="10" class="input-field"
+                           placeholder="Paste your SVG code here..."></textarea>
+                     </div>
+                     <div class="flex space-x-2">
+                        <button id="svg-load-example-btn" class="btn-secondary">
+                           Load Example
+                        </button>
+                        <button id="svg-clear-btn" class="btn-secondary">
+                           Clear
+                        </button>
+                     </div>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Preview</label>
+                        <div id="svg-preview-area">
+                           <p class="text-gray-400 dark:text-gray-500">
+                              SVG preview will appear here
+                           </p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="image-compressor-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                     </svg>
+                     Image Compressor
+                  </h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div
+                        class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                        <input type="file" id="ic-image-upload" accept="image/*" class="hidden" />
+                        <div id="ic-upload-area" class="cursor-pointer">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                           </svg>
+                           <p class="mt-2 text-gray-600 dark:text-gray-400">
+                              Click to upload an image
+                           </p>
+                           <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                              JPG, PNG, WEBP (Max 10MB)
+                           </p>
+                        </div>
+                        <div id="ic-image-preview" class="hidden mt-4">
+                           <img id="ic-preview" src="#" alt="Preview" class="max-h-64 mx-auto rounded" />
+                           <div class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+                              <span id="ic-original-size"></span><span id="ic-original-dimensions"></span>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="space-y-6">
+                        <div>
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Compression
+                              Mode</label>
+                           <div class="flex space-x-4">
+                              <label class="inline-flex items-center">
+                                 <input type="radio" name="ic-compression-mode" value="quality" checked
+                                    class="form-radio h-4 w-4 text-blue-500" />
+                                 <span class="ml-2 text-gray-700 dark:text-gray-300">Quality (%)</span></label>
+                              <label class="inline-flex items-center">
+                                 <input type="radio" name="ic-compression-mode" value="size"
+                                    class="form-radio h-4 w-4 text-blue-500" />
+                                 <span class="ml-2 text-gray-700 dark:text-gray-300">Target Size (KB)</span></label>
+                           </div>
+                        </div>
+                        <div id="ic-quality-control">
+                           <label for="ic-quality"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality: <span
+                                 id="ic-quality-value">80</span>%</label>
+                           <input type="range" id="ic-quality" min="1" max="100" value="80" class="w-full" />
+                        </div>
+                        <div id="ic-size-control" class="hidden">
+                           <label for="ic-target-size"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Target Size
+                              (KB)</label>
+                           <input type="number" id="ic-target-size" min="10" value="100" class="input-field" />
+                        </div>
+                        <div>
+                           <label for="ic-output-format"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Output
+                              Format</label>
+                           <select id="ic-output-format" class="input-field">
+                              <option value="auto">Same as input</option>
+                              <option value="jpeg">JPEG</option>
+                              <option value="png">PNG</option>
+                              <option value="webp">WebP</option>
+                           </select>
+                        </div>
+                        <button id="ic-compress-btn" disabled
+                           class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                           Compress Image
+                        </button>
+                        <div id="ic-results" class="hidden space-y-4">
+                           <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                              <h3 class="font-medium">Compressed Image</h3>
+                              <div class="flex items-center justify-between mt-2">
+                                 <div class="text-sm text-gray-600 dark:text-gray-400">
+                                    <span id="ic-compressed-size"></span><span id="ic-compression-ratio"></span>
+                                 </div>
+                                 <a id="ic-download-btn" href="#"
+                                    class="text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400">Download</a>
+                              </div>
+                              <img id="ic-compressed-preview" src="#" alt="Compressed Preview"
+                                 class="mt-2 max-h-40 mx-auto rounded" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="image-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                     </svg>
+                     Image Converter
+                  </h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div
+                        class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center">
+                        <input type="file" id="iconv-image-upload" accept="image/*" class="hidden" />
+                        <div id="iconv-upload-area" class="cursor-pointer">
+                           <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-gray-400" fill="none"
+                              viewBox="0 0 24 24" stroke="currentColor">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                 d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                           </svg>
+                           <p class="mt-2 text-gray-600 dark:text-gray-400">
+                              Click to upload an image
+                           </p>
+                           <p class="text-sm text-gray-500 dark:text-gray-500 mt-1">
+                              JPG, PNG, GIF, WEBP, BMP
+                           </p>
+                        </div>
+                        <div id="iconv-image-preview-container" class="hidden mt-4">
+                           <img id="iconv-preview" src="#" alt="Preview" class="max-h-64 mx-auto rounded" />
+                           <div class="mt-2 text-sm text-gray-600 dark:text-gray-400" id="iconv-original-info"></div>
+                        </div>
+                     </div>
+                     <div class="space-y-6">
+                        <div>
+                           <label for="iconv-output-format"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Convert To</label>
+                           <select id="iconv-output-format" class="input-field">
+                              <option value="jpeg">JPEG</option>
+                              <option value="png">PNG</option>
+                              <option value="webp">WebP</option>
+                              <option value="gif">GIF</option>
+                              <option value="bmp">BMP</option>
+                           </select>
+                        </div>
+                        <div>
+                           <label for="iconv-quality"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Quality (for
+                              JPEG/WebP):
+                              <span id="iconv-quality-value">100</span>%</label>
+                           <input type="range" id="iconv-quality" min="1" max="100" value="100" class="w-full" />
+                        </div>
+                        <button id="iconv-convert-btn" disabled
+                           class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
+                           Convert Image
+                        </button>
+                        <div id="iconv-results" class="hidden space-y-4">
+                           <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+                              <h3 class="font-medium">Converted Image</h3>
+                              <div class="flex items-center justify-between mt-2">
+                                 <div class="text-sm text-gray-600 dark:text-gray-400" id="iconv-converted-info"></div>
+                                 <a id="iconv-download-btn" href="#"
+                                    class="text-sm text-blue-500 hover:text-blue-600 dark:hover:text-blue-400">Download</a>
+                              </div>
+                              <img id="iconv-converted-preview" src="#" alt="Converted Preview"
+                                 class="mt-2 max-h-40 mx-auto rounded" />
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="json-beautifier-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 22 22" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M6 9v6m-2 0a2 2 0 002 2h.5M6 9H4a2 2 0 012-2h.5M18 15v-6m2 0a2 2 0 00-2-2h-.5m2 8a2 2 0 01-2 2h-.5" />
+                     </svg>
+                     JSON Formatter
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="json-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input JSON</label>
+                        <textarea id="json-input" rows="8" class="w-full input-field"></textarea>
+                     </div>
+                     <div>
+                        <label for="json-indent"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Indentation</label>
+                        <select id="json-indent"
+                           class="px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                           <option value="2">2 Spaces</option>
+                           <option value="4" selected>4 Spaces</option>
+                           <option value="tab">Tabs</option>
+                        </select>
+                     </div>
+                     <div class="flex space-x-2">
+                        <button id="json-format-btn" class="btn-primary flex-1">
+                           Format
+                        </button>
+                        <button id="json-minify-btn" class="btn-secondary flex-1">
+                           Minify
+                        </button>
+                        <button id="json-clear-btn" class="btn-secondary flex-1">
+                           Clear
+                        </button>
+                     </div>
+                     <p id="json-status" class="text-sm"></p>
+                     <div class="flex space-x-2 mb-2">
+                        <button id="json-show-formatted-btn" class="btn-primary active flex-1 text-sm py-1">
+                           Formatted Text
+                        </button>
+                        <button id="json-show-tree-btn" class="btn-secondary flex-1 text-sm py-1">
+                           Tree View
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label id="json-output-label" for="json-output-code"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Formatted JSON</label>
+                           <button id="json-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <pre id="json-output-pre"
+                           class="output-code-block language-json max-h-96"><code id="json-output-code"></code></pre>
+                        <label id="json-tree-label" for="json-tree-view-container"
+                           class="hidden mt-2 block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">JSON Tree
+                           View</label>
+                        <div id="json-tree-view-container" class="tree-view-container overflow-auto h-64"
+                           style="display: none"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="xml-beautifier-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" viewBox="0 0 512 512"
+                        fill="currentColor">
+                        <g transform="translate(62.077867, 42.666667)">
+                           <path
+                              d="M257.922133,7.10542736e-15 L23.2554667,7.10542736e-15 L23.2554667,234.666667 L65.9221333,234.666667 L65.9221333,192 L65.9221333,169.6 L65.9221333,42.6666667 L240.215467,42.6666667 L321.922133,124.373333 L321.922133,169.6 L321.922133,192 L321.922133,234.666667 L364.5888,234.666667 L364.5888,106.666667 L257.922133,7.10542736e-15 L257.922133,7.10542736e-15 Z M95.936,277.568 L65.728,319.338667 L35.904,277.568 L2.34666667,277.568 L47.3813333,339.946667 L-2.13162821e-14,405.696 L34.0693333,405.696 L64.2986667,362.922667 L94.6773333,405.696 L129.472,405.696 L82.3893333,340.672 L128.938667,277.568 L95.936,277.568 Z M231.0848,346.606933 C228.9088,353.284267 226.4128,361.924267 223.575467,372.462933 C220.759467,361.796267 218.263467,353.1776 216.1728,346.606933 L194.0288,277.3376 L151.255467,277.3376 L151.255467,405.4656 L177.922133,405.4656 L177.922133,301.742933 C180.866133,312.7936 183.447467,321.646933 185.602133,328.3456 L210.562133,405.4656 L235.330133,405.4656 L261.015467,326.1696 C263.6608,318.084267 266.0288,309.956267 268.055467,301.742933 L268.055467,405.4656 L295.831467,405.4656 L295.831467,277.3376 L253.527467,277.3376 L231.0848,346.606933 Z M324.951467,277.568 L324.951467,405.696 L408.855467,405.696 L408.855467,383.082667 L353.815467,383.082667 L353.815467,277.568 L324.951467,277.568 Z">
+                           </path>
+                        </g>
+                     </svg>
+                     XML Formatter
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="xml-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input XML</label>
+                        <textarea id="xml-input" rows="8" class="w-full input-field"></textarea>
+                     </div>
+                     <div class="flex space-x-2">
+                        <button id="xml-format-btn" class="btn-primary flex-1">
+                           Format
+                        </button>
+                        <button id="xml-clear-btn" class="btn-secondary flex-1">
+                           Clear
+                        </button>
+                     </div>
+                     <p id="xml-status" class="text-sm"></p>
+                     <div class="flex space-x-2 mb-2">
+                        <button id="xml-show-formatted-btn" class="btn-primary active flex-1 text-sm py-1">
+                           Formatted Text
+                        </button>
+                        <button id="xml-show-tree-btn" class="btn-secondary flex-1 text-sm py-1">
+                           Tree View
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label id="xml-output-label" for="xml-output-code"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Formatted XML</label>
+                           <button id="xml-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <pre id="xml-output-pre"
+                           class="output-code-block language-xml max-h-96"><code id="xml-output-code"></code></pre>
+                        <label id="xml-tree-label" for="xml-tree-view-container"
+                           class="hidden mt-2 block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">XML Tree
+                           View</label>
+                        <div id="xml-tree-view-container" class="tree-view-container overflow-auto h-64"
+                           style="display: none"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="syntax-highlighter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                     </svg>
+                     Syntax Highlighter
+                  </h2>
+                  <div class="space-y-4">
+                     <div class="flex space-x-2 items-end">
+                        <div class="flex-grow">
+                           <label for="sh-language"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Language</label>
+                           <select id="sh-language" class="input-field">
+                              <option value="markup">HTML/XML/SVG</option>
+                              <option value="css">CSS</option>
+                              <option value="javascript" selected>JavaScript</option>
+                              <option value="python">Python</option>
+                              <option value="java">Java</option>
+                              <option value="c">C</option>
+                              <option value="cpp">C++</option>
+                              <option value="csharp">C#</option>
+                              <option value="php">PHP</option>
+                              <option value="ruby">Ruby</option>
+                              <option value="go">Go</option>
+                              <option value="swift">Swift</option>
+                              <option value="kotlin">Kotlin</option>
+                              <option value="sql">SQL</option>
+                              <option value="json">JSON</option>
+                              <option value="yaml">YAML</option>
+                           </select>
+                        </div>
+                        <button id="sh-format-code-btn" class="btn-secondary">
+                           Format Code
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="sh-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Code
+                              Input</label>
+                           <button id="sh-copy-input-btn" class="copy-btn text-xs">
+                              Copy Input
+                           </button>
+                        </div>
+                        <textarea id="sh-input" rows="10" class="input-field"
+                           placeholder="Paste your code here..."></textarea>
+                     </div>
+                     <div>
+                        <div class="flex items-center justify-between mb-1">
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Highlighted
+                              Code</label>
+                           <button id="sh-copy-output-btn" class="copy-btn text-xs">
+                              Copy Output
+                           </button>
+                        </div>
+                        <pre id="sh-output-pre"
+                           class="max-h-96 overflow-auto"><code id="sh-output-code" class="language-javascript"></code></pre>
+                     </div>
+                     <p id="sh-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="html-beautifier-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                     </svg>
+                     HTML Beautifier
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="html-beautify-input" class="block text-sm font-medium">Input HTML</label>
+                        <textarea id="html-beautify-input" rows="10" class="input-field"></textarea>
+                     </div>
+                     <button id="html-beautify-btn" class="btn-primary">
+                        Beautify HTML
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="html-beautify-output" class="block text-sm font-medium">Formatted HTML</label>
+                           <button id="html-copy-beautify-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="html-beautify-output" rows="10" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                     <p id="html-beautify-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="css-beautifier-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                     </svg>
+                     CSS Beautifier
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="css-beautify-input" class="block text-sm font-medium">Input CSS</label>
+                        <textarea id="css-beautify-input" rows="10" class="input-field"></textarea>
+                     </div>
+                     <button id="css-beautify-btn" class="btn-primary">
+                        Beautify CSS
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="css-beautify-output" class="block text-sm font-medium">Formatted CSS</label>
+                           <button id="css-copy-beautify-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="css-beautify-output" rows="10" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                     <p id="css-beautify-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="js-beautifier-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                     </svg>
+                     JavaScript Beautifier
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="js-beautify-input" class="block text-sm font-medium">Input JavaScript</label>
+                        <textarea id="js-beautify-input" rows="10" class="input-field"></textarea>
+                     </div>
+                     <button id="js-beautify-btn" class="btn-primary">
+                        Beautify JS
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="js-beautify-output" class="block text-sm font-medium">Formatted
+                              JavaScript</label>
+                           <button id="js-copy-beautify-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="js-beautify-output" rows="10" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                     <p id="js-beautify-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="hash-generator-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                     </svg>
+                     Hash Generator
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="hash-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input Text</label>
+                        <textarea id="hash-input" rows="5" class="input-field"></textarea>
+                     </div>
+                     <div>
+                        <label for="hash-algorithm"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Algorithm</label>
+                        <select id="hash-algorithm" class="input-field">
+                           <option value="SHA-256">SHA-256</option>
+                           <option value="SHA-512">SHA-512</option>
+                           <option value="SHA-1">SHA-1 (Not Recommended)</option>
+                        </select>
+                     </div>
+                     <button id="hash-generate-btn" class="btn-primary">
+                        Generate Hash
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="hash-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Output Hash
+                              (Hex)</label>
+                           <button id="hash-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="hash-output" rows="3" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="aes-encrypt-decrypt-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                     </svg>
+                     AES Encrypt/Decrypt (Text)
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="aes-text-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text to
+                           Encrypt/Decrypt</label>
+                        <textarea id="aes-text-input" rows="4" class="input-field"></textarea>
+                     </div>
+                     <div>
+                        <label for="aes-password"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Password</label>
+                        <input type="password" id="aes-password" class="input-field" />
+                     </div>
+                     <div class="flex space-x-4">
+                        <button id="aes-encrypt-btn" class="flex-1 btn-primary">
+                           Encrypt
+                        </button>
+                        <button id="aes-decrypt-btn" class="flex-1 btn-secondary">
+                           Decrypt
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="aes-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Output</label>
+                           <button id="aes-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="aes-output" rows="4" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                     <p id="aes-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="text-comparison-content" class="tool-content max-w-full mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                     </svg>
+                     Text Comparison
+                  </h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                        <label for="text-compare-input1"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text 1</label>
+                        <textarea id="text-compare-input1" rows="10" class="input-field"></textarea>
+                     </div>
+                     <div>
+                        <label for="text-compare-input2"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text 2</label>
+                        <textarea id="text-compare-input2" rows="10" class="input-field"></textarea>
+                     </div>
+                  </div>
+                  <button id="text-compare-btn" class="mt-4 btn-primary">
+                     Compare Texts
+                  </button>
+                  <div id="text-compare-result" class="mt-4 hidden">
+                     <h3 class="font-semibold mb-2">Comparison Result:</h3>
+                     <pre class="whitespace-pre-wrap"></pre>
+                  </div>
+               </div>
+            </div>
+            <div id="base64-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" viewBox="0 0 100 100"
+                        fill="currentColor">
+                        <text x="50" y="60" /* Adjusted baseline for better visual centering of "B64" */
+                           font-family="Arial, Helvetica, sans-serif" font-size="50" /* Adjusted for good fit and
+                           legibility */ font-weight="bold" text-anchor="middle">
+                           B64
+                        </text>
+                     </svg>
+                     Base64 Encoder/Decoder
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="base64-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input Text</label>
+                        <textarea id="base64-input" rows="5" class="input-field"></textarea>
+                     </div>
+                     <div class="flex space-x-4">
+                        <button id="base64-encode-btn" class="flex-1 btn-primary">
+                           Encode to Base64
+                        </button>
+                        <button id="base64-decode-btn" class="flex-1 btn-secondary">
+                           Decode from Base64
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="base64-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Output</label>
+                           <button id="base64-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="base64-output" rows="5" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                     <p id="base64-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="url-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                     </svg>
+                     URL Encoder/Decoder
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="url-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input URL or
+                           Text</label>
+                        <textarea id="url-input" rows="5" class="input-field"></textarea>
+                     </div>
+                     <div class="flex space-x-4">
+                        <button id="url-encode-btn" class="flex-1 btn-primary">
+                           Encode URL
+                        </button>
+                        <button id="url-decode-btn" class="flex-1 btn-secondary">
+                           Decode URL
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="url-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Output</label>
+                           <button id="url-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="url-output" rows="5" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                     <p id="url-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="markdown-previewer-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M9.663 17h4.673M9.337 11h5.326M16.663 7H7.337M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z" />
+                     </svg>
+                     Markdown Previewer
+                  </h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                     <div>
+                        <label for="markdown-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Markdown
+                           Input</label>
+                        <textarea id="markdown-input" rows="15" class="w-full input-field"
+                           placeholder="Type your Markdown here..."></textarea>
+                     </div>
+                     <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">HTML
+                           Preview</label>
+                        <div id="markdown-preview"
+                           class="prose dark:prose-invert max-w-none h-[calc(theme(space.8)*15+theme(padding.6)*2)] overflow-y-auto">
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="text-case-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2A8.001 8.001 0 0019.419 15m0 0H15" />
+                     </svg>
+                     Text Case Converter
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="text-case-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input Text</label>
+                        <textarea id="text-case-input" rows="5" class="input-field"></textarea>
+                     </div>
+                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <button data-case="uppercase" class="text-case-btn btn-primary text-sm py-1.5">
+                           UPPERCASE
+                        </button>
+                        <button data-case="lowercase" class="text-case-btn btn-primary text-sm py-1.5">
+                           lowercase
+                        </button>
+                        <button data-case="sentencecase" class="text-case-btn btn-primary text-sm py-1.5">
+                           Sentence case
+                        </button>
+                        <button data-case="titlecase" class="text-case-btn btn-primary text-sm py-1.5">
+                           Title Case
+                        </button>
+                        <button data-case="camelcase" class="text-case-btn btn-primary text-sm py-1.5">
+                           camelCase
+                        </button>
+                        <button data-case="pascalcase" class="text-case-btn btn-primary text-sm py-1.5">
+                           PascalCase
+                        </button>
+                        <button data-case="kebabcase" class="text-case-btn btn-primary text-sm py-1.5">
+                           kebab-case
+                        </button>
+                        <button data-case="snakecase" class="text-case-btn btn-primary text-sm py-1.5">
+                           snake_case
+                        </button>
+                     </div>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="text-case-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Output Text</label>
+                           <button id="text-case-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="text-case-output" rows="5" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="word-count-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                     </svg>
+                     Word Count
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="word-count-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Input Text</label>
+                        <textarea id="word-count-input" rows="8" class="input-field"></textarea>
+                     </div>
+                     <div id="word-count-output" class="p-4 border rounded-md bg-gray-50 dark:bg-gray-900">
+                        <p>Words: <span id="wc-words">0</span></p>
+                        <p>
+                           Characters (with spaces):
+                           <span id="wc-chars-spaces">0</span>
+                        </p>
+                        <p>
+                           Characters (no spaces):
+                           <span id="wc-chars-nospaces">0</span>
+                        </p>
+                        <p>Sentences: <span id="wc-sentences">0</span></p>
+                        <p>Paragraphs: <span id="wc-paragraphs">0</span></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="lorem-ipsum-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z" />
+                     </svg>
+                     Lorem Ipsum Generator
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="lorem-paragraphs"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Number of
+                           Paragraphs</label>
+                        <input type="number" id="lorem-paragraphs" value="3" min="1" max="20" class="input-field" />
+                     </div>
+                     <button id="lorem-generate-btn" class="btn-primary">
+                        Generate Lorem Ipsum
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label for="lorem-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300">Generated Text</label>
+                           <button id="lorem-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <textarea id="lorem-output" rows="10" readonly
+                           class="input-field bg-gray-50 dark:bg-gray-900"></textarea>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="qr-generator-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                     </svg>
+                     QR Code Generator
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="qr-text-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Text or URL for QR
+                           Code</label>
+                        <input type="text" id="qr-text-input" placeholder="Enter text here" class="input-field" />
+                     </div>
+                     <button id="qr-generate-btn" class="btn-primary">
+                        Generate QR Code
+                     </button>
+                     <div id="qr-code-canvas-container"
+                        class="flex justify-center p-4 border rounded-md bg-gray-50 dark:bg-gray-900">
+                        <div id="qr-code-canvas"></div>
+                     </div>
+                     <p id="qr-status" class="text-sm"></p>
+                  </div>
+               </div>
+            </div>
+            <div id="uuid-generator-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m-15.357-2A8.001 8.001 0 0019.419 15m0 0H15" />
+                     </svg>
+                     UUID Generator
+                  </h2>
+                  <div class="space-y-4">
+                     <button id="uuid-generate-btn" class="btn-primary">
+                        Generate UUID v4
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center mb-1">
+                           <label for="uuid-output"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mr-2">Generated
+                              UUID</label>
+                        </div>
+                        <div class="flex">
+                           <input type="text" id="uuid-output" readonly
+                              class="flex-grow input-field rounded-r-none bg-gray-50 dark:bg-gray-900" />
+                           <button id="uuid-copy-btn" class="copy-btn rounded-l-none">
+                              Copy
+                           </button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="password-generator-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                     </svg>
+                     Password Generator
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="pg-length"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password Length:
+                           <span id="pg-length-value">12</span></label>
+                        <input type="range" id="pg-length" min="6" max="128" value="12" class="w-full" />
+                     </div>
+                     <div class="grid grid-cols-2 gap-4">
+                        <label class="flex items-center"><input type="checkbox" id="pg-uppercase" checked
+                              class="form-checkbox h-5 w-5 text-blue-600" /><span
+                              class="ml-2 text-gray-700 dark:text-gray-300">Include Uppercase (A-Z)</span></label>
+                        <label class="flex items-center"><input type="checkbox" id="pg-lowercase" checked
+                              class="form-checkbox h-5 w-5 text-blue-600" /><span
+                              class="ml-2 text-gray-700 dark:text-gray-300">Include Lowercase (a-z)</span></label>
+                        <label class="flex items-center"><input type="checkbox" id="pg-numbers" checked
+                              class="form-checkbox h-5 w-5 text-blue-600" /><span
+                              class="ml-2 text-gray-700 dark:text-gray-300">Include Numbers (0-9)</span></label>
+                        <label class="flex items-center"><input type="checkbox" id="pg-symbols" checked
+                              class="form-checkbox h-5 w-5 text-blue-600" /><span
+                              class="ml-2 text-gray-700 dark:text-gray-300">Include Symbols (!@#$)</span></label>
+                     </div>
+                     <button id="pg-generate-btn" class="w-full btn-primary">
+                        Generate Password
+                     </button>
+                     <div class="output-container">
+                        <label for="pg-output"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Generated
+                           Password</label>
+                        <div class="flex">
+                           <input type="text" id="pg-output" readonly
+                              class="flex-grow input-field rounded-r-none bg-gray-50 dark:bg-gray-900" />
+                           <button id="pg-copy-btn" class="copy-btn rounded-l-none">
+                              Copy
+                           </button>
+                        </div>
+                        <p id="pg-strength" class="text-sm mt-1"></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="unit-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
+                     </svg>
+                     Unit Converter
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="uc-category"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
+                        <select id="uc-category" class="input-field">
+                           <option value="length">Length</option>
+                           <option value="weight">Weight</option>
+                           <option value="temperature">Temperature</option>
+                        </select>
+                     </div>
+                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                        <div>
+                           <label for="uc-value"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Value</label>
+                           <input type="number" id="uc-value" placeholder="Enter value" class="input-field" />
+                        </div>
+                        <div>
+                           <label for="uc-from-unit"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">From</label>
+                           <select id="uc-from-unit" class="input-field"></select>
+                        </div>
+                        <div>
+                           <label for="uc-to-unit"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">To</label>
+                           <select id="uc-to-unit" class="input-field"></select>
+                        </div>
+                     </div>
+                     <button id="uc-convert-btn" class="btn-primary">Convert</button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Result</label>
+                           <button id="uc-copy-result-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <p id="uc-result" class="p-3 border rounded-md bg-gray-50 dark:bg-gray-900 min-h-[2.5em]"></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="color-picker-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                     </svg>
+                     Color Picker
+                  </h2>
+                  <div class="flex flex-col items-center space-y-4">
+                     <input type="color" id="color-picker-input" value="#3B82F6"
+                        class="w-24 h-24 border-none rounded-md cursor-pointer" />
+                     <div id="color-picker-preview"
+                        class="w-full h-20 rounded-md border border-gray-300 dark:border-gray-600"></div>
+                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
+                        <div class="output-container">
+                           <div class="flex items-center justify-between">
+                              <label for="color-hex" class="block text-sm font-medium">HEX:</label>
+                              <button id="color-copy-hex" class="copy-btn text-xs">
+                                 Copy
+                              </button>
+                           </div>
+                           <input type="text" id="color-hex" readonly class="w-full mt-1 input-field" />
+                        </div>
+                        <div class="output-container">
+                           <div class="flex items-center justify-between">
+                              <label for="color-rgb" class="block text-sm font-medium">RGB:</label>
+                              <button id="color-copy-rgb" class="copy-btn text-xs">
+                                 Copy
+                              </button>
+                           </div>
+                           <input type="text" id="color-rgb" readonly class="w-full mt-1 input-field" />
+                        </div>
+                        <div class="output-container sm:col-span-2">
+                           <div class="flex items-center justify-between">
+                              <label for="color-hsl" class="block text-sm font-medium">HSL:</label>
+                              <button id="color-copy-hsl" class="copy-btn text-xs">
+                                 Copy
+                              </button>
+                           </div>
+                           <input type="text" id="color-hsl" readonly class="w-full mt-1 input-field" />
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="timestamp-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                     </svg>
+                     Timestamp Converter
+                  </h2>
+                  <div class="space-y-6">
+                     <div>
+                        <h3 class="text-lg font-medium mb-2">
+                           Unix Timestamp to Human Readable
+                        </h3>
+                        <label for="ts-unix-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Unix Timestamp
+                           (seconds or ms)</label>
+                        <input type="number" id="ts-unix-input" placeholder="e.g., 1678886400"
+                           class="w-full input-field" />
+                        <button id="ts-convert-to-human" class="mt-2 btn-primary">
+                           Convert to Date
+                        </button>
+                        <div class="output-container mt-2">
+                           <div class="flex items-center justify-between mb-1">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Human Readable
+                                 Date</label>
+                              <button id="ts-copy-human-output-btn" class="copy-btn text-xs">
+                                 Copy
+                              </button>
+                           </div>
+                           <p id="ts-human-output"
+                              class="p-2 border rounded bg-gray-50 dark:bg-gray-900 min-h-[2.5em] whitespace-pre-wrap">
+                           </p>
+                        </div>
+                     </div>
+                     <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <h3 class="text-lg font-medium mb-2">
+                           Human Readable to Unix Timestamp
+                        </h3>
+                        <label for="ts-date-input"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Date and Time (Your
+                           Local)</label>
+                        <input type="datetime-local" id="ts-date-input" class="w-full input-field" />
+                        <button id="ts-convert-to-unix" class="mt-2 btn-primary">
+                           Convert to Timestamp
+                        </button>
+                        <div class="output-container mt-2">
+                           <div class="flex items-center justify-between mb-1">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Unix
+                                 Timestamp</label>
+                              <button id="ts-copy-unix-output-btn" class="copy-btn text-xs">
+                                 Copy
+                              </button>
+                           </div>
+                           <p id="ts-unix-output" class="p-2 border rounded bg-gray-50 dark:bg-gray-900 min-h-[2.5em]">
+                           </p>
+                        </div>
+                     </div>
+                     <div class="border-t border-gray-200 dark:border-gray-700 pt-6">
+                        <button id="ts-current-time" class="btn-secondary">
+                           Get Current Unix Timestamp
+                        </button>
+                        <div class="output-container mt-2">
+                           <div class="flex items-center justify-between mb-1">
+                              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Current
+                                 Timestamp</label>
+                              <button id="ts-copy-current-output-btn" class="copy-btn text-xs">
+                                 Copy
+                              </button>
+                           </div>
+                           <p id="ts-current-output"
+                              class="p-2 border rounded bg-gray-50 dark:bg-gray-900 min-h-[2.5em]"></p>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="timezone-converter-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                     </svg>
+                     Timezone Converter
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="tz-datetime-local"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Select Date & Time
+                           (Your Local)</label>
+                        <input type="datetime-local" id="tz-datetime-local" class="input-field" />
+                     </div>
+                     <div>
+                        <label for="tz-target-timezone"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Target
+                           Timezone</label>
+                        <select id="tz-target-timezone" class="input-field"></select>
+                     </div>
+                     <button id="tz-convert-btn" class="btn-primary">
+                        Convert Time
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Converted
+                              Time</label>
+                           <button id="tz-copy-output-btn" class="copy-btn text-xs">
+                              Copy
+                           </button>
+                        </div>
+                        <p id="tz-output" class="p-3 border rounded-md bg-gray-50 dark:bg-gray-900 min-h-[2.5em]"></p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="regex-tester-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 10l4 4m0-4l-4 4" />
+                     </svg>
+                     RegEx Tester
+                  </h2>
+                  <div class="space-y-4">
+                     <div>
+                        <label for="regex-pattern"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Regular
+                           Expression</label>
+                        <input type="text" id="regex-pattern" placeholder="pattern (no slashes)"
+                           class="input-field font-mono" />
+                     </div>
+                     <div>
+                        <label for="regex-flags"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Flags (e.g., g, i,
+                           m)</label>
+                        <input type="text" id="regex-flags" placeholder="gi" class="input-field font-mono" />
+                     </div>
+                     <div>
+                        <label for="regex-test-string"
+                           class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Test String</label>
+                        <textarea id="regex-test-string" rows="5" class="input-field"></textarea>
+                     </div>
+                     <button id="regex-test-btn" class="btn-primary">
+                        Test RegEx
+                     </button>
+                     <div class="output-container">
+                        <div class="flex items-center justify-between mb-1">
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Result</label>
+                        </div>
+                        <div id="regex-result" class="min-h-[50px] whitespace-pre-wrap"></div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div id="network-tools-content" class="tool-content max-w-4xl mx-auto">
+               <div
+                  class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 border border-gray-200 dark:border-gray-700">
+                  <h2 class="text-2xl font-bold mb-6 flex items-center">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2 text-blue-500" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                           d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9">
+                        </path>
+                     </svg>
+                     Network Tools
+                  </h2>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     <div class="space-y-4">
+                        <div class="p-4 border rounded-md">
+                           <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Your IP
+                              Information</label>
+                           <div class="mb-2">
+                              <label for="nt-client-ip" class="text-xs text-gray-600 dark:text-gray-400">Your IP
+                                 Address:</label>
+                              <input type="text" id="nt-client-ip" class="input-field mt-1 bg-gray-50 dark:bg-gray-700"
+                                 readonly placeholder="Fetching..." />
+                           </div>
+                           <div>
+                              <label for="nt-ip-location"
+                                 class="text-xs text-gray-600 dark:text-gray-400">Location:</label>
+                              <input type="text" id="nt-ip-location"
+                                 class="input-field mt-1 bg-gray-50 dark:bg-gray-700" readonly
+                                 placeholder="Fetching..." />
+                           </div>
+                        </div>
+                        <div class="p-4 border rounded-md">
+                           <label for="nt-ip-lookup-input"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IP/Domain
+                              Lookup</label>
+                           <input type="text" id="nt-ip-lookup-input" class="input-field"
+                              placeholder="Enter IP or domain..." />
+                           <button id="nt-ip-lookup-btn" class="btn-primary mt-2 w-full">
+                              Lookup
+                           </button>
+                           <div id="nt-ip-lookup-result" class="nt-result-area">
+                              Lookup results will appear here.
+                           </div>
+                        </div>
+                     </div>
+                     <div class="space-y-4">
+                        <div class="p-4 border rounded-md">
+                           <label for="nt-dns-input"
+                              class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">DNS Lookup</label>
+                           <input type="text" id="nt-dns-input" class="input-field" placeholder="Enter domain..." />
+                           <div class="mt-2">
+                              <label for="nt-dns-record-type" class="text-xs text-gray-600 dark:text-gray-400">Record
+                                 Type:</label>
+                              <select id="nt-dns-record-type" class="input-field mt-1">
+                                 <option value="A">A</option>
+                                 <option value="AAAA">AAAA</option>
+                                 <option value="MX">MX</option>
+                                 <option value="TXT">TXT</option>
+                                 <option value="CNAME">CNAME</option>
+                                 <option value="NS">NS</option>
+                              </select>
+                           </div>
+                           <button id="nt-dns-lookup-btn" class="btn-primary mt-2 w-full">
+                              DNS Lookup
+                           </button>
+                           <div id="nt-dns-result" class="nt-result-area">
+                              DNS lookup results will appear here.
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-4">
+                     Note: IP and DNS lookups use public APIs. Information accuracy
+                     depends on the API provider.
+                  </p>
+               </div>
+            </div>
+         </main>
+      </div>
+   </div>
+   <script src="script.js"></script>
+</body>
 
-    <script src="script.js" type="text/javascript"></script>
-  </body>
 </html>
