@@ -1,614 +1,571 @@
-// Ensure Prism autoloader knows where to find languages
-Prism.plugins.autoloader.languages_path =
-  "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/";
-
 document.addEventListener("DOMContentLoaded", function () {
-  const sidebar = document.getElementById("sidebar");
-  const sidebarToggle = document.getElementById("sidebar-toggle");
-  const mobileSidebarToggle = document.getElementById("mobile-sidebar-toggle");
-  const toolSearch = document.getElementById("tool-search");
-  const toolSearchIconBtn = document.getElementById("tool-search-icon-btn");
-  const toolButtons = document.querySelectorAll("[data-tool]");
-  const toolContents = document.querySelectorAll(".tool-content");
-  const mainContentArea = document.querySelector("main");
+  // --- UI Navigation and Interaction ---
 
-  if (window.innerWidth < 768 && !sidebar.classList.contains("collapsed")) {
-    sidebar.classList.add("collapsed");
-    updateSidebarToggleIcon(true);
-  } else if (
-    window.innerWidth >= 768 &&
-    sidebar.classList.contains("collapsed")
-  ) {
-    updateSidebarToggleIcon(sidebar.classList.contains("collapsed"));
-  } else {
-    updateSidebarToggleIcon(sidebar.classList.contains("collapsed"));
+  const allTools = [
+    // --- Graphics Tools ---
+    {
+      id: "svgViewer",
+      name: "SVG Viewer",
+      category: "Graphics Tools",
+      description: "Paste your SVG code to render and preview it instantly.",
+      icon: '<i class="fas fa-shapes text-white text-xl"></i>',
+      color: "graphics",
+    },
+    // --- Image Tools ---
+    {
+      id: "imageCompressor",
+      name: "Image Compressor",
+      category: "Image Tools",
+      description: "Reduce image file sizes while balancing quality.",
+      icon: '<i class="fas fa-compress-alt text-white text-xl"></i>',
+      color: "image",
+    },
+    {
+      id: "imageConverter",
+      name: "Image Converter",
+      category: "Image Tools",
+      description: "Convert images between formats like JPG, PNG, and WebP.",
+      icon: '<i class="fas fa-exchange-alt text-white text-xl"></i>',
+      color: "image",
+    },
+    // --- Code Tools ---
+    {
+      id: "modelGenerator",
+      name: "JSON/XML To Model",
+      category: "Code Tools",
+      description:
+        "Generate model classes in C#, Python, Java, and more from JSON or XML data.",
+      icon: '<i class="fas fa-cubes text-white text-xl"></i>',
+      color: "code",
+    },
+    {
+      id: "jsonFormatter",
+      name: "JSON Formatter",
+      category: "Code Tools",
+      description: "Format, validate, and inspect JSON data in a tree view.",
+      icon: '<i class="fas fa-code text-white text-xl"></i>',
+      color: "code",
+    },
+    {
+      id: "xmlFormatter",
+      name: "XML Formatter",
+      category: "Code Tools",
+      description:
+        "Beautify and explore XML data with a collapsible tree view.",
+      icon: '<i class="fas fa-file-code text-white text-xl"></i>',
+      color: "code",
+    },
+    {
+      id: "syntaxHighlighter",
+      name: "Syntax Highlighter",
+      category: "Code Tools",
+      description:
+        "Apply syntax highlighting to code snippets in various languages.",
+      icon: '<i class="fas fa-star-of-life text-white text-xl"></i>',
+      color: "code",
+    },
+    {
+      id: "hashGenerator",
+      name: "Hash Generator",
+      category: "Code Tools",
+      description: "Generate hashes (SHA-1, SHA-256, SHA-512) from text input.",
+      icon: '<i class="fas fa-hashtag text-white text-xl"></i>',
+      color: "code",
+    },
+    {
+      id: "aesEncrypt",
+      name: "AES Encrypt/Decrypt",
+      category: "Code Tools",
+      description: "Encrypt and decrypt text using AES with a password.",
+      icon: '<i class="fas fa-shield-halved text-white text-xl"></i>',
+      color: "code",
+    },
+    // --- Text Tools ---
+    {
+      id: "textCompare",
+      name: "Text Comparison",
+      category: "Text Tools",
+      description:
+        "Compare two texts and highlight the character-wise differences.",
+      icon: '<i class="fas fa-columns text-white text-xl"></i>',
+      color: "text",
+    },
+    {
+      id: "base64Converter",
+      name: "Base64 Converter",
+      category: "Text Tools",
+      description: "Encode text to Base64 or decode a Base64 string.",
+      icon: '<i class="fas fa-lock text-white text-xl"></i>',
+      color: "text",
+    },
+    {
+      id: "urlEncoder",
+      name: "URL Encoder/Decoder",
+      category: "Text Tools",
+      description: "Encode or decode strings for safe use in URLs.",
+      icon: '<i class="fas fa-link text-white text-xl"></i>',
+      color: "text",
+    },
+    {
+      id: "markdownPreview",
+      name: "Markdown Previewer",
+      category: "Text Tools",
+      description: "Write Markdown and see the rendered HTML in real-time.",
+      icon: '<i class="fab fa-markdown text-white text-xl"></i>',
+      color: "text",
+    },
+    {
+      id: "caseConverter",
+      name: "Text Case Converter",
+      category: "Text Tools",
+      description:
+        "Convert text between various case styles (camelCase, snake_case, etc.).",
+      icon: '<i class="fas fa-text-height text-white text-xl"></i>',
+      color: "text",
+    },
+    {
+      id: "wordCounter",
+      name: "Word Counter",
+      category: "Text Tools",
+      description:
+        "Count words, characters, sentences, and paragraphs in your text.",
+      icon: '<i class="fas fa-calculator text-white text-xl"></i>',
+      color: "text",
+    },
+    {
+      id: "loremIpsum",
+      name: "Lorem Ipsum Generator",
+      category: "Text Tools",
+      description: "Generate customizable placeholder text.",
+      icon: '<i class="fas fa-paragraph text-white text-xl"></i>',
+      color: "text",
+    },
+    // --- Generators ---
+    {
+      id: "qrGenerator",
+      name: "QR Code Generator",
+      category: "Generators",
+      description: "Create custom QR codes for URLs, text, and more.",
+      icon: '<i class="fas fa-qrcode text-white text-xl"></i>',
+      color: "generators",
+    },
+    {
+      id: "uuidGenerator",
+      name: "UUID Generator",
+      category: "Generators",
+      description: "Generate universally unique identifiers (UUIDs).",
+      icon: '<i class="fas fa-fingerprint text-white text-xl"></i>',
+      color: "generators",
+    },
+    {
+      id: "passwordGenerator",
+      name: "Password Generator",
+      category: "Generators",
+      description: "Create strong, secure passwords with customizable options.",
+      icon: '<i class="fas fa-key text-white text-xl"></i>',
+      color: "generators",
+    },
+    // --- Converters ---
+    {
+      id: "unitConverter",
+      name: "Unit Converter",
+      category: "Converters",
+      description: "Convert between units of length, weight, and temperature.",
+      icon: '<i class="fas fa-balance-scale text-white text-xl"></i>',
+      color: "converters",
+    },
+    {
+      id: "timestampConverter",
+      name: "Timestamp Converter",
+      category: "Converters",
+      description:
+        "Convert Unix timestamps to human-readable dates and vice-versa.",
+      icon: '<i class="fas fa-clock text-white text-xl"></i>',
+      color: "converters",
+    },
+    {
+      id: "timezoneConverter",
+      name: "Timezone Converter",
+      category: "Converters",
+      description: "Convert dates and times between different timezones.",
+      icon: '<i class="fas fa-globe text-white text-xl"></i>',
+      color: "converters",
+    },
+    // --- Testing Tools ---
+    {
+      id: "regexTester",
+      name: "RegEx Tester",
+      category: "Testing Tools",
+      description: "Test and debug regular expressions against a sample text.",
+      icon: '<i class="fas fa-search-plus text-white text-xl"></i>',
+      color: "testing",
+    },
+    // --- Network Tools ---
+    {
+      id: "ipLookup",
+      name: "IP/DNS Lookup",
+      category: "Network Tools",
+      description: "Look up IP address information and perform DNS queries.",
+      icon: '<i class="fas fa-map-marker-alt text-white text-xl"></i>',
+      color: "network",
+    },
+  ];
+
+  const defaultView = document.getElementById("default-view");
+  const toolContainers = document.getElementById("tool-containers");
+
+  function showTool(toolId) {
+    if (!toolId || !document.getElementById(toolId)) {
+      console.warn(`Tool with ID "${toolId}" not found. Returning home.`);
+      returnHome();
+      return;
+    }
+    defaultView.classList.add("hidden");
+    toolContainers.classList.remove("hidden");
+    document.querySelectorAll(".tool-container").forEach((container) => {
+      container.classList.remove("active");
+    });
+    document.getElementById(toolId).classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function updateSidebarToggleIcon(isCollapsed) {
-    sidebarToggle.querySelector("svg").innerHTML = isCollapsed
-      ? '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>' // Hamburger
-      : '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>'; // Chevron Left
+  function returnHome() {
+    toolContainers.classList.add("hidden");
+    defaultView.classList.remove("hidden");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  sidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-    updateSidebarToggleIcon(sidebar.classList.contains("collapsed"));
-  });
-
-  toolSearchIconBtn.addEventListener("click", () => {
-    if (sidebar.classList.contains("collapsed")) {
-      sidebar.classList.remove("collapsed");
-      updateSidebarToggleIcon(false);
+  function toggleCategory(categoryId) {
+    const toolsDiv = document.getElementById(`${categoryId}-tools`);
+    const arrowIcon = document.getElementById(`${categoryId}-arrow`);
+    if (toolsDiv && arrowIcon) {
+      toolsDiv.classList.toggle("hidden");
+      arrowIcon.classList.toggle("rotate-180");
     }
-    toolSearch.focus();
-  });
+  }
 
-  toolSearch.addEventListener("focus", () => {
-    if (sidebar.classList.contains("collapsed")) {
-      sidebar.classList.remove("collapsed");
-      updateSidebarToggleIcon(false);
-    }
-  });
+  // Event Listeners for sidebar and featured cards
+  document
+    .getElementById("sidebar-tool-list")
+    .addEventListener("click", function (e) {
+      const toolEl = e.target.closest("[data-tool]");
+      const categoryToggleEl = e.target.closest("[data-category-toggle]");
 
-  mobileSidebarToggle.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
-  });
-
-  function setActiveTool(toolId) {
-    toolContents.forEach((content) => content.classList.remove("active"));
-    const activeContent = document.getElementById(`${toolId}-content`);
-    if (activeContent) {
-      activeContent.classList.add("active");
-    } else {
-      document.getElementById("dashboard-content").classList.add("active");
-    }
-    window.location.hash = toolId;
-    if (mainContentArea) {
-      mainContentArea.scrollTo(0, 0);
-    } else {
-      window.scrollTo(0, 0);
-    }
-    toolButtons.forEach((btn) => {
-      const isCurrentTool = btn.getAttribute("data-tool") === toolId;
-      btn.classList.toggle(
-        "bg-gray-100",
-        isCurrentTool && !html.classList.contains("dark")
-      );
-      btn.classList.toggle(
-        "dark:bg-gray-700",
-        isCurrentTool && html.classList.contains("dark")
-      );
-      if (!isCurrentTool) {
-        btn.classList.remove("bg-gray-100", "dark:bg-gray-700");
+      if (toolEl) {
+        const toolId = toolEl.dataset.tool;
+        showTool(toolId);
+      } else if (categoryToggleEl) {
+        const categoryId = categoryToggleEl.dataset.categoryToggle;
+        toggleCategory(categoryId);
       }
     });
-  }
 
-  toolButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      const toolId = button.getAttribute("data-tool");
-      setActiveTool(toolId);
-      if (window.innerWidth < 768 && !sidebar.classList.contains("collapsed")) {
-        sidebar.classList.add("collapsed");
-        updateSidebarToggleIcon(true);
-      }
-    });
+  defaultView.addEventListener("click", function (e) {
+    const toolCard = e.target.closest(".tool-card");
+    if (toolCard) {
+      const toolId = toolCard.dataset.tool;
+      showTool(toolId);
+    }
   });
 
-  toolSearch.addEventListener("input", () => {
-    const searchTerm = toolSearch.value.toLowerCase();
-    document.querySelectorAll("#sidebar nav > div").forEach((categoryDiv) => {
-      let categoryHasVisibleItem = false;
-      categoryDiv.querySelectorAll("ul li").forEach((li) => {
-        const button = li.querySelector("button[data-tool]");
-        const toolName =
-          button
-            ?.querySelector(".sidebar-item-text")
-            ?.textContent.toLowerCase() || "";
-        const isVisible = toolName.includes(searchTerm);
-        li.style.display = isVisible ? "block" : "none";
-        if (isVisible) categoryHasVisibleItem = true;
+  document.querySelectorAll(".return-home-btn").forEach((btn) => {
+    btn.addEventListener("click", returnHome);
+  });
+
+  // Search functionality
+  const toolSearchInput = document.getElementById("toolSearchInput");
+  toolSearchInput.addEventListener("input", () => {
+    const searchTerm = toolSearchInput.value.toLowerCase().trim();
+    document
+      .querySelectorAll("#sidebar-tool-list .sidebar-item")
+      .forEach((categoryDiv) => {
+        let categoryHasVisibleItem = false;
+        categoryDiv.querySelectorAll("[data-tool]").forEach((toolDiv) => {
+          const toolName = toolDiv
+            .querySelector("span:last-child")
+            .textContent.toLowerCase();
+          const isVisible = toolName.includes(searchTerm);
+          toolDiv.style.display = isVisible ? "flex" : "none";
+          if (isVisible) categoryHasVisibleItem = true;
+        });
+        categoryDiv.style.display =
+          categoryHasVisibleItem || searchTerm === "" ? "block" : "none";
       });
-      const header = categoryDiv.querySelector("h3");
-      if (header) {
-        header.style.display =
-          categoryHasVisibleItem || searchTerm === "" ? "flex" : "none";
-      }
-    });
   });
 
-  const html = document.documentElement;
-  const savedTheme = "dark";
-  html.classList.add(savedTheme);
-
-  function generateDashboardContent() {
-    const dashboardContentEl = document.getElementById("dashboard-content");
-    const pinnedTools = [
-      {
-        id: "base64-converter",
-        name: "Base64 Encoder/Decoder",
-        desc: "Encode and decode Base64 strings.",
-        icon: `<svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-5 w-5 mr-2 text-blue-500"
-                        viewBox="0 0 100 100"
-                        fill="currentColor">
-                        <text
-                        x="50"
-                        y="60"
-                        font-family="Arial, Helvetica, sans-serif"
-                        font-size="50"
-                        font-weight="bold"
-                        text-anchor="middle">
-                        B64
-                        </text>
-                        </svg>
-                        `,
-      },
-      {
-        id: "url-converter",
-        name: "URL Encoder/Decoder",
-        desc: "Encode and decode URL components.",
-        icon: '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>',
-      },
-      {
-        id: "json-beautifier",
-        name: "JSON Formatter",
-        desc: "Beautify, minify, and view JSON data.",
-        icon: `<svg
-                         xmlns="http://www.w3.org/2000/svg"
-                         class="h-5 w-5 mr-2 text-blue-500"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor"
-                       >
-                         <path
-                           stroke-linecap="round"
-                           stroke-linejoin="round"
-                           stroke-width="2"
-                           d="M6 9v6m-2 0a2 2 0 002 2h.5M6 9H4a2 2 0 012-2h.5M18 15v-6m2 0a2 2 0 00-2-2h-.5m2 8a2 2 0 01-2 2h-.5"
-                         />
-                       </svg>`,
-      },
-      {
-        id: "xml-beautifier",
-        name: "XML Formatter",
-        desc: "Format and view XML data.",
-        icon: `<svg
-                         xmlns="http://www.w3.org/2000/svg"
-                         class="h-5 w-5 mr-2 text-blue-500"
-                         viewBox="0 0 512 512"
-                         fill="currentColor">
-                         <g transform="translate(62.077867, 42.666667)">
-                           <path d="M257.922133,7.10542736e-15 L23.2554667,7.10542736e-15 L23.2554667,234.666667 L65.9221333,234.666667 L65.9221333,192 L65.9221333,169.6 L65.9221333,42.6666667 L240.215467,42.6666667 L321.922133,124.373333 L321.922133,169.6 L321.922133,192 L321.922133,234.666667 L364.5888,234.666667 L364.5888,106.666667 L257.922133,7.10542736e-15 L257.922133,7.10542736e-15 Z M95.936,277.568 L65.728,319.338667 L35.904,277.568 L2.34666667,277.568 L47.3813333,339.946667 L-2.13162821e-14,405.696 L34.0693333,405.696 L64.2986667,362.922667 L94.6773333,405.696 L129.472,405.696 L82.3893333,340.672 L128.938667,277.568 L95.936,277.568 Z M231.0848,346.606933 C228.9088,353.284267 226.4128,361.924267 223.575467,372.462933 C220.759467,361.796267 218.263467,353.1776 216.1728,346.606933 L194.0288,277.3376 L151.255467,277.3376 L151.255467,405.4656 L177.922133,405.4656 L177.922133,301.742933 C180.866133,312.7936 183.447467,321.646933 185.602133,328.3456 L210.562133,405.4656 L235.330133,405.4656 L261.015467,326.1696 C263.6608,318.084267 266.0288,309.956267 268.055467,301.742933 L268.055467,405.4656 L295.831467,405.4656 L295.831467,277.3376 L253.527467,277.3376 L231.0848,346.606933 Z M324.951467,277.568 L324.951467,405.696 L408.855467,405.696 L408.855467,383.082667 L353.815467,383.082667 L353.815467,277.568 L324.951467,277.568 Z"></path>
-                         </g>
-                       </svg>`,
-      },
-      {
-        id: "lorem-ipsum",
-        name: "Lorem Ipsum Generator",
-        desc: "Generate random text.",
-        icon: `<svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 mr-2 text-blue-500"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 >
-                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"
-                                    />
-                              </svg>`,
-      },
-      {
-        id: "syntax-highlighter",
-        name: "Syntax Highlighter",
-        desc: "Highlight and Format code.",
-        icon: `<svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 class="h-5 w-5 mr-2 text-blue-500"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 stroke="currentColor"
-                                 >
-                                 <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                                    />
-                              </svg>`,
-      },
-    ];
-
-    let html = `
-                   <div class="max-w-4xl mx-auto text-center mb-8">
-                       <h2 class="text-3xl font-bold mb-2">Welcome to Pocket Tools</h2>
-                       <p class="text-lg text-gray-600 dark:text-gray-400">Your handy online utilities. Select a tool or pick one below:</p>
-                   </div>
-                   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-               `;
-    pinnedTools.forEach((tool) => {
-      html += `
-                       <a href="#${tool.id}" class="dashboard-card" data-tool-link="${tool.id}">
-                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">${tool.icon}</svg>
-                           <h3>${tool.name}</h3>
-                           <p>${tool.desc}</p>
-                       </a>
-                   `;
+  // Expand/Collapse All
+  const expandBtn = document.getElementById("expand-all-btn");
+  const collapseBtn = document.getElementById("collapse-all-btn");
+  const controlAll = (shouldExpand) => {
+    document.querySelectorAll("[data-category-toggle]").forEach((el) => {
+      const categoryId = el.dataset.categoryToggle;
+      const toolsDiv = document.getElementById(`${categoryId}-tools`);
+      const arrowIcon = document.getElementById(`${categoryId}-arrow`);
+      if (toolsDiv && arrowIcon) {
+        toolsDiv.classList.toggle("hidden", !shouldExpand);
+        arrowIcon.classList.toggle("rotate-180", shouldExpand);
+      }
     });
-    html += `</div>`;
-    dashboardContentEl.innerHTML = html;
+  };
+  expandBtn.addEventListener("click", () => controlAll(true));
+  collapseBtn.addEventListener("click", () => controlAll(false));
 
-    dashboardContentEl.querySelectorAll("[data-tool-link]").forEach((link) => {
-      link.addEventListener("click", (e) => {
-        e.preventDefault();
-        const toolId = link.getAttribute("data-tool-link");
-        setActiveTool(toolId);
-      });
-    });
-  }
-  generateDashboardContent();
+  // --- Core Tool Logic (from index.html, adapted for new UI) ---
+  Prism.plugins.autoloader.languages_path =
+    "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/";
 
-  if (window.location.hash) {
-    const toolIdFromHash = window.location.hash.substring(1);
-    const toolExists = Array.from(toolButtons).some(
-      (btn) => btn.getAttribute("data-tool") === toolIdFromHash
-    );
-    setActiveTool(toolExists ? toolIdFromHash : "dashboard");
-  } else {
-    setActiveTool("dashboard");
-  }
-
+  // --- Helper Functions ---
   function formatFileSize(bytes) {
     if (bytes < 1024) return bytes + " bytes";
-    else if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
-    else return (bytes / 1048576).toFixed(1) + " MB";
+    if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+    return (bytes / 1048576).toFixed(1) + " MB";
   }
 
   function showStatus(elementId, message, isError = false) {
     const el = document.getElementById(elementId);
     if (el) {
       el.textContent = message;
-      el.className = `text-sm ${
-        isError
-          ? "text-red-500 dark:text-red-400"
-          : "text-green-500 dark:text-green-400"
+      el.className = `text-sm h-5 ${
+        isError ? "text-red-400" : "text-green-400"
       }`;
     }
   }
 
   function genericCopy(textToCopy, buttonElement) {
-    if (textToCopy) {
-      navigator.clipboard
-        .writeText(textToCopy)
-        .then(() => {
-          const originalText = buttonElement.textContent;
-          buttonElement.textContent = "Copied!";
-          setTimeout(() => {
-            buttonElement.textContent = originalText;
-          }, 1500);
-        })
-        .catch((err) => {
-          console.warn("Async copy failed:", err);
-          try {
-            const textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            textArea.style.position = "fixed";
-            textArea.style.opacity = 0;
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-            document.execCommand("copy");
-            document.body.removeChild(textArea);
-
-            const originalText = buttonElement.textContent;
-            buttonElement.textContent = "Copied!";
-            setTimeout(() => {
-              buttonElement.textContent = originalText;
-            }, 1500);
-          } catch (e) {
-            alert("Failed to copy.");
-          }
-        });
-    }
+    if (!textToCopy) return;
+    navigator.clipboard
+      .writeText(textToCopy)
+      .then(() => {
+        const originalContent = buttonElement.innerHTML;
+        buttonElement.innerHTML = "Copied!";
+        setTimeout(() => {
+          buttonElement.innerHTML = originalContent;
+        }, 1500);
+      })
+      .catch((err) => console.error("Failed to copy text: ", err));
   }
 
-  function addCopyListener(buttonId, targetIdOrGetter) {
-    const btn = document.getElementById(buttonId);
-    if (btn) {
-      btn.addEventListener("click", () => {
-        let text;
-        if (typeof targetIdOrGetter === "function") {
-          text = targetIdOrGetter();
-        } else {
-          const target = document.getElementById(targetIdOrGetter);
-          if (target) {
-            text =
-              target.value !== undefined ? target.value : target.textContent;
-          }
+  function escapeHtml(unsafe) {
+    return unsafe
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function copyToClipboard(element, button) {
+    navigator.clipboard.writeText(element.textContent).then(() => {
+      const originalText = button.textContent;
+      button.textContent = "Copied!";
+      setTimeout(() => (button.textContent = originalText), 1500);
+    });
+  }
+
+  let pinnedToolIds = [];
+  function initPinningSystem() {
+    const customizeBtn = document.getElementById("customize-pins-btn");
+    const saveBtn = document.getElementById("save-pins-btn");
+    const modal = document.getElementById("pin-modal");
+    const modalList = document.getElementById("pin-modal-tool-list");
+    const closeBtns = [
+      document.getElementById("close-pin-modal-btn"),
+      document.getElementById("cancel-pin-changes-btn"),
+    ];
+
+    // 1. Load pins from localStorage or set defaults
+    loadPins();
+
+    // 2. Render the initial dashboard
+    renderDashboard();
+
+    // 3. Setup Modal
+    customizeBtn.addEventListener("click", openPinModal);
+    closeBtns.forEach((btn) =>
+      btn.addEventListener("click", () => modal.classList.add("hidden"))
+    );
+    saveBtn.addEventListener("click", savePinChanges);
+
+    function loadPins() {
+      const savedPins = localStorage.getItem("pinnedTools");
+      const defaultPins = [
+        "modelGenerator",
+        "jsonFormatter",
+        "xmlFormatter",
+        "base64Converter",
+        "textCompare",
+        "hashGenerator",
+      ];
+
+      if (savedPins) {
+        pinnedToolIds = JSON.parse(savedPins);
+        // If the user has unpinned everything, reset to the default set.
+        if (pinnedToolIds.length === 0) {
+          pinnedToolIds = defaultPins;
         }
-        if (text) {
-          genericCopy(text, btn);
+      } else {
+        // This is for the very first visit.
+        pinnedToolIds = defaultPins;
+      }
+    }
+
+    function savePins() {
+      localStorage.setItem("pinnedTools", JSON.stringify(pinnedToolIds));
+    }
+
+    function renderDashboard() {
+      const grid = document.getElementById("featured-tools-grid");
+      grid.innerHTML = "";
+      if (pinnedToolIds.length === 0) {
+        grid.innerHTML = `<p class="text-gray-400 md:col-span-2 lg:col-span-3 text-center">No tools pinned. Click 'Customize' to add some!</p>`;
+      }
+      pinnedToolIds.forEach((id) => {
+        const tool = allTools.find((t) => t.id === id);
+        if (tool) {
+          grid.innerHTML += createToolCardHTML(tool);
         }
       });
+      // Add event listeners to new unpin buttons
+      document.querySelectorAll(".unpin-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation(); // prevent card click
+          const toolId = e.currentTarget.dataset.toolId;
+          unpinTool(toolId);
+        });
+      });
+    }
+
+    function createToolCardHTML(tool) {
+      return `
+                    <div class="tool-card bg-dark-card rounded-xl p-6 cursor-pointer" data-tool="${tool.id}">
+                        <button class="unpin-btn" data-tool-id="${tool.id}" title="Unpin Tool">
+                            <i class="fas fa-thumbtack"></i>
+                        </button>
+                        <div class="flex items-center mb-4">
+                            <div class="bg-${tool.color} p-3 rounded-xl mr-4">${tool.icon}</div>
+                            <h3 class="text-xl font-semibold">${tool.name}</h3>
+                        </div>
+                        <p class="text-gray-400 mb-4">${tool.description}</p>
+                        <div class="bg-${tool.color} bg-opacity-10 text-${tool.color} px-3 py-1 rounded-full text-xs inline-block">${tool.category}</div>
+                    </div>`;
+    }
+
+    function openPinModal() {
+      modalList.innerHTML = "";
+      allTools.forEach((tool) => {
+        const isPinned = pinnedToolIds.includes(tool.id);
+        modalList.innerHTML += `
+                        <label class="flex items-center p-3 pin-modal-item hover:bg-gray-800 rounded-lg cursor-pointer">
+                            <input type="checkbox" data-tool-id="${
+                              tool.id
+                            }" class="h-5 w-5 mr-4" ${
+          isPinned ? "checked" : ""
+        }>
+                            <div class="bg-${tool.color} p-2 rounded-lg mr-3">${
+          tool.icon
+        }</div>
+                            <div>
+                                <span class="font-medium">${tool.name}</span>
+                                <p class="text-sm text-gray-400">${
+                                  tool.category
+                                }</p>
+                            </div>
+                        </label>`;
+      });
+      modal.classList.remove("hidden");
+    }
+
+    function savePinChanges() {
+      const newPinnedIds = [];
+      modalList
+        .querySelectorAll('input[type="checkbox"]:checked')
+        .forEach((checkbox) => {
+          newPinnedIds.push(checkbox.dataset.toolId);
+        });
+      pinnedToolIds = newPinnedIds;
+      savePins();
+      renderDashboard();
+      modal.classList.add("hidden");
+    }
+
+    function unpinTool(toolId) {
+      pinnedToolIds = pinnedToolIds.filter((id) => id !== toolId);
+      savePins();
+      renderDashboard();
     }
   }
 
   // --- Tool Initializations ---
-  initSvgViewer();
-  initImageCompressor();
-  initImageConverter();
-  initJsonBeautifierAndTree();
-  initXmlBeautifierAndTree();
-  initSyntaxHighlighter();
-  initHtmlBeautifier();
-  initCssBeautifier();
-  initJsBeautifier();
-  initHashGenerator();
-  initAesEncryptDecrypt();
-  initTextComparison();
-  initBase64Converter();
-  initUrlConverter();
-  initMarkdownPreviewer();
-  initTextCaseConverter();
-  initWordCount();
-  initLoremIpsum();
-  initQrCodeGenerator();
-  initUuidGenerator();
-  initPasswordGenerator();
-  initUnitConverter();
-  initColorPicker();
-  initTimestampConverter();
-  initTimezoneConverter();
-  initRegexTester();
-  initNetworkTools();
+  function initAllTools() {
+    initSvgViewer();
+    initImageCompressor();
+    initImageConverter();
+    initModelGenerator();
+    initJsonFormatter();
+    initXmlFormatter();
+    initSyntaxHighlighter();
+    initHashGenerator();
+    initAesEncryptDecrypt();
+    initTextComparison();
+    initBase64Converter();
+    initUrlConverter();
+    initMarkdownPreviewer();
+    initTextCaseConverter();
+    initWordCount();
+    initLoremIpsum();
+    initQrCodeGenerator();
+    initUuidGenerator();
+    initPasswordGenerator();
+    initUnitConverter();
+    initTimestampConverter();
+    initTimezoneConverter();
+    initRegexTester();
+    initNetworkTools();
+  }
+  initAllTools();
+  initPinningSystem();
 
   // --- Tool Implementations ---
   function initSvgViewer() {
-    const inputEl = document.getElementById("svg-input");
-    const previewArea = document.getElementById("svg-preview-area");
-    const loadExampleBtn = document.getElementById("svg-load-example-btn");
-    const clearBtn = document.getElementById("svg-clear-btn");
-
-    const exampleSVG = `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-         <circle cx="50" cy="50" r="40" stroke="black" stroke-width="3" fill="red" />
-         <rect x="25" y="25" width="50" height="50" style="fill:blue;stroke:pink;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
-         <text x="50" y="55" font-family="Verdana" font-size="10" fill="white" text-anchor="middle">SVG!</text>
-         </svg>`;
+    const inputEl = document.getElementById("svgInput");
+    const previewArea = document.getElementById("svgPreview");
+    const renderBtn = document.getElementById("svgRenderBtn");
 
     function renderSVG() {
       const svgCode = inputEl.value;
-      // Basic sanitization: remove script tags. More robust sanitization is complex.
       const sanitizedCode = svgCode.replace(
         /<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi,
         ""
       );
       previewArea.innerHTML = sanitizedCode;
-      if (!previewArea.querySelector("svg") && sanitizedCode.trim() !== "") {
+      if (!previewArea.querySelector("svg") && sanitizedCode.trim()) {
         previewArea.innerHTML =
-          '<p class="text-red-500 dark:text-red-400">Invalid or empty SVG code.</p>';
-      } else if (sanitizedCode.trim() === "") {
+          '<p class="text-red-400">Invalid or empty SVG code.</p>';
+      } else if (!sanitizedCode.trim()) {
         previewArea.innerHTML =
-          '<p class="text-gray-400 dark:text-gray-500">SVG preview will appear here</p>';
+          '<p class="text-gray-500">SVG preview will appear here</p>';
       }
     }
-
+    renderBtn.addEventListener("click", renderSVG);
     inputEl.addEventListener("input", renderSVG);
-    loadExampleBtn.addEventListener("click", () => {
-      inputEl.value = exampleSVG;
-      renderSVG();
-    });
-    clearBtn.addEventListener("click", () => {
-      inputEl.value = "";
-      renderSVG();
-    });
   }
 
   function initImageCompressor() {
     const uploadArea = document.getElementById("ic-upload-area");
-    const imageUpload = document.getElementById("ic-image-upload");
-    const imagePreview = document.getElementById("ic-image-preview");
-    const previewImg = document.getElementById("ic-preview");
-    const originalSizeSpan = document.getElementById("ic-original-size");
-    const originalDimensionsSpan = document.getElementById(
-      "ic-original-dimensions"
-    );
-    const qualityControl = document.getElementById("ic-quality-control");
-    const sizeControl = document.getElementById("ic-size-control");
-    const qualitySlider = document.getElementById("ic-quality");
-    const qualityValue = document.getElementById("ic-quality-value");
-    const targetSizeInput = document.getElementById("ic-target-size");
-    const outputFormatSelect = document.getElementById("ic-output-format");
-    const compressBtn = document.getElementById("ic-compress-btn");
-    const resultsDiv = document.getElementById("ic-results");
-    const compressedSizeSpan = document.getElementById("ic-compressed-size");
-    const compressionRatioSpan = document.getElementById(
-      "ic-compression-ratio"
-    );
-    const compressedPreview = document.getElementById("ic-compressed-preview");
-    const downloadBtn = document.getElementById("ic-download-btn");
-    const compressionModeRadios = document.querySelectorAll(
-      'input[name="ic-compression-mode"]'
-    );
-    let originalImage = null,
-      originalFile = null,
-      compressedBlob = null;
-
-    if (!uploadArea) return; // Tool not present
+    const imageUpload = document.getElementById("imageUpload");
+    const selectImgBtn = document.getElementById("selectImgBtn");
+    const originalPreview = document.getElementById("originalPreview");
+    const originalSize = document.getElementById("originalSize");
+    const qualitySlider = document.getElementById("compressionQuality");
+    const qualityValue = document.getElementById("qualityValue");
+    const compressBtn = document.getElementById("compressBtn");
+    const compressedPreview = document.getElementById("compressedPreview");
+    const compressedSize = document.getElementById("compressedSize");
+    const downloadBtn = document.getElementById("downloadBtn");
+    let originalFile = null;
 
     uploadArea.addEventListener("click", () => imageUpload.click());
-    imageUpload.addEventListener("change", handleImageUpload);
-    qualitySlider.addEventListener(
-      "input",
-      () => (qualityValue.textContent = qualitySlider.value)
-    );
-    compressBtn.addEventListener("click", compressImage);
-
-    compressionModeRadios.forEach((radio) => {
-      radio.addEventListener("change", function () {
-        qualityControl.classList.toggle("hidden", this.value !== "quality");
-        sizeControl.classList.toggle("hidden", this.value !== "size");
-      });
-    });
-
-    function handleImageUpload(e) {
-      const file = e.target.files[0];
-      if (!file || !file.type.match("image.*")) return;
-      originalFile = file;
-      originalSizeSpan.textContent = `Size: ${formatFileSize(file.size)} • `;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        previewImg.src = e.target.result;
-        originalImage = new Image();
-        originalImage.onload = function () {
-          originalDimensionsSpan.textContent = `${this.width}×${this.height} px`;
-          imagePreview.classList.remove("hidden");
-          compressBtn.disabled = false;
-          resultsDiv.classList.add("hidden");
-        };
-        originalImage.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function compressImage() {
-      if (!originalImage) return;
-      const mode = document.querySelector(
-        'input[name="ic-compression-mode"]:checked'
-      ).value;
-      const outputFormatVal = outputFormatSelect.value;
-      const outputFormat =
-        outputFormatVal === "auto"
-          ? originalFile.type.split("/")[1].toLowerCase()
-          : outputFormatVal;
-
-      compressBtn.disabled = true;
-      compressBtn.textContent = "Compressing...";
-      if (mode === "quality")
-        compressByQuality(parseInt(qualitySlider.value), outputFormat);
-      else compressToTargetSize(parseInt(targetSizeInput.value), outputFormat);
-    }
-
-    function compressByQuality(quality, format) {
-      const canvas = document.createElement("canvas");
-      canvas.width = originalImage.width;
-      canvas.height = originalImage.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(originalImage, 0, 0);
-      const mimeType = `image/${format}`;
-      canvas.toBlob(
-        (blob) => showResults(blob, format),
-        mimeType,
-        quality / 100
-      );
-    }
-
-    function compressToTargetSize(targetKB, format) {
-      let minQuality = 1,
-        maxQuality = 100,
-        currentQuality = 50;
-      const mimeType = `image/${format}`;
-      const targetBytes = targetKB * 1024;
-      const canvas = document.createElement("canvas");
-      canvas.width = originalImage.width;
-      canvas.height = originalImage.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(originalImage, 0, 0);
-      let bestBlob = null;
-      let attempts = 0;
-
-      function attempt() {
-        if (attempts >= 7) {
-          showResults(bestBlob || null, format);
-          return;
-        }
-        attempts++;
-        currentQuality = Math.round((minQuality + maxQuality) / 2);
-        if (currentQuality < 1) currentQuality = 1;
-        if (currentQuality > 100) currentQuality = 100;
-
-        canvas.toBlob(
-          (blob) => {
-            if (!blob) {
-              showResults(null, format);
-              return;
-            }
-            if (blob.size > targetBytes) {
-              maxQuality = currentQuality - 1;
-            } else {
-              minQuality = currentQuality + 1;
-              bestBlob = blob;
-            }
-            if (
-              maxQuality >= minQuality &&
-              attempts < 7 &&
-              minQuality <= 100 &&
-              maxQuality >= 1
-            ) {
-              attempt();
-            } else {
-              showResults(bestBlob || blob, format);
-            }
-          },
-          mimeType,
-          currentQuality / 100
-        );
-      }
-      attempt();
-    }
-
-    function showResults(blob, format) {
-      if (!blob) {
-        alert(
-          "Compression failed. The target size might be too small for the chosen format or image dimensions."
-        );
-        compressBtn.disabled = false;
-        compressBtn.textContent = "Compress Image";
-        resultsDiv.classList.add("hidden");
-        return;
-      }
-      compressedBlob = blob;
-      const compressedUrl = URL.createObjectURL(blob);
-      compressedPreview.src = compressedUrl;
-      compressedSizeSpan.textContent = `Size: ${formatFileSize(blob.size)} • `;
-      const ratio = (1 - blob.size / originalFile.size) * 100;
-      compressionRatioSpan.textContent = `Reduced by ${ratio.toFixed(1)}%`;
-      downloadBtn.href = compressedUrl;
-      const fileExt = format === "jpeg" ? "jpg" : format;
-      downloadBtn.download = `compressed_${Date.now()}.${fileExt}`;
-      resultsDiv.classList.remove("hidden");
-      compressBtn.disabled = false;
-      compressBtn.textContent = "Compress Image";
-    }
-  }
-
-  function initImageConverter() {
-    const uploadArea = document.getElementById("iconv-upload-area");
-    const imageUpload = document.getElementById("iconv-image-upload");
-    const previewContainer = document.getElementById(
-      "iconv-image-preview-container"
-    );
-    const previewImg = document.getElementById("iconv-preview");
-    const originalInfo = document.getElementById("iconv-original-info");
-    const outputFormatSelect = document.getElementById("iconv-output-format");
-    const qualitySlider = document.getElementById("iconv-quality");
-    const qualityValue = document.getElementById("iconv-quality-value");
-    const convertBtn = document.getElementById("iconv-convert-btn");
-    const resultsDiv = document.getElementById("iconv-results");
-    const convertedInfo = document.getElementById("iconv-converted-info");
-    const convertedPreview = document.getElementById("iconv-converted-preview");
-    const downloadBtn = document.getElementById("iconv-download-btn");
-    let originalImage = null,
-      originalFile = null;
-
-    if (!uploadArea) return; // Tool not present
-
-    uploadArea.addEventListener("click", () => imageUpload.click());
+    selectImgBtn.addEventListener("click", () => imageUpload.click());
     qualitySlider.addEventListener(
       "input",
       () => (qualityValue.textContent = qualitySlider.value)
@@ -618,129 +575,413 @@ document.addEventListener("DOMContentLoaded", function () {
       const file = e.target.files[0];
       if (!file || !file.type.startsWith("image/")) return;
       originalFile = file;
-      originalInfo.textContent = `Original: ${file.name} (${formatFileSize(
-        file.size
-      )})`;
       const reader = new FileReader();
-      reader.onload = (ev) => {
-        previewImg.src = ev.target.result;
-        originalImage = new Image();
-        originalImage.onload = () => {
-          previewContainer.classList.remove("hidden");
-          convertBtn.disabled = false;
-          resultsDiv.classList.add("hidden");
-        };
-        originalImage.src = ev.target.result;
+      reader.onload = (e) => {
+        originalPreview.src = e.target.result;
+        originalSize.textContent = `${formatFileSize(originalFile.size)}`;
+        compressBtn.disabled = false;
+        compressBtn.classList.remove("opacity-50", "cursor-not-allowed");
       };
       reader.readAsDataURL(file);
     });
 
-    convertBtn.addEventListener("click", () => {
-      if (!originalImage) return;
-      const format = outputFormatSelect.value;
+    compressBtn.addEventListener("click", () => {
+      if (!originalFile) return;
       const quality = parseInt(qualitySlider.value) / 100;
-      const mimeType = `image/${format}`;
-
-      convertBtn.disabled = true;
-      convertBtn.textContent = "Converting...";
-
-      const canvas = document.createElement("canvas");
-      canvas.width = originalImage.naturalWidth;
-      canvas.height = originalImage.naturalHeight;
-      const ctx = canvas.getContext("2d");
-      if (format === "jpeg" || format === "bmp") {
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      }
-      ctx.drawImage(originalImage, 0, 0);
-
-      canvas.toBlob(
-        (blob) => {
-          if (blob) {
-            const url = URL.createObjectURL(blob);
-            convertedPreview.src = url;
-            downloadBtn.href = url;
-            downloadBtn.download = `converted_${Date.now()}.${
-              format === "jpeg" ? "jpg" : format
-            }`;
-            convertedInfo.textContent = `Converted: ${format.toUpperCase()} (${formatFileSize(
-              blob.size
-            )})`;
-            resultsDiv.classList.remove("hidden");
-          } else {
-            alert(
-              "Conversion failed. This format might not be supported by your browser for encoding, or an error occurred."
-            );
-            convertedInfo.textContent = `Conversion to ${format.toUpperCase()} failed.`;
-            resultsDiv.classList.add("hidden");
-          }
-          convertBtn.disabled = false;
-          convertBtn.textContent = "Convert Image";
-        },
-        mimeType,
-        format === "jpeg" || format === "webp" ? quality : undefined
-      );
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob(
+            (blob) => {
+              compressedPreview.src = URL.createObjectURL(blob);
+              compressedSize.textContent = `${formatFileSize(blob.size)}`;
+              downloadBtn.href = URL.createObjectURL(blob);
+              downloadBtn.download = `compressed-${originalFile.name}`;
+              downloadBtn.disabled = false;
+              downloadBtn.classList.remove("opacity-50", "cursor-not-allowed");
+              downloadBtn.classList.remove("bg-image");
+              downloadBtn.classList.add("bg-purple-600");
+            },
+            originalFile.type,
+            quality
+          );
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(originalFile);
     });
   }
 
-  function initJsonBeautifierAndTree() {
-    const inputEl = document.getElementById("json-input");
-    const outputCodeEl = document.getElementById("json-output-code");
-    const outputPreEl = document.getElementById("json-output-pre");
-    const formatBtn = document.getElementById("json-format-btn");
-    const minifyBtn = document.getElementById("json-minify-btn");
-    const clearBtn = document.getElementById("json-clear-btn");
-    const indentSelect = document.getElementById("json-indent");
-    const statusEl = document.getElementById("json-status");
-    const treeViewContainer = document.getElementById(
-      "json-tree-view-container"
-    );
-    const showFormattedBtn = document.getElementById("json-show-formatted-btn");
-    const showTreeBtn = document.getElementById("json-show-tree-btn");
-    const outputLabel = document.getElementById("json-output-label");
-    const treeLabel = document.getElementById("json-tree-label");
-    const copyOutputBtn = document.getElementById("json-copy-output-btn");
+  function initImageConverter() {
+    const uploadArea = document.getElementById("iconv-upload-area");
+    const imageUpload = document.getElementById("iconvImageUpload");
+    const selectImgBtn = document.getElementById("iconvSelectImageBtn");
+    const previewImg = document.getElementById("iconvPreview");
+    const outputFormatSelect = document.getElementById("iconvOutputFormat");
+    const convertBtn = document.getElementById("iconvConvertBtn");
+    const downloadLink = document.getElementById("iconvDownloadLink");
+    const statusEl = document.getElementById("iconvStatus");
+    let originalImageFile = null;
 
-    if (!inputEl) return; // Tool not present
+    uploadArea.addEventListener("click", () => imageUpload.click());
+    selectImgBtn.addEventListener("click", () => imageUpload.click());
 
-    addCopyListener("json-copy-output-btn", () => outputCodeEl.textContent);
+    imageUpload.addEventListener("change", (e) => {
+      const file = e.target.files[0];
+      if (!file || !file.type.startsWith("image/")) return;
+      originalImageFile = file;
+      previewImg.src = URL.createObjectURL(file);
+      convertBtn.disabled = false;
+      convertBtn.classList.remove("opacity-50", "cursor-not-allowed");
+      statusEl.textContent = `Original: ${formatFileSize(file.size)}`;
+    });
 
-    function toggleView(showFormatted) {
-      outputPreEl.style.display = showFormatted ? "block" : "none";
-      outputLabel.style.display = showFormatted ? "block" : "none";
-      copyOutputBtn.style.display = showFormatted ? "inline-flex" : "none";
+    convertBtn.addEventListener("click", () => {
+      if (!originalImageFile) return;
 
-      treeViewContainer.style.display = showFormatted ? "none" : "block";
-      treeLabel.style.display = showFormatted ? "none" : "block";
+      const format = outputFormatSelect.value;
+      const mimeType = `image/${format}`;
+      statusEl.textContent = "Converting...";
 
-      showFormattedBtn.classList.toggle("active", showFormatted);
-      showFormattedBtn.classList.toggle("btn-primary", showFormatted);
-      showFormattedBtn.classList.toggle("btn-secondary", !showFormatted);
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              downloadLink.href = url;
+              downloadLink.download = `converted_${Date.now()}.${
+                format === "jpeg" ? "jpg" : format
+              }`;
+              downloadLink.classList.remove("hidden");
+              statusEl.textContent = `Converted: ${format.toUpperCase()} (${formatFileSize(
+                blob.size
+              )})`;
+            } else {
+              statusEl.textContent = `Conversion to ${format.toUpperCase()} failed.`;
+            }
+          },
+          mimeType,
+          0.9
+        ); // Quality for JPG/WEBP
+      };
+      img.src = URL.createObjectURL(originalImageFile);
+    });
+  }
 
-      showTreeBtn.classList.toggle("active", !showFormatted);
-      showTreeBtn.classList.toggle("btn-primary", !showFormatted);
-      showTreeBtn.classList.toggle("btn-secondary", showFormatted);
+  function initModelGenerator() {
+    const inputEl = document.getElementById("model-input");
+    const outputEl = document.getElementById("model-output");
+    const generateBtn = document.getElementById("model-generate-btn");
+    const copyBtn = document.getElementById("model-copy-btn");
+    const statusEl = document.getElementById("model-status");
+    const languageSelect = document.getElementById("model-language");
+
+    const languages = {
+      csharp: { name: "C#", prism: "csharp" },
+      typescript: { name: "TypeScript", prism: "typescript" },
+      python: { name: "Python", prism: "python" },
+      java: { name: "Java", prism: "java" },
+      go: { name: "Go", prism: "go" },
+      ruby: { name: "Ruby", prism: "ruby" },
+      php: { name: "PHP", prism: "php" },
+      rust: { name: "Rust", prism: "rust" },
+      swift: { name: "Swift", prism: "swift" },
+      kotlin: { name: "Kotlin", prism: "kotlin" },
+      dart: { name: "Dart", prism: "dart" },
+      scala: { name: "Scala", prism: "scala" },
+      r: { name: "R", prism: "r" },
+      perl: { name: "Perl", prism: "perl" },
+      elixir: { name: "Elixir", prism: "elixir" },
+      haskell: { name: "Haskell", prism: "haskell" },
+      javascript: { name: "JavaScript", prism: "javascript" },
+    };
+
+    Object.keys(languages).forEach((key) => {
+      const option = new Option(languages[key].name, key);
+      if (key === "csharp") option.selected = true;
+      languageSelect.appendChild(option);
+    });
+
+    copyBtn.addEventListener("click", () => copyToClipboard(outputEl, copyBtn));
+
+    generateBtn.addEventListener("click", () => {
+      const input = inputEl.value.trim();
+      if (!input) {
+        showStatus(statusEl, "Input cannot be empty.", true);
+        return;
+      }
+      const langKey = languageSelect.value;
+      const typeStrategy = document.querySelector(
+        'input[name="type-strategy"]:checked'
+      ).value;
+
+      let inputType;
+      let code = "";
+
+      try {
+        JSON.parse(input);
+        inputType = "json";
+        code = generateCodeFromJson(input, langKey, typeStrategy);
+      } catch (e) {
+        try {
+          const xmlDoc = new DOMParser().parseFromString(
+            input,
+            "application/xml"
+          );
+          if (xmlDoc.querySelector("parsererror")) throw new Error();
+          inputType = "xml";
+          code = generateCodeFromXml(xmlDoc, langKey, typeStrategy);
+        } catch (e2) {
+          outputEl.textContent = "";
+          Prism.highlightElement(outputEl);
+          showStatus(statusEl, "Input is not valid JSON or XML.", true);
+          return;
+        }
+      }
+
+      outputEl.textContent = code;
+      outputEl.className = `language-${languages[langKey].prism}`;
+      Prism.highlightElement(outputEl);
+      showStatus(
+        statusEl,
+        `${
+          languages[langKey].name
+        } models generated from ${inputType.toUpperCase()}.`
+      );
+    });
+
+    const toPascal = (s) =>
+      s.replace(/(?:^|[-_])(\w)/g, (_, c) => c.toUpperCase());
+    const toSnake = (s) =>
+      s
+        .replace(/([A-Z])/g, "_$1")
+        .toLowerCase()
+        .replace(/^_/, "");
+    const toCamel = (s) => s.replace(/^[A-Z]/, (l) => l.toLowerCase());
+
+    function inferJsonType(value, lang, typeStrategy) {
+      if (typeStrategy === "string")
+        return (
+          { csharp: "string", python: "str", java: "String" }[lang] || "string"
+        );
+      if (value === null)
+        return { csharp: "object", python: "Any" }[lang] || "any";
+      const type = typeof value;
+      if (type === "string")
+        return (
+          { csharp: "string", python: "str", java: "String" }[lang] || "string"
+        );
+      if (type === "boolean")
+        return (
+          { csharp: "bool", python: "bool", java: "boolean" }[lang] || "bool"
+        );
+      if (type === "number")
+        return Number.isInteger(value)
+          ? { csharp: "int", python: "int", java: "Integer", go: "int64" }[
+              lang
+            ] || "int"
+          : {
+              csharp: "double",
+              python: "float",
+              java: "Double",
+              go: "float64",
+            }[lang] || "float";
+      return "object";
     }
 
-    showFormattedBtn.addEventListener("click", () => toggleView(true));
-    showTreeBtn.addEventListener("click", () => toggleView(false));
-    toggleView(true);
+    function inferXmlType(text, lang, typeStrategy) {
+      if (typeStrategy === "string") return "string";
+      if (text === "true" || text === "false") return "bool";
+      if (!isNaN(text) && text.trim() !== "") {
+        if (text.includes(".")) return "double";
+        return "int";
+      }
+      return "string";
+    }
+
+    function generateCodeFromJson(json, lang, typeStrategy) {
+      const data = JSON.parse(json);
+      let classes = new Map();
+      const rootName = "Root";
+
+      function buildClass(obj, name) {
+        if (classes.has(name) || typeof obj !== "object" || obj === null)
+          return;
+        let props = new Map();
+        for (const key in obj) {
+          const value = obj[key];
+          let typeName, arrayType;
+          if (Array.isArray(value)) {
+            const item = value.length > 0 ? value[0] : null;
+            const childName = toPascal(key);
+            arrayType =
+              item !== null && typeof item === "object"
+                ? childName
+                : inferJsonType(item, lang, typeStrategy);
+            if (item !== null && typeof item === "object")
+              buildClass(item, childName);
+            typeName =
+              {
+                csharp: `List<${arrayType}>`,
+                python: `List[${arrayType}]`,
+                java: `List<${arrayType}>`,
+                go: `[]${arrayType}`,
+                typescript: `${arrayType}[]`,
+              }[lang] || `List<${arrayType}>`;
+          } else if (typeof value === "object" && value !== null) {
+            typeName = toPascal(key);
+            buildClass(value, typeName);
+          } else {
+            typeName = inferJsonType(value, lang, typeStrategy);
+          }
+          props.set(key, {
+            name: toPascal(key),
+            type: typeName,
+            original: key,
+          });
+        }
+        classes.set(name, { props: Array.from(props.values()) });
+      }
+
+      buildClass(data, rootName);
+
+      let code = "";
+      if (lang === "csharp")
+        code += "using System.Text.Json.Serialization;\n\n";
+
+      classes.forEach((classData, className) => {
+        let propsString = "";
+        classData.props.forEach((p) => {
+          propsString += `    [JsonPropertyName("${p.original}")]\n    public ${p.type} ${p.name} { get; set; }\n\n`;
+        });
+        code += `public class ${className}\n{\n${propsString.trimEnd()}\n}\n\n`;
+      });
+      return code.trim();
+    }
+
+    function generateCodeFromXml(xmlDoc, lang, typeStrategy) {
+      if (lang !== "csharp")
+        return "// XML to model is currently only supported for C#.";
+
+      let classes = new Map();
+      const rootName = toPascal(xmlDoc.documentElement.nodeName);
+
+      function buildClass(element, className) {
+        if (classes.has(className)) return;
+        let props = [];
+
+        if (element.attributes) {
+          for (const attr of element.attributes) {
+            const type = inferXmlType(attr.value, lang, typeStrategy);
+            props.push(
+              `    [XmlAttribute(AttributeName = "${
+                attr.name
+              }")]\n    public ${type} ${toPascal(attr.name)} { get; set; }\n`
+            );
+          }
+        }
+
+        const childCounts = {};
+        for (const child of element.children) {
+          childCounts[child.nodeName] = (childCounts[child.nodeName] || 0) + 1;
+        }
+
+        const processedChildren = new Set();
+        for (const child of element.children) {
+          if (processedChildren.has(child.nodeName)) continue;
+          const propName = toPascal(child.nodeName);
+          if (childCounts[child.nodeName] > 1) {
+            buildClass(child, propName);
+            props.push(
+              `    [XmlElement(ElementName = "${child.nodeName}")]\n    public List<${propName}> ${propName} { get; set; }\n`
+            );
+          } else {
+            if (child.children.length > 0 || child.attributes.length > 0) {
+              buildClass(child, propName);
+              props.push(
+                `    [XmlElement(ElementName = "${child.nodeName}")]\n    public ${propName} ${propName} { get; set; }\n`
+              );
+            } else {
+              const type = inferXmlType(child.textContent, lang, typeStrategy);
+              props.push(
+                `    [XmlElement(ElementName = "${child.nodeName}")]\n    public ${type} ${propName} { get; set; }\n`
+              );
+            }
+          }
+          processedChildren.add(child.nodeName);
+        }
+
+        const textNode = Array.from(element.childNodes).find(
+          (n) => n.nodeType === 3 && n.textContent.trim()
+        );
+        if (textNode) {
+          const type = inferXmlType(
+            textNode.textContent.trim(),
+            lang,
+            typeStrategy
+          );
+          props.push(`    [XmlText]\n    public ${type} Text { get; set; }\n`);
+        }
+
+        classes.set(className, props);
+      }
+
+      buildClass(xmlDoc.documentElement, rootName);
+
+      let code =
+        "using System.Xml.Serialization;\nusing System.Collections.Generic;\n\n";
+      for (const [name, props] of classes) {
+        code += `[XmlRoot(ElementName = "${toSnake(name).replace(
+          /_/g,
+          "-"
+        )}")]\n`; // A guess for root name
+        code += `public class ${name}\n{\n${props.join("\n")}\n}\n\n`;
+      }
+      return code.trim();
+    }
+  }
+
+  function initJsonFormatter() {
+    const inputEl = document.getElementById("jsonInput");
+    const outputCodeEl = document.getElementById("jsonOutput");
+    const formatBtn = document.getElementById("jsonFormatBtn");
+    const minifyBtn = document.getElementById("jsonMinifyBtn");
+    const clearBtn = document.getElementById("jsonClearBtn");
+    const statusEl = document.getElementById("jsonStatus");
+    const treeViewContainer = document.getElementById("jsonTreeView");
+    const showFormattedBtn = document.getElementById("json-show-formatted-btn");
+    const showTreeBtn = document.getElementById("json-show-tree-btn");
+    const preOutputView = document.getElementById("json-output-pre");
+
+    function toggleView(showTree) {
+      preOutputView.classList.toggle("hidden", showTree);
+      treeViewContainer.classList.toggle("hidden", !showTree);
+      showFormattedBtn.style.backgroundColor = showTree ? "" : "#FFD166";
+      showFormattedBtn.style.color = showTree ? "" : "black";
+      showTreeBtn.style.backgroundColor = showTree ? "#FFD116" : "";
+      showTreeBtn.style.color = showTree ? "black" : "";
+    }
+
+    showFormattedBtn.addEventListener("click", () => toggleView(false));
+    showTreeBtn.addEventListener("click", () => toggleView(true));
+    toggleView(false); // Default to formatted text
 
     function buildJsonTree(data, parentElement) {
       parentElement.innerHTML = "";
       const ul = document.createElement("ul");
       ul.className = "tree-view";
-      if (Object.keys(data).length === 0 && !Array.isArray(data)) {
-        parentElement.innerHTML =
-          '<p class="text-gray-500 dark:text-gray-400 text-sm p-2">Empty JSON object or invalid structure for tree view.</p>';
-        return;
-      }
-      if (Array.isArray(data) && data.length === 0) {
-        parentElement.innerHTML =
-          '<p class="text-gray-500 dark:text-gray-400 text-sm p-2">Empty JSON array.</p>';
-        return;
-      }
-
       const items = Array.isArray(data) ? data.entries() : Object.entries(data);
 
       for (const [key, value] of items) {
@@ -749,20 +990,16 @@ document.addEventListener("DOMContentLoaded", function () {
         keySpan.className = "tree-key";
         keySpan.textContent = Array.isArray(data) ? `[${key}]: ` : `"${key}": `;
 
-        let valueSpan;
-
         if (typeof value === "object" && value !== null) {
+          li.className = "tree-node collapsed";
           const toggler = document.createElement("span");
           toggler.className = "tree-toggler";
           toggler.textContent = "▸";
-          li.className = "tree-node collapsed";
           li.appendChild(toggler);
           li.appendChild(keySpan);
-
           const childUl = document.createElement("ul");
           buildJsonTree(value, childUl);
           li.appendChild(childUl);
-
           toggler.onclick = (e) => {
             e.stopPropagation();
             li.classList.toggle("collapsed");
@@ -772,7 +1009,7 @@ document.addEventListener("DOMContentLoaded", function () {
           };
         } else {
           li.appendChild(keySpan);
-          valueSpan = document.createElement("span");
+          const valueSpan = document.createElement("span");
           if (typeof value === "string") {
             valueSpan.className = "tree-value-string";
             valueSpan.textContent = `"${value}"`;
@@ -782,7 +1019,7 @@ document.addEventListener("DOMContentLoaded", function () {
           } else if (typeof value === "boolean") {
             valueSpan.className = "tree-value-boolean";
             valueSpan.textContent = value;
-          } else if (value === null) {
+          } else {
             valueSpan.className = "tree-value-null";
             valueSpan.textContent = "null";
           }
@@ -796,248 +1033,155 @@ document.addEventListener("DOMContentLoaded", function () {
     function processJson(minify = false) {
       try {
         const jsonObj = JSON.parse(inputEl.value);
-        const indentValue = minify
-          ? 0
-          : indentSelect.value === "tab"
-          ? "\t"
-          : parseInt(indentSelect.value);
-        outputCodeEl.textContent = JSON.stringify(jsonObj, null, indentValue);
+        outputCodeEl.textContent = JSON.stringify(
+          jsonObj,
+          null,
+          minify ? 0 : 2
+        );
         Prism.highlightElement(outputCodeEl);
         buildJsonTree(jsonObj, treeViewContainer);
-        showStatus(
-          "json-status",
-          minify
-            ? "JSON minified successfully!"
-            : "JSON formatted successfully!"
-        );
+        showStatus(statusEl, minify ? "JSON minified!" : "JSON formatted!");
       } catch (e) {
         outputCodeEl.textContent = "";
-        Prism.highlightElement(outputCodeEl); // Clear highlight
-        treeViewContainer.innerHTML =
-          '<p class="text-red-500 p-2">Invalid JSON input.</p>';
-        showStatus("json-status", "Invalid JSON: " + e.message, true);
+        Prism.highlightElement(outputCodeEl);
+        treeViewContainer.innerHTML = `<p class="text-red-400">${e.message}</p>`;
+        showStatus(statusEl, "Invalid JSON: " + e.message, true);
       }
     }
 
     formatBtn.addEventListener("click", () => processJson(false));
     minifyBtn.addEventListener("click", () => processJson(true));
-
     clearBtn.addEventListener("click", () => {
       inputEl.value = "";
       outputCodeEl.textContent = "";
-      Prism.highlightElement(outputCodeEl);
       treeViewContainer.innerHTML = "";
-      statusEl.textContent = "";
-      showStatus("json-status", "");
+      Prism.highlightElement(outputCodeEl);
+      showStatus(statusEl, "");
     });
   }
 
-  function initXmlBeautifierAndTree() {
-    const inputEl = document.getElementById("xml-input");
-    const outputCodeEl = document.getElementById("xml-output-code");
-    const outputPreEl = document.getElementById("xml-output-pre");
-    const formatBtn = document.getElementById("xml-format-btn");
-    const clearBtn = document.getElementById("xml-clear-btn");
-    const statusEl = document.getElementById("xml-status");
-    const treeViewContainer = document.getElementById(
-      "xml-tree-view-container"
-    );
+  function initXmlFormatter() {
+    const inputEl = document.getElementById("xmlInput");
+    const outputCodeEl = document.getElementById("xmlOutput");
+    const formatBtn = document.getElementById("xmlFormatBtn");
+    const clearBtn = document.getElementById("xmlClearBtn");
+    const statusEl = document.getElementById("xmlStatus");
+    const treeViewContainer = document.getElementById("xmlTreeView");
     const showFormattedBtn = document.getElementById("xml-show-formatted-btn");
     const showTreeBtn = document.getElementById("xml-show-tree-btn");
-    const outputLabel = document.getElementById("xml-output-label");
-    const treeLabel = document.getElementById("xml-tree-label");
-    const copyOutputBtn = document.getElementById("xml-copy-output-btn");
+    const preOutputView = document.getElementById("xml-output-pre");
 
-    if (!inputEl) return; // Tool not present
-
-    addCopyListener("xml-copy-output-btn", () => outputCodeEl.textContent);
-
-    function toggleView(showFormatted) {
-      outputPreEl.style.display = showFormatted ? "block" : "none";
-      outputLabel.style.display = showFormatted ? "block" : "none";
-      copyOutputBtn.style.display = showFormatted ? "inline-flex" : "none";
-
-      treeViewContainer.style.display = showFormatted ? "none" : "block";
-      treeLabel.style.display = showFormatted ? "none" : "block";
-
-      showFormattedBtn.classList.toggle("active", showFormatted);
-      showFormattedBtn.classList.toggle("btn-primary", showFormatted);
-      showFormattedBtn.classList.toggle("btn-secondary", !showFormatted);
-
-      showTreeBtn.classList.toggle("active", !showFormatted);
-      showTreeBtn.classList.toggle("btn-primary", !showFormatted);
-      showTreeBtn.classList.toggle("btn-secondary", showFormatted);
+    function toggleView(showTree) {
+      preOutputView.classList.toggle("hidden", showTree);
+      treeViewContainer.classList.toggle("hidden", !showTree);
+      showFormattedBtn.style.backgroundColor = showTree ? "" : "#FFD166";
+      showFormattedBtn.style.color = showTree ? "" : "black";
+      showTreeBtn.style.backgroundColor = showTree ? "#FFD166" : "";
+      showTreeBtn.style.color = showTree ? "black" : "";
     }
-    showFormattedBtn.addEventListener("click", () => toggleView(true));
-    showTreeBtn.addEventListener("click", () => toggleView(false));
-    toggleView(true);
 
-    function formatXml(xml) {
-      // Using html_beautify for XML as it handles it reasonably well
-      try {
-        if (typeof html_beautify !== "undefined") {
-          return html_beautify(xml, { indent_size: 2, unformatted: [] });
-        }
-      } catch (e) {
-        /* fallback or error */
-      }
-
-      // Fallback basic formatter (less robust)
-      let formatted = "",
-        indent = "";
-      const tab = "  ";
-      xml.split(/>\s*</).forEach((node) => {
-        if (node.match(/^\/\w/)) indent = indent.substring(tab.length);
-        let currentIndent = indent;
-        const selfClosingOrCommentOrPI = node.match(
-          /^(?:[^>]*\/>|\?.*\?|!--.*--)$/
-        );
-        formatted += currentIndent + "<" + node + ">\r\n";
-        if (node.match(/^<?\w[^>]*[^\/]$/) && !selfClosingOrCommentOrPI) {
-          indent += tab;
-        }
-      });
-      return formatted.trim();
-    }
+    showFormattedBtn.addEventListener("click", () => toggleView(false));
+    showTreeBtn.addEventListener("click", () => toggleView(true));
+    toggleView(false); // Default view
 
     function buildXmlTree(xmlNode, parentElement) {
       const li = document.createElement("li");
       const nodeContainer = document.createElement("div");
-
-      const toggler = document.createElement("span");
-      toggler.className = "tree-toggler";
 
       const tagSpan = document.createElement("span");
       tagSpan.className = "xml-tag";
       tagSpan.textContent = `<${xmlNode.nodeName}`;
       nodeContainer.appendChild(tagSpan);
 
-      if (xmlNode.attributes && xmlNode.attributes.length > 0) {
-        for (let i = 0; i < xmlNode.attributes.length; i++) {
-          const attr = xmlNode.attributes[i];
+      if (xmlNode.attributes) {
+        for (const attr of xmlNode.attributes) {
           const attrNameSpan = document.createElement("span");
           attrNameSpan.className = "xml-attribute-name";
-          attrNameSpan.textContent = ` ${attr.name}`;
+          attrNameSpan.textContent = `${attr.name}`;
           nodeContainer.appendChild(attrNameSpan);
-          const attrEqSpan = document.createElement("span");
-          attrEqSpan.textContent = `=`;
-          nodeContainer.appendChild(attrEqSpan);
+          nodeContainer.append(`="`);
           const attrValSpan = document.createElement("span");
           attrValSpan.className = "xml-attribute-value";
-          attrValSpan.textContent = `"${attr.value}"`;
+          attrValSpan.textContent = `${attr.value}`;
           nodeContainer.appendChild(attrValSpan);
+          nodeContainer.append(`"`);
         }
       }
 
-      const childNodesArray = Array.from(xmlNode.childNodes);
-      const elementChildren = childNodesArray.filter(
-        (n) => n.nodeType === Node.ELEMENT_NODE
-      );
-      const textChildren = childNodesArray.filter(
+      const elementChildren = Array.from(xmlNode.children);
+      const textChildren = Array.from(xmlNode.childNodes).filter(
         (n) => n.nodeType === Node.TEXT_NODE && n.nodeValue.trim()
       );
 
-      const isSelfClosing =
-        elementChildren.length === 0 &&
-        textChildren.length === 0 &&
-        xmlNode.childNodes.length === 0;
-
-      if (isSelfClosing && xmlNode.nodeType === Node.ELEMENT_NODE) {
+      if (elementChildren.length === 0 && textChildren.length === 0) {
         tagSpan.textContent += ` />`;
+        li.appendChild(nodeContainer);
       } else {
         tagSpan.textContent += `>`;
-      }
-
-      if (elementChildren.length > 0 || textChildren.length > 0) {
-        toggler.textContent = "▸";
         li.className = "tree-node collapsed";
+        const toggler = document.createElement("span");
+        toggler.className = "tree-toggler";
+        toggler.textContent = "▸";
         li.appendChild(toggler);
-      } else {
-        toggler.textContent = " "; // Keep space for alignment
-        li.appendChild(toggler);
-      }
-      li.appendChild(nodeContainer);
+        li.appendChild(nodeContainer);
 
-      if (elementChildren.length > 0 || textChildren.length > 0) {
         const childUl = document.createElement("ul");
-        elementChildren.forEach((child) => buildXmlTree(child, childUl));
         textChildren.forEach((child) => {
           const textLi = document.createElement("li");
-          textLi.style.listStyleType = "none"; // No bullet for text
+          textLi.style.cssText = "list-style-type: none; margin-left: -1em;";
           const textSpan = document.createElement("span");
           textSpan.className = "xml-text-node";
           textSpan.textContent = child.nodeValue.trim();
           textLi.appendChild(textSpan);
           childUl.appendChild(textLi);
         });
+        elementChildren.forEach((child) => buildXmlTree(child, childUl));
         li.appendChild(childUl);
+
+        const closingTag = document.createElement("span");
+        closingTag.className = "xml-tag";
+        closingTag.textContent = `</${xmlNode.nodeName}>`;
+        li.appendChild(closingTag);
+
+        toggler.onclick = (e) => {
+          e.stopPropagation();
+          li.classList.toggle("collapsed");
+          toggler.textContent = li.classList.contains("collapsed") ? "▸" : "▾";
+        };
       }
-
-      if (!isSelfClosing && xmlNode.nodeType === Node.ELEMENT_NODE) {
-        const closingTagSpan = document.createElement("span");
-        closingTagSpan.className = "xml-tag";
-        closingTagSpan.textContent = `</${xmlNode.nodeName}>`;
-
-        const closingDiv = document.createElement("div"); // Wrap in div for new line behavior
-        // Indent closing tag slightly if it's on a new line
-        if (elementChildren.length > 0 || textChildren.length > 0) {
-          closingDiv.style.paddingLeft = "1em"; // Match tree toggler margin + ul padding
-        }
-        closingDiv.appendChild(closingTagSpan);
-        li.appendChild(closingDiv);
-      }
-
-      toggler.onclick = (e) => {
-        if (!li.classList.contains("tree-node")) return;
-        e.stopPropagation();
-        li.classList.toggle("collapsed");
-        toggler.textContent = li.classList.contains("collapsed") ? "▸" : "▾";
-      };
       parentElement.appendChild(li);
     }
 
     function processXml() {
       const xmlString = inputEl.value;
-      treeViewContainer.innerHTML = "";
       if (!xmlString.trim()) {
-        outputCodeEl.textContent = "";
-        Prism.highlightElement(outputCodeEl);
-        showStatus("xml-status", "Input is empty.", true);
+        showStatus(statusEl, "Input is empty.", true);
         return;
       }
       try {
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xmlString, "application/xml");
-        const parseError = xmlDoc.getElementsByTagName("parsererror");
-        if (parseError.length > 0) {
-          throw new Error(
-            "Invalid XML: " +
-              parseError[0].textContent
-                .split("\n")[0]
-                .replace(/<[^>]+>/g, "")
-                .trim()
-          );
-        }
+        const parseError = xmlDoc.querySelector("parsererror");
+        if (parseError) throw new Error(parseError.textContent.split("\n")[0]);
 
-        outputCodeEl.textContent = formatXml(xmlString);
+        outputCodeEl.textContent = html_beautify(xmlString, {
+          indent_size: 2,
+          unformatted: [],
+        });
         Prism.highlightElement(outputCodeEl);
 
-        const rootElement = xmlDoc.documentElement;
-        if (rootElement) {
-          const rootUl = document.createElement("ul");
-          rootUl.className = "tree-view";
-          buildXmlTree(rootElement, rootUl);
-          treeViewContainer.appendChild(rootUl);
-        } else {
-          treeViewContainer.innerHTML =
-            '<p class="text-red-500 p-2">No root element found in XML.</p>';
-        }
-        showStatus("xml-status", "XML processed successfully!");
+        treeViewContainer.innerHTML = "";
+        const rootUl = document.createElement("ul");
+        rootUl.className = "tree-view";
+        buildXmlTree(xmlDoc.documentElement, rootUl);
+        treeViewContainer.appendChild(rootUl);
+
+        showStatus(statusEl, "XML processed successfully!");
       } catch (e) {
-        outputCodeEl.textContent = xmlString; // Show original on error
+        outputCodeEl.textContent = "";
         Prism.highlightElement(outputCodeEl);
-        treeViewContainer.innerHTML = `<p class="text-red-500 p-2">${e.message}</p>`;
-        showStatus("xml-status", e.message, true);
+        treeViewContainer.innerHTML = `<p class="text-red-400">${e.message}</p>`;
+        showStatus(statusEl, "Invalid XML: " + e.message, true);
       }
     }
 
@@ -1045,10 +1189,9 @@ document.addEventListener("DOMContentLoaded", function () {
     clearBtn.addEventListener("click", () => {
       inputEl.value = "";
       outputCodeEl.textContent = "";
-      Prism.highlightElement(outputCodeEl);
       treeViewContainer.innerHTML = "";
-      statusEl.textContent = "";
-      showStatus("xml-status", "");
+      Prism.highlightElement(outputCodeEl);
+      showStatus(statusEl, "");
     });
   }
 
@@ -1056,138 +1199,18 @@ document.addEventListener("DOMContentLoaded", function () {
     const languageSelect = document.getElementById("sh-language");
     const inputArea = document.getElementById("sh-input");
     const outputCode = document.getElementById("sh-output-code");
-    const outputPre = document.getElementById("sh-output-pre");
-    const formatBtn = document.getElementById("sh-format-code-btn");
-    const statusEl = document.getElementById("sh-status");
-
-    if (!inputArea) return; // Tool not present
-    addCopyListener("sh-copy-input-btn", "sh-input");
-
-    addCopyListener("sh-copy-output-btn", "sh-output-code");
 
     function highlight() {
       const code = inputArea.value;
       const language = languageSelect.value;
       outputCode.textContent = code;
       outputCode.className = `language-${language}`;
+      outputCode.parentElement.className = `syntax-highlight language-${language}`;
       Prism.highlightElement(outputCode);
     }
-
-    formatBtn.addEventListener("click", () => {
-      const lang = languageSelect.value;
-      let formattedCode = inputArea.value;
-      let beautifierUsed = false;
-      showStatus("sh-status", "");
-      try {
-        if (lang === "javascript" && typeof js_beautify !== "undefined") {
-          formattedCode = js_beautify(inputArea.value, {
-            indent_size: 2,
-          });
-          beautifierUsed = true;
-        } else if (
-          (lang === "markup" ||
-            lang === "html" ||
-            lang === "xml" ||
-            lang === "svg" ||
-            lang === "json") &&
-          typeof html_beautify !== "undefined"
-        ) {
-          // html_beautify can handle JSON and XML-like structures
-          formattedCode = html_beautify(inputArea.value, {
-            indent_size: 2,
-          });
-          beautifierUsed = true;
-        } else if (lang === "css" && typeof css_beautify !== "undefined") {
-          formattedCode = css_beautify(inputArea.value, {
-            indent_size: 2,
-          });
-          beautifierUsed = true;
-        }
-        inputArea.value = formattedCode;
-        highlight();
-        if (beautifierUsed) {
-          showStatus("sh-status", "Code formatted successfully.");
-        } else {
-          showStatus(
-            "sh-status",
-            "No beautifier available for this language.",
-            true
-          );
-        }
-      } catch (e) {
-        showStatus("sh-status", "Error formatting code: " + e.message, true);
-      }
-    });
-
     inputArea.addEventListener("input", highlight);
-    languageSelect.addEventListener("change", () => {
-      showStatus("sh-status", ""); // Clear status on lang change
-      highlight();
-    });
-    highlight();
-  }
-
-  function initHtmlBeautifier() {
-    const input = document.getElementById("html-beautify-input");
-    const output = document.getElementById("html-beautify-output");
-    const beautifyBtn = document.getElementById("html-beautify-btn");
-    const statusEl = document.getElementById("html-beautify-status");
-
-    if (!input) return; // Tool not present
-    addCopyListener("html-copy-beautify-output-btn", "html-beautify-output");
-
-    beautifyBtn.addEventListener("click", () => {
-      try {
-        if (typeof html_beautify === "undefined")
-          throw new Error("HTML beautifier library not loaded.");
-        output.value = html_beautify(input.value, { indent_size: 2 });
-        showStatus("html-beautify-status", "HTML beautified successfully!");
-      } catch (e) {
-        output.value = input.value;
-        showStatus("html-beautify-status", "Error: " + e.message, true);
-      }
-    });
-  }
-  function initCssBeautifier() {
-    const input = document.getElementById("css-beautify-input");
-    const output = document.getElementById("css-beautify-output");
-    const beautifyBtn = document.getElementById("css-beautify-btn");
-    const statusEl = document.getElementById("css-beautify-status");
-
-    if (!input) return; // Tool not present
-    addCopyListener("css-copy-beautify-output-btn", "css-beautify-output");
-
-    beautifyBtn.addEventListener("click", () => {
-      try {
-        if (typeof css_beautify === "undefined")
-          throw new Error("CSS beautifier library not loaded.");
-        output.value = css_beautify(input.value, { indent_size: 2 });
-        showStatus("css-beautify-status", "CSS beautified successfully!");
-      } catch (e) {
-        output.value = input.value;
-        showStatus("css-beautify-status", "Error: " + e.message, true);
-      }
-    });
-  }
-  function initJsBeautifier() {
-    const input = document.getElementById("js-beautify-input");
-    const output = document.getElementById("js-beautify-output");
-    const beautifyBtn = document.getElementById("js-beautify-btn");
-    const statusEl = document.getElementById("js-beautify-status");
-
-    if (!input) return; // Tool not present
-    addCopyListener("js-copy-beautify-output-btn", "js-beautify-output");
-    beautifyBtn.addEventListener("click", () => {
-      try {
-        if (typeof js_beautify === "undefined")
-          throw new Error("JS beautifier library not loaded.");
-        output.value = js_beautify(input.value, { indent_size: 2 });
-        showStatus("js-beautify-status", "JavaScript beautified successfully!");
-      } catch (e) {
-        output.value = input.value;
-        showStatus("js-beautify-status", "Error: " + e.message, true);
-      }
-    });
+    languageSelect.addEventListener("change", highlight);
+    highlight(); // Initial call
   }
 
   function initHashGenerator() {
@@ -1196,25 +1219,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const generateBtn = document.getElementById("hash-generate-btn");
     const outputEl = document.getElementById("hash-output");
 
-    if (!inputEl) return; // Tool not present
-    addCopyListener("hash-copy-output-btn", "hash-output");
-
     generateBtn.addEventListener("click", async () => {
       const text = inputEl.value;
-      const algo = algoSelect.value;
-      if (!text) {
-        outputEl.value = "Please enter text to hash.";
-        return;
-      }
+      if (!text) return;
       try {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(text);
-        const hashBuffer = await crypto.subtle.digest(algo, data);
+        const data = new TextEncoder().encode(text);
+        const hashBuffer = await crypto.subtle.digest(algoSelect.value, data);
         const hashArray = Array.from(new Uint8Array(hashBuffer));
-        const hashHex = hashArray
+        outputEl.value = hashArray
           .map((b) => b.toString(16).padStart(2, "0"))
           .join("");
-        outputEl.value = hashHex;
       } catch (e) {
         outputEl.value = "Error generating hash: " + e.message;
       }
@@ -1229,25 +1243,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const outputArea = document.getElementById("aes-output");
     const statusEl = document.getElementById("aes-status");
 
-    if (!textInput) return; // Tool not present
-    addCopyListener("aes-copy-output-btn", "aes-output");
-
     async function getKey(password, salt) {
-      const enc = new TextEncoder();
       const keyMaterial = await crypto.subtle.importKey(
         "raw",
-        enc.encode(password),
+        new TextEncoder().encode(password),
         { name: "PBKDF2" },
         false,
         ["deriveKey"]
       );
       return crypto.subtle.deriveKey(
-        {
-          name: "PBKDF2",
-          salt: salt,
-          iterations: 100000,
-          hash: "SHA-256",
-        },
+        { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
         keyMaterial,
         { name: "AES-GCM", length: 256 },
         true,
@@ -1266,21 +1271,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const salt = crypto.getRandomValues(new Uint8Array(16));
         const iv = crypto.getRandomValues(new Uint8Array(12));
         const key = await getKey(password, salt);
-        const enc = new TextEncoder();
-        const encodedPlaintext = enc.encode(plaintext);
+        const encodedPlaintext = new TextEncoder().encode(plaintext);
         const ciphertextBuffer = await crypto.subtle.encrypt(
-          { name: "AES-GCM", iv: iv },
+          { name: "AES-GCM", iv },
           key,
           encodedPlaintext
         );
-
         const combined = new Uint8Array(
           salt.length + iv.length + ciphertextBuffer.byteLength
         );
         combined.set(salt, 0);
         combined.set(iv, salt.length);
         combined.set(new Uint8Array(ciphertextBuffer), salt.length + iv.length);
-
         outputArea.value = btoa(String.fromCharCode.apply(null, combined));
         showStatus("aes-status", "Encryption successful.");
       } catch (e) {
@@ -1295,41 +1297,29 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!base64Input || !password) {
           showStatus(
             "aes-status",
-            "Encrypted text (from input) and password are required.",
+            "Ciphertext and password are required.",
             true
           );
           return;
         }
-
         const combined = Uint8Array.from(atob(base64Input), (c) =>
           c.charCodeAt(0)
         );
-        if (combined.length < 28) {
-          // salt (16) + iv (12)
-          throw new Error("Ciphertext is too short.");
-        }
+        if (combined.length < 28) throw new Error("Ciphertext is too short.");
         const salt = combined.slice(0, 16);
-        const iv = combined.slice(16, 16 + 12);
-        const ciphertext = combined.slice(16 + 12);
-
+        const iv = combined.slice(16, 28);
+        const ciphertext = combined.slice(28);
         const key = await getKey(password, salt);
         const decryptedBuffer = await crypto.subtle.decrypt(
-          { name: "AES-GCM", iv: iv },
+          { name: "AES-GCM", iv },
           key,
           ciphertext
         );
-        const dec = new TextDecoder();
-        outputArea.value = dec.decode(decryptedBuffer);
+        outputArea.value = new TextDecoder().decode(decryptedBuffer);
         showStatus("aes-status", "Decryption successful.");
       } catch (e) {
         outputArea.value = "";
-        showStatus(
-          "aes-status",
-          "Decryption failed: " +
-            e.message +
-            ". Ensure correct password and Base64 ciphertext format.",
-          true
-        );
+        showStatus("aes-status", "Decryption failed: " + e.message, true);
       }
     });
   }
@@ -1337,81 +1327,99 @@ document.addEventListener("DOMContentLoaded", function () {
   function initTextComparison() {
     const input1El = document.getElementById("text-compare-input1");
     const input2El = document.getElementById("text-compare-input2");
-    const compareBtn = document.getElementById("text-compare-btn");
-    const resultEl = document.getElementById("text-compare-result");
+    const resultLeftEl = document.getElementById("text-compare-result-left");
+    const resultRightEl = document.getElementById("text-compare-result-right");
+    const modeContainer =
+      document.querySelector(".diff-mode-btn").parentElement;
+    let currentDiffMode = "word";
 
-    if (!input1El) return; // Tool not present
-    const resultPre = resultEl.querySelector("pre");
+    function runComparison() {
+      const text1 = input1El.value;
+      const text2 = input2El.value;
 
-    compareBtn.addEventListener("click", () => {
-      const text1Lines = input1El.value.split("\n");
-      const text2Lines = input2El.value.split("\n");
-      let diffOutput = "";
+      let diffFunction;
+      if (currentDiffMode === "line") diffFunction = Diff.diffLines;
+      else if (currentDiffMode === "char") diffFunction = Diff.diffChars;
+      else diffFunction = Diff.diffWords;
 
-      const maxLines = Math.max(text1Lines.length, text2Lines.length);
-      let differencesFound = false;
-      for (let i = 0; i < maxLines; i++) {
-        const line1 = text1Lines[i] === undefined ? null : text1Lines[i];
-        const line2 = text2Lines[i] === undefined ? null : text2Lines[i];
+      const diffs = diffFunction(text1, text2);
+      let leftHtml = "";
+      let rightHtml = "";
 
-        if (line1 === line2) {
-          diffOutput += `  ${line1 === null ? "" : escapeHtml(line1)}\n`;
+      diffs.forEach((part) => {
+        const escapedValue = escapeHtml(part.value);
+        if (part.added) {
+          rightHtml += `<ins>${escapedValue}</ins>`;
+        } else if (part.removed) {
+          leftHtml += `<del>${escapedValue}</del>`;
         } else {
-          differencesFound = true;
-          if (line1 !== null) diffOutput += `- ${escapeHtml(line1)}\n`;
-          if (line2 !== null) diffOutput += `+ ${escapeHtml(line2)}\n`;
+          leftHtml += `<span>${escapedValue}</span>`;
+          rightHtml += `<span>${escapedValue}</span>`;
         }
+      });
+
+      resultLeftEl.innerHTML = leftHtml || " ";
+      resultRightEl.innerHTML = rightHtml || " ";
+    }
+
+    modeContainer.addEventListener("click", (e) => {
+      if (e.target.tagName === "BUTTON") {
+        modeContainer.querySelector(".active").classList.remove("active");
+        e.target.classList.add("active");
+        currentDiffMode = e.target.dataset.mode;
+        runComparison();
       }
-      resultPre.innerHTML = diffOutput || "Texts are identical or empty.";
-      if (differencesFound) {
-        resultPre.innerHTML = diffOutput
-          .replace(
-            /- .*\n?/g,
-            (match) =>
-              `<span class="text-red-500 dark:text-red-400">${match}</span>`
-          )
-          .replace(
-            /\+ .*\n?/g,
-            (match) =>
-              `<span class="text-green-500 dark:text-green-400">${match}</span>`
-          );
-      }
-      resultEl.classList.remove("hidden");
     });
+
+    input1El.addEventListener("input", runComparison);
+    input2El.addEventListener("input", runComparison);
+
+    // Sync scrolling for all text areas in this tool
+    const scrollElements = document.querySelectorAll(
+      "#textCompare .sync-scroll"
+    );
+    scrollElements.forEach((el) => {
+      el.addEventListener("scroll", () => {
+        const scrollPos = el.scrollTop;
+        scrollElements.forEach((otherEl) => {
+          if (otherEl !== el) {
+            otherEl.scrollTop = scrollPos;
+          }
+        });
+      });
+    });
+
+    runComparison(); // Initial run
   }
 
   function initBase64Converter() {
-    const inputEl = document.getElementById("base64-input");
-    const outputEl = document.getElementById("base64-output");
-    const encodeBtn = document.getElementById("base64-encode-btn");
-    const decodeBtn = document.getElementById("base64-decode-btn");
-    const statusEl = document.getElementById("base64-status");
-
-    if (!inputEl) return; // Tool not present
-    addCopyListener("base64-copy-output-btn", "base64-output");
+    const inputEl = document.getElementById("base64Input");
+    const outputEl = document.getElementById("base64Output");
+    const encodeBtn = document.getElementById("encodeBase64Btn");
+    const decodeBtn = document.getElementById("decodeBase64Btn");
+    const statusEl = document.getElementById("base64Status");
 
     encodeBtn.addEventListener("click", () => {
       try {
         const utf8Bytes = new TextEncoder().encode(inputEl.value);
         const binaryString = String.fromCharCode(...utf8Bytes);
         outputEl.value = btoa(binaryString);
-        showStatus("base64-status", "Encoded successfully!");
+        showStatus("base64Status", "Encoded successfully!");
       } catch (e) {
-        outputEl.value = "";
-        showStatus("base64-status", "Error encoding: " + e.message, true);
+        showStatus("base64Status", "Error encoding: " + e.message, true);
       }
     });
+
     decodeBtn.addEventListener("click", () => {
       try {
         const binaryString = atob(inputEl.value);
         const utf8Bytes = Uint8Array.from(binaryString, (c) => c.charCodeAt(0));
         outputEl.value = new TextDecoder().decode(utf8Bytes);
-        showStatus("base64-status", "Decoded successfully!");
+        showStatus("base64Status", "Decoded successfully!");
       } catch (e) {
-        outputEl.value = "";
         showStatus(
-          "base64-status",
-          "Error decoding: Invalid Base64 string or UTF-8. " + e.message,
+          "base64Status",
+          "Error decoding: Invalid Base64 string.",
           true
         );
       }
@@ -1425,48 +1433,42 @@ document.addEventListener("DOMContentLoaded", function () {
     const decodeBtn = document.getElementById("url-decode-btn");
     const statusEl = document.getElementById("url-status");
 
-    if (!inputEl) return; // Tool not present
-    addCopyListener("url-copy-output-btn", "url-output");
-
     encodeBtn.addEventListener("click", () => {
       try {
         outputEl.value = encodeURIComponent(inputEl.value);
-        showStatus("url-status", "Encoded successfully!");
+        showStatus("url-status", "Encoded!");
       } catch (e) {
-        outputEl.value = "";
-        showStatus("url-status", "Error: " + e.message, true);
+        showStatus("url-status", "Error encoding.", true);
       }
     });
     decodeBtn.addEventListener("click", () => {
       try {
         outputEl.value = decodeURIComponent(inputEl.value);
-        showStatus("url-status", "Decoded successfully!");
+        showStatus("url-status", "Decoded!");
       } catch (e) {
-        outputEl.value = "";
-        showStatus(
-          "url-status",
-          "Error decoding: Malformed URI. " + e.message,
-          true
-        );
+        showStatus("url-status", "Error decoding: Malformed URI.", true);
       }
     });
   }
 
   function initMarkdownPreviewer() {
-    const markdownInput = document.getElementById("markdown-input");
-    const previewOutput = document.getElementById("markdown-preview");
+    const markdownInput = document.getElementById("markdownInput");
+    const previewOutput = document.getElementById("markdownPreviewOutput");
+    const defaultMarkdown = `# Welcome to Pocket Tools\n## Markdown Previewer\n\n**This is bold text**  \n*This is italic text*\n\n### Features:\n- Real-time preview\n- Supports GFM\n\n\`\`\`javascript\nfunction hello() {\n  console.log("Hello, world!");\n}\n\`\`\``;
 
-    if (!markdownInput) return; // Tool not present
+    marked.setOptions({
+      breaks: true,
+      gfm: true,
+      highlight: (code, lang) => {
+        const language = Prism.languages[lang] || Prism.languages.markup;
+        return Prism.highlight(code, language, lang);
+      },
+    });
 
-    if (typeof marked === "undefined") {
-      previewOutput.innerHTML =
-        "<p class='text-red-500'>Error: marked.js library not loaded.</p>";
-      return;
-    }
-    marked.setOptions({ breaks: true, gfm: true });
     function renderMarkdown() {
       previewOutput.innerHTML = marked.parse(markdownInput.value);
     }
+    markdownInput.value = defaultMarkdown;
     markdownInput.addEventListener("input", renderMarkdown);
     renderMarkdown();
   }
@@ -1474,93 +1476,71 @@ document.addEventListener("DOMContentLoaded", function () {
   function initTextCaseConverter() {
     const inputEl = document.getElementById("text-case-input");
     const outputEl = document.getElementById("text-case-output");
-    const buttons = document.querySelectorAll(".text-case-btn");
-
-    if (!inputEl) return; // Tool not present
-    addCopyListener("text-case-copy-output-btn", "text-case-output");
-
-    buttons.forEach((btn) => {
+    document.querySelectorAll(".text-case-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const text = inputEl.value;
         const caseType = btn.dataset.case;
-        let result = "";
         switch (caseType) {
           case "uppercase":
-            result = text.toUpperCase();
+            outputEl.value = text.toUpperCase();
             break;
           case "lowercase":
-            result = text.toLowerCase();
+            outputEl.value = text.toLowerCase();
             break;
           case "sentencecase":
-            result = text
+            outputEl.value = text
               .toLowerCase()
               .replace(/(^\s*\w|[.!?]\s*\w)/g, (c) => c.toUpperCase());
             break;
           case "titlecase":
-            result = text
+            outputEl.value = text
               .toLowerCase()
               .split(" ")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
               .join(" ");
             break;
           case "camelcase":
-            result = text
+            outputEl.value = text
               .toLowerCase()
-              .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase())
-              .replace(/^(.)/, (c) => c.toLowerCase());
+              .replace(/[^a-zA-Z0-9]+(.)/g, (m, chr) => chr.toUpperCase());
             break;
           case "pascalcase":
-            result = text
+            outputEl.value = text
               .toLowerCase()
-              .split(/[^a-zA-Z0-9]/)
-              .filter((w) => w)
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join("");
+              .replace(/(?:^|[^a-zA-Z0-9])(.)/g, (m, chr) => chr.toUpperCase());
             break;
           case "kebabcase":
-            result = text
-              .replace(/([a-z])([A-Z])/g, "$1-$2")
+            outputEl.value = text
+              .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2")
               .replace(/[\s_]+/g, "-")
-              .toLowerCase()
-              .replace(/[^a-z0-9-]/g, "")
-              .replace(/-+/g, "-");
+              .toLowerCase();
             break;
           case "snakecase":
-            result = text
-              .replace(/([a-z])([A-Z])/g, "$1_$2")
+            outputEl.value = text
+              .replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1_$2")
               .replace(/[\s-]+/g, "_")
-              .toLowerCase()
-              .replace(/[^a-z0-9_]/g, "")
-              .replace(/_+/g, "_");
+              .toLowerCase();
             break;
         }
-        outputEl.value = result;
       });
     });
   }
 
   function initWordCount() {
     const inputEl = document.getElementById("word-count-input");
-    const wordsSpan = document.getElementById("wc-words");
-    const charsSpacesSpan = document.getElementById("wc-chars-spaces");
-    const charsNoSpacesSpan = document.getElementById("wc-chars-nospaces");
-    const sentencesSpan = document.getElementById("wc-sentences");
-    const paragraphsSpan = document.getElementById("wc-paragraphs");
-
-    if (!inputEl) return; // Tool not present
-
     inputEl.addEventListener("input", () => {
       const text = inputEl.value;
-      wordsSpan.textContent = (text.match(/\b\S+\b/g) || []).length;
-      charsSpacesSpan.textContent = text.length;
-      charsNoSpacesSpan.textContent = text.replace(/\s/g, "").length;
-      sentencesSpan.textContent = (
+      document.getElementById("wc-words").textContent = (
+        text.match(/\S+/g) || []
+      ).length;
+      document.getElementById("wc-chars-spaces").textContent = text.length;
+      document.getElementById("wc-sentences").textContent = (
         text.match(
           /[^.!?\s][^.!?]*(?:[.!?](?!['"]?\s|$)[^.!?]*)*[.!?]?['"]?(?=\s|$)/g
         ) || []
       ).length;
-      paragraphsSpan.textContent = text
-        ? (text.split(/\n\s*\n/).filter((p) => p.trim() !== "") || []).length
+      document.getElementById("wc-paragraphs").textContent = text
+        ? text.split(/\n\s*\n/).filter((p) => p.trim()).length
         : 0;
     });
   }
@@ -1569,66 +1549,55 @@ document.addEventListener("DOMContentLoaded", function () {
     const paragraphsInput = document.getElementById("lorem-paragraphs");
     const generateBtn = document.getElementById("lorem-generate-btn");
     const outputEl = document.getElementById("lorem-output");
-
-    if (!paragraphsInput) return; // Tool not present
-    addCopyListener("lorem-copy-output-btn", "lorem-output");
-
     const loremBase =
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-
     generateBtn.addEventListener("click", () => {
       const numParagraphs = parseInt(paragraphsInput.value) || 1;
-      let result = "";
-      for (let i = 0; i < numParagraphs; i++) {
-        result += loremBase + (i < numParagraphs - 1 ? "\n\n" : "");
-      }
-      outputEl.value = result;
+      outputEl.value = Array(numParagraphs).fill(loremBase).join("\n\n");
     });
     generateBtn.click();
   }
 
   function initQrCodeGenerator() {
-    const textInput = document.getElementById("qr-text-input");
-    const generateBtn = document.getElementById("qr-generate-btn");
-    const canvasDiv = document.getElementById("qr-code-canvas");
-    const statusEl = document.getElementById("qr-status");
+    const textInput = document.getElementById("qrText");
+    const sizeSlider = document.getElementById("qrSize");
+    const sizeValue = document.getElementById("qrSizeValue");
+    const generateBtn = document.getElementById("generateQRBtn");
+    const canvasDiv = document.getElementById("qrcode");
+    const downloadLink = document.getElementById("downloadQRLink");
     let qrCodeInstance = null;
 
-    if (!textInput) return; // Tool not present
-
-    if (typeof QRCode === "undefined") {
-      showStatus("qr-status", "Error: qrcode.js library not loaded.", true);
-      generateBtn.disabled = true;
-      return;
-    }
+    sizeSlider.addEventListener(
+      "input",
+      () => (sizeValue.textContent = sizeSlider.value)
+    );
 
     generateBtn.addEventListener("click", () => {
       const text = textInput.value;
+      const size = parseInt(sizeSlider.value);
       if (!text) {
-        showStatus("qr-status", "Please enter text for the QR code.", true);
-        canvasDiv.innerHTML = "";
-        qrCodeInstance = null;
+        alert("Please enter text for the QR code.");
         return;
       }
       canvasDiv.innerHTML = "";
-      try {
-        qrCodeInstance = new QRCode(canvasDiv, {
-          text: text,
-          width: 128,
-          height: 128,
-          colorDark: document.documentElement.classList.contains("dark")
-            ? "#FFFFFF"
-            : "#000000",
-          colorLight: document.documentElement.classList.contains("dark")
-            ? "#1f2937"
-            : "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H,
-        });
-        showStatus("qr-status", "QR Code generated successfully.");
-      } catch (e) {
-        qrCodeInstance = null;
-        showStatus("qr-status", "Error generating QR Code: " + e.message, true);
-      }
+      qrCodeInstance = new QRCode(canvasDiv, {
+        text,
+        width: size,
+        height: size,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+      setTimeout(() => {
+        const canvas = canvasDiv.querySelector("canvas");
+        if (canvas) {
+          downloadLink.href = canvas.toDataURL("image/png");
+          downloadLink.download = "qrcode.png";
+          downloadLink.classList.remove("hidden");
+          downloadLink.classList.remove("bg-gray-500");
+          downloadLink.classList.add("bg-purple-600");
+        }
+      }, 100);
     });
   }
 
@@ -1636,52 +1605,48 @@ document.addEventListener("DOMContentLoaded", function () {
     const generateBtn = document.getElementById("uuid-generate-btn");
     const outputEl = document.getElementById("uuid-output");
     const copyBtn = document.getElementById("uuid-copy-btn");
-
-    if (!generateBtn) return; // Tool not present
-
-    generateBtn.addEventListener("click", () => {
-      outputEl.value = crypto.randomUUID();
-    });
-    copyBtn.addEventListener("click", () => {
-      genericCopy(outputEl.value, copyBtn);
-    });
+    generateBtn.addEventListener(
+      "click",
+      () => (outputEl.value = crypto.randomUUID())
+    );
+    copyBtn.addEventListener("click", () =>
+      genericCopy(outputEl.value, copyBtn)
+    );
   }
 
   function initPasswordGenerator() {
-    const lengthSlider = document.getElementById("pg-length");
-    const lengthValue = document.getElementById("pg-length-value");
-    const uppercaseCheck = document.getElementById("pg-uppercase");
-    const lowercaseCheck = document.getElementById("pg-lowercase");
-    const numbersCheck = document.getElementById("pg-numbers");
-    const symbolsCheck = document.getElementById("pg-symbols");
-    const generateBtn = document.getElementById("pg-generate-btn");
-    const outputEl = document.getElementById("pg-output");
-    const copyBtn = document.getElementById("pg-copy-btn");
-    const strengthEl = document.getElementById("pg-strength");
-
-    if (!lengthSlider) return; // Tool not present
-
+    const lengthSlider = document.getElementById("passwordLength");
+    const lengthValue = document.getElementById("lengthValue");
+    const outputEl = document.getElementById("generatedPassword");
+    const strengthEl = document.getElementById("strengthValue");
+    const generateBtn = document.getElementById("generatePasswordBtn");
+    const copyBtn = document.getElementById("copyPasswordBtn");
+    const checks = {
+      uppercase: document.getElementById("uppercase"),
+      lowercase: document.getElementById("lowercase"),
+      numbers: document.getElementById("numbers"),
+      symbols: document.getElementById("symbols"),
+    };
     const chars = {
       uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       lowercase: "abcdefghijklmnopqrstuvwxyz",
       numbers: "0123456789",
-      symbols: "!@#$%^&*()_+~`|}{[]:;?><,./-=",
+      symbols: "!@#$%^&*()_+-=[]{}|;:,.<>?",
     };
 
     lengthSlider.addEventListener(
       "input",
       () => (lengthValue.textContent = lengthSlider.value)
     );
+
     generateBtn.addEventListener("click", () => {
       const length = parseInt(lengthSlider.value);
       let charSet = "";
-      if (uppercaseCheck.checked) charSet += chars.uppercase;
-      if (lowercaseCheck.checked) charSet += chars.lowercase;
-      if (numbersCheck.checked) charSet += chars.numbers;
-      if (symbolsCheck.checked) charSet += chars.symbols;
-
-      if (charSet === "") {
-        outputEl.value = "Select at least one character type!";
+      Object.keys(checks).forEach((key) => {
+        if (checks[key].checked) charSet += chars[key];
+      });
+      if (!charSet) {
+        outputEl.value = "Select options!";
         strengthEl.textContent = "";
         return;
       }
@@ -1693,23 +1658,24 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       outputEl.value = password;
 
-      let strengthScore = 0;
-      if (length >= 8) strengthScore++;
-      if (length >= 12) strengthScore++;
-      if (length >= 16) strengthScore++;
-      if (uppercaseCheck.checked && length > 0) strengthScore++;
-      if (lowercaseCheck.checked && length > 0) strengthScore++;
-      if (numbersCheck.checked && length > 0) strengthScore++;
-      if (symbolsCheck.checked && length > 0) strengthScore++;
-
-      if (strengthScore <= 2) strengthEl.textContent = "Strength: Weak";
-      else if (strengthScore <= 4) strengthEl.textContent = "Strength: Medium";
-      else if (strengthScore <= 6) strengthEl.textContent = "Strength: Strong";
-      else strengthEl.textContent = "Strength: Very Strong";
+      let score = 0;
+      if (length >= 12) score++;
+      if (length >= 16) score++;
+      if (checks.uppercase.checked) score++;
+      if (checks.lowercase.checked) score++;
+      if (checks.numbers.checked) score++;
+      if (checks.symbols.checked) score++;
+      strengthEl.textContent = [
+        "Very Weak",
+        "Weak",
+        "Medium",
+        "Strong",
+        "Very Strong",
+      ][Math.min(score - 1, 4)];
     });
-    copyBtn.addEventListener("click", () => {
-      genericCopy(outputEl.value, copyBtn);
-    });
+    copyBtn.addEventListener("click", () =>
+      genericCopy(outputEl.value, copyBtn)
+    );
     generateBtn.click();
   }
 
@@ -1720,201 +1686,65 @@ document.addEventListener("DOMContentLoaded", function () {
     const toUnitSelect = document.getElementById("uc-to-unit");
     const convertBtn = document.getElementById("uc-convert-btn");
     const resultP = document.getElementById("uc-result");
-
-    if (!categorySelect) return; // Tool not present
-    addCopyListener("uc-copy-result-btn", "uc-result");
-
     const units = {
       length: {
-        cm: {
-          name: "Centimeters (cm)",
-          to_base: (v) => v / 100,
-          from_base: (v) => v * 100,
-        },
-        m: {
-          name: "Meters (m)",
-          to_base: (v) => v,
-          from_base: (v) => v,
-          base: true,
-        },
-        km: {
-          name: "Kilometers (km)",
-          to_base: (v) => v * 1000,
-          from_base: (v) => v / 1000,
-        },
-        in: {
-          name: "Inches (in)",
-          to_base: (v) => v * 0.0254,
-          from_base: (v) => v / 0.0254,
-        },
-        ft: {
-          name: "Feet (ft)",
-          to_base: (v) => v * 0.3048,
-          from_base: (v) => v / 0.3048,
-        },
-        yd: {
-          name: "Yards (yd)",
-          to_base: (v) => v * 0.9144,
-          from_base: (v) => v / 0.9144,
-        },
-        mi: {
-          name: "Miles (mi)",
-          to_base: (v) => v * 1609.34,
-          from_base: (v) => v / 1609.34,
-        },
+        m: { n: "Meters", b: 1 },
+        cm: { n: "Centimeters", t: (v) => v / 100, f: (v) => v * 100 },
+        km: { n: "Kilometers", t: (v) => v * 1000, f: (v) => v / 1000 },
+        in: { n: "Inches", t: (v) => v * 0.0254, f: (v) => v / 0.0254 },
+        ft: { n: "Feet", t: (v) => v * 0.3048, f: (v) => v / 0.3048 },
       },
       weight: {
-        g: {
-          name: "Grams (g)",
-          to_base: (v) => v / 1000,
-          from_base: (v) => v * 1000,
-        },
-        kg: {
-          name: "Kilograms (kg)",
-          to_base: (v) => v,
-          from_base: (v) => v,
-          base: true,
-        },
-        lb: {
-          name: "Pounds (lb)",
-          to_base: (v) => v * 0.453592,
-          from_base: (v) => v / 0.453592,
-        },
-        oz: {
-          name: "Ounces (oz)",
-          to_base: (v) => v * 0.0283495,
-          from_base: (v) => v / 0.0283495,
-        },
+        kg: { n: "Kilograms", b: 1 },
+        g: { n: "Grams", t: (v) => v / 1000, f: (v) => v * 1000 },
+        lb: { n: "Pounds", t: (v) => v * 0.453592, f: (v) => v / 0.453592 },
       },
       temperature: {
-        c: { name: "Celsius (°C)" },
-        f: { name: "Fahrenheit (°F)" },
-        k: { name: "Kelvin (K)" },
+        c: { n: "Celsius" },
+        f: { n: "Fahrenheit" },
+        k: { n: "Kelvin" },
       },
     };
 
-    function populateUnitSelectors() {
-      const category = categorySelect.value;
-      const currentUnits = units[category];
+    function populate() {
+      const cat = categorySelect.value;
       fromUnitSelect.innerHTML = "";
       toUnitSelect.innerHTML = "";
-      for (const unitKey in currentUnits) {
-        const optionText = currentUnits[unitKey].name;
-        fromUnitSelect.add(new Option(optionText, unitKey));
-        toUnitSelect.add(new Option(optionText, unitKey));
-      }
-      if (fromUnitSelect.options.length > 1) toUnitSelect.selectedIndex = 1;
+      Object.keys(units[cat]).forEach((key) => {
+        fromUnitSelect.add(new Option(units[cat][key].n, key));
+        toUnitSelect.add(new Option(units[cat][key].n, key));
+      });
+      if (toUnitSelect.options.length > 1) toUnitSelect.selectedIndex = 1;
     }
-    categorySelect.addEventListener("change", populateUnitSelectors);
+    categorySelect.addEventListener("change", populate);
     convertBtn.addEventListener("click", () => {
-      const category = categorySelect.value;
-      const value = parseFloat(valueInput.value);
-      const fromUnitKey = fromUnitSelect.value;
-      const toUnitKey = toUnitSelect.value;
-      if (isNaN(value)) {
-        resultP.textContent = "Please enter a valid number.";
+      const cat = categorySelect.value,
+        val = parseFloat(valueInput.value),
+        from = fromUnitSelect.value,
+        to = toUnitSelect.value;
+      if (isNaN(val)) {
+        resultP.textContent = "Invalid number.";
         return;
       }
-      let convertedValue;
-      if (category === "temperature") {
-        if (fromUnitKey === "c") {
-          if (toUnitKey === "f") convertedValue = (value * 9) / 5 + 32;
-          else if (toUnitKey === "k") convertedValue = value + 273.15;
-          else convertedValue = value;
-        } else if (fromUnitKey === "f") {
-          if (toUnitKey === "c") convertedValue = ((value - 32) * 5) / 9;
-          else if (toUnitKey === "k")
-            convertedValue = ((value - 32) * 5) / 9 + 273.15;
-          else convertedValue = value;
-        } else {
-          // from Kelvin
-          if (toUnitKey === "c") convertedValue = value - 273.15;
-          else if (toUnitKey === "f")
-            convertedValue = ((value - 273.15) * 9) / 5 + 32;
-          else convertedValue = value;
-        }
+      let result;
+      if (cat === "temperature") {
+        if (from === to) result = val;
+        else if (from === "c")
+          result = to === "f" ? (val * 9) / 5 + 32 : val + 273.15;
+        else if (from === "f")
+          result =
+            to === "c" ? ((val - 32) * 5) / 9 : ((val - 32) * 5) / 9 + 273.15;
+        else if (from === "k")
+          result = to === "c" ? val - 273.15 : ((val - 273.15) * 9) / 5 + 32;
       } else {
-        const valueInBase = units[category][fromUnitKey].to_base(value);
-        convertedValue = units[category][toUnitKey].from_base(valueInBase);
+        const baseVal = units[cat][from].b ? val : units[cat][from].t(val);
+        result = units[cat][to].b ? baseVal : units[cat][to].f(baseVal);
       }
-      const fromUnitName =
-        units[category][fromUnitKey].name.match(/\(([^)]+)\)/)?.[1] ||
-        fromUnitKey;
-      const toUnitName =
-        units[category][toUnitKey].name.match(/\(([^)]+)\)/)?.[1] || toUnitKey;
-      resultP.textContent = `${value} ${fromUnitName} = ${convertedValue.toFixed(
-        4
-      )} ${toUnitName}`;
+      resultP.textContent = `${val.toFixed(2)} ${
+        units[cat][from].n
+      } = ${result.toFixed(2)} ${units[cat][to].n}`;
     });
-    populateUnitSelectors();
-  }
-
-  function initColorPicker() {
-    const pickerInput = document.getElementById("color-picker-input");
-    const previewDiv = document.getElementById("color-picker-preview");
-    const hexOutput = document.getElementById("color-hex");
-    const rgbOutput = document.getElementById("color-rgb");
-    const hslOutput = document.getElementById("color-hsl");
-
-    if (!pickerInput) return; // Tool not present
-    addCopyListener("color-copy-hex", "color-hex");
-    addCopyListener("color-copy-rgb", "color-rgb");
-    addCopyListener("color-copy-hsl", "color-hsl");
-
-    function updateColors(hexColor) {
-      previewDiv.style.backgroundColor = hexColor;
-      hexOutput.value = hexColor.toUpperCase();
-      const rgb = hexToRgb(hexColor);
-      rgbOutput.value = rgb ? `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})` : "N/A";
-      const hsl = rgbToHsl(rgb?.r, rgb?.g, rgb?.b);
-      hslOutput.value = hsl ? `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)` : "N/A";
-    }
-    pickerInput.addEventListener("input", (e) => updateColors(e.target.value));
-    updateColors(pickerInput.value);
-    function hexToRgb(hex) {
-      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-      return result
-        ? {
-            r: parseInt(result[1], 16),
-            g: parseInt(result[2], 16),
-            b: parseInt(result[3], 16),
-          }
-        : null;
-    }
-    function rgbToHsl(r, g, b) {
-      if (r == undefined) return null;
-      r /= 255;
-      g /= 255;
-      b /= 255;
-      const max = Math.max(r, g, b),
-        min = Math.min(r, g, b);
-      let h,
-        s,
-        l = (max + min) / 2;
-      if (max === min) {
-        h = s = 0;
-      } else {
-        const d = max - min;
-        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-        switch (max) {
-          case r:
-            h = (g - b) / d + (g < b ? 6 : 0);
-            break;
-          case g:
-            h = (b - r) / d + 2;
-            break;
-          case b:
-            h = (r - g) / d + 4;
-            break;
-        }
-        h /= 6;
-      }
-      return {
-        h: Math.round(h * 360),
-        s: Math.round(s * 100),
-        l: Math.round(l * 100),
-      };
-    }
+    populate();
   }
 
   function initTimestampConverter() {
@@ -1927,238 +1757,115 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentBtn = document.getElementById("ts-current-time");
     const currentOutput = document.getElementById("ts-current-output");
 
-    if (!unixInput) return; // Tool not present
-    addCopyListener("ts-copy-human-output-btn", "ts-human-output");
-    addCopyListener("ts-copy-unix-output-btn", "ts-unix-output");
-    addCopyListener("ts-copy-current-output-btn", "ts-current-output");
-
     toHumanBtn.addEventListener("click", () => {
-      const tsVal = unixInput.value;
-      if (!tsVal.trim()) {
-        humanOutput.textContent = "Please enter a timestamp.";
-        return;
-      }
-      const ts = parseInt(tsVal);
+      const ts = parseInt(unixInput.value);
       if (isNaN(ts)) {
-        humanOutput.textContent = "Invalid timestamp format.";
+        humanOutput.textContent = "Invalid timestamp.";
         return;
       }
       const date = new Date(ts * (String(ts).length === 10 ? 1000 : 1));
-      humanOutput.textContent = `UTC: ${date.toUTCString()} \nLocal: ${date.toLocaleString()}`;
+      humanOutput.textContent = `UTC: ${date.toUTCString()}\nLocal: ${date.toLocaleString()}`;
     });
     toUnixBtn.addEventListener("click", () => {
-      if (!dateInput.value) {
-        unixOutput.textContent = "Please select a date and time";
-        return;
-      }
-      const date = new Date(dateInput.value);
-      unixOutput.textContent = Math.floor(date.getTime() / 1000);
+      if (!dateInput.value) return;
+      unixOutput.textContent = Math.floor(
+        new Date(dateInput.value).getTime() / 1000
+      );
     });
     currentBtn.addEventListener("click", () => {
-      const now = Math.floor(Date.now() / 1000);
-      currentOutput.textContent = now;
-      unixInput.value = now;
-      const nowDate = new Date();
-      const year = nowDate.getFullYear();
-      const month = (nowDate.getMonth() + 1).toString().padStart(2, "0");
-      const day = nowDate.getDate().toString().padStart(2, "0");
-      const hours = nowDate.getHours().toString().padStart(2, "0");
-      const minutes = nowDate.getMinutes().toString().padStart(2, "0");
-      dateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+      const now = new Date();
+      currentOutput.textContent = Math.floor(now.getTime() / 1000);
+      unixInput.value = Math.floor(now.getTime() / 1000);
+      const y = now.getFullYear(),
+        m = (now.getMonth() + 1).toString().padStart(2, "0"),
+        d = now.getDate().toString().padStart(2, "0");
+      const h = now.getHours().toString().padStart(2, "0"),
+        min = now.getMinutes().toString().padStart(2, "0");
+      dateInput.value = `${y}-${m}-${d}T${h}:${min}`;
       toHumanBtn.click();
     });
     currentBtn.click();
   }
 
   function initTimezoneConverter() {
-    const dateTimeLocalInput = document.getElementById("tz-datetime-local");
-    const targetTimezoneSelect = document.getElementById("tz-target-timezone");
+    const dtLocalInput = document.getElementById("tz-datetime-local");
+    const targetTzSelect = document.getElementById("tz-target-timezone");
     const convertBtn = document.getElementById("tz-convert-btn");
     const outputP = document.getElementById("tz-output");
 
-    if (!dateTimeLocalInput) return; // Tool not present
-    addCopyListener("tz-copy-output-btn", "tz-output");
-
-    let commonTimezones = [
-      "UTC",
-      "GMT",
-      "America/New_York",
-      "America/Chicago",
-      "America/Denver",
-      "America/Los_Angeles",
-      "Europe/London",
-      "Europe/Paris",
-      "Europe/Berlin",
-      "Asia/Tokyo",
-      "Asia/Dubai",
-      "Asia/Shanghai",
-      "Asia/Kolkata",
-      "Australia/Sydney",
-      "Australia/Perth",
-      "Pacific/Auckland",
-    ];
-    if (typeof Intl !== "undefined" && Intl.supportedValuesOf) {
-      try {
-        const systemTimezones = Intl.supportedValuesOf("timeZone");
-        systemTimezones.forEach((tz) => {
-          if (!commonTimezones.includes(tz)) commonTimezones.push(tz);
-        });
-        commonTimezones.sort();
-      } catch (e) {
-        console.warn("Could not get system timezones:", e);
-      }
-    }
-    commonTimezones.forEach((tz) => {
-      targetTimezoneSelect.add(new Option(tz, tz));
-    });
     try {
-      const userTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      if (commonTimezones.includes(userTz)) targetTimezoneSelect.value = userTz;
-      else {
-        const option = new Option(userTz, userTz, true, true);
-        targetTimezoneSelect.add(option);
-        targetTimezoneSelect.value = userTz;
-      }
+      const timezones = Intl.supportedValuesOf("timeZone");
+      timezones.forEach((tz) => targetTzSelect.add(new Option(tz, tz)));
+      targetTzSelect.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
     } catch (e) {
-      targetTimezoneSelect.value = "UTC";
+      // Fallback for older browsers
+      ["UTC", "America/New_York", "Europe/London", "Asia/Tokyo"].forEach((tz) =>
+        targetTzSelect.add(new Option(tz, tz))
+      );
     }
 
+    convertBtn.addEventListener("click", () => {
+      const localDateTime = dtLocalInput.value;
+      if (!localDateTime) {
+        outputP.textContent = "Please select a date.";
+        return;
+      }
+      const date = new Date(localDateTime);
+      const options = {
+        timeZone: targetTzSelect.value,
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        timeZoneName: "short",
+      };
+      outputP.textContent = new Intl.DateTimeFormat("en-US", options).format(
+        date
+      );
+    });
+
+    // Set initial value and convert
     const now = new Date();
-    dateTimeLocalInput.value = `${now.getFullYear()}-${(now.getMonth() + 1)
+    dtLocalInput.value = `${now.getFullYear()}-${(now.getMonth() + 1)
       .toString()
       .padStart(2, "0")}-${now.getDate().toString().padStart(2, "0")}T${now
       .getHours()
       .toString()
       .padStart(2, "0")}:${now.getMinutes().toString().padStart(2, "0")}`;
-
-    convertBtn.addEventListener("click", () => {
-      const localDateTimeValue = dateTimeLocalInput.value;
-      const targetTimezone = targetTimezoneSelect.value;
-      if (!localDateTimeValue) {
-        outputP.textContent = "Please select a local date and time.";
-        return;
-      }
-      try {
-        const localDate = new Date(localDateTimeValue);
-        const options = {
-          timeZone: targetTimezone,
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: true,
-          timeZoneName: "short",
-        };
-        const formatter = new Intl.DateTimeFormat([], options);
-        const convertedTime = formatter.format(localDate);
-        outputP.textContent = `${convertedTime}`;
-      } catch (e) {
-        outputP.textContent = "Error converting time: " + e.message;
-      }
-    });
     convertBtn.click();
-  }
-
-  function escapeHtml(unsafe) {
-    return unsafe
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
   }
 
   function initRegexTester() {
     const patternInput = document.getElementById("regex-pattern");
     const flagsInput = document.getElementById("regex-flags");
     const testStringInput = document.getElementById("regex-test-string");
-    const testBtn = document.getElementById("regex-test-btn");
     const resultDiv = document.getElementById("regex-result");
 
-    if (!patternInput) return; // Tool not present
-
-    function highlightMatches(text, matches) {
-      let lastIndex = 0;
-      let highlightedText = "";
-      matches.forEach((matchInfo) => {
-        highlightedText += escapeHtml(
-          text.substring(lastIndex, matchInfo.index)
-        );
-        highlightedText += `<mark class="bg-yellow-300 dark:bg-yellow-600 px-0.5 rounded">${escapeHtml(
-          text.substring(
-            matchInfo.index,
-            matchInfo.index + matchInfo.value.length
-          )
-        )}</mark>`;
-        lastIndex = matchInfo.index + matchInfo.value.length;
-      });
-      highlightedText += escapeHtml(text.substring(lastIndex));
-      return highlightedText;
-    }
-
     function testRegex() {
-      const pattern = patternInput.value;
-      const flags = flagsInput.value;
-      const testString = testStringInput.value;
-      resultDiv.innerHTML = "";
+      const pattern = patternInput.value,
+        flags = flagsInput.value,
+        testString = testStringInput.value;
       if (!pattern) {
         resultDiv.innerHTML =
-          '<p class="text-red-500 dark:text-red-400">Please enter a RegEx pattern.</p>';
+          '<p class="text-gray-400">Enter a pattern to start.</p>';
         return;
       }
       try {
         const regex = new RegExp(pattern, flags);
-        const allMatchesInfo = [];
-        let match;
-        if (regex.global) {
-          while ((match = regex.exec(testString)) !== null) {
-            allMatchesInfo.push({
-              value: match[0],
-              index: match.index,
-              groups: match.groups ? { ...match.groups } : null,
-            });
-          }
-        } else {
-          match = regex.exec(testString);
-          if (match) {
-            allMatchesInfo.push({
-              value: match[0],
-              index: match.index,
-              groups: match.groups ? { ...match.groups } : null,
-            });
-          }
-        }
-        if (allMatchesInfo.length > 0) {
-          resultDiv.innerHTML = `<p class="mb-2"><strong>Matches found: ${allMatchesInfo.length}</strong></p>`;
-          resultDiv.innerHTML += `<div class="mb-2 p-2 border rounded bg-gray-100 dark:bg-gray-700 whitespace-pre-wrap font-mono text-sm">${highlightMatches(
-            testString,
-            allMatchesInfo
-          )}</div>`;
-          allMatchesInfo.forEach((m, i) => {
-            let matchDetail = `<p class="text-xs">Match ${
-              i + 1
-            }: <code class="bg-gray-200 dark:bg-gray-600 p-0.5 rounded">${escapeHtml(
-              m.value
-            )}</code> at index ${m.index}.</p>`;
-            if (m.groups && Object.keys(m.groups).length > 0) {
-              matchDetail += `<p class="text-xs ml-2">Groups: ${escapeHtml(
-                JSON.stringify(m.groups)
-              )}</p>`;
-            }
-            resultDiv.innerHTML += matchDetail;
-          });
-        } else {
-          resultDiv.innerHTML = "<p>No matches found.</p>";
-        }
+        const highlighted = testString.replace(
+          regex,
+          (match) =>
+            `<mark class="bg-yellow-400 text-black px-1 rounded">${match}</mark>`
+        );
+        const matches = testString.match(regex);
+        resultDiv.innerHTML = `<p class="mb-2"><strong>Matches: ${
+          matches ? matches.length : 0
+        }</strong></p><div class="whitespace-pre-wrap">${highlighted}</div>`;
       } catch (e) {
-        resultDiv.innerHTML = `<p class="text-red-500 dark:text-red-400">Invalid RegEx: ${escapeHtml(
-          e.message
-        )}</p>`;
+        resultDiv.innerHTML = `<p class="text-red-400">Invalid RegEx: ${e.message}</p>`;
       }
     }
-    testBtn.addEventListener("click", testRegex);
     [patternInput, flagsInput, testStringInput].forEach((el) =>
       el.addEventListener("input", testRegex)
     );
@@ -2175,118 +1882,59 @@ document.addEventListener("DOMContentLoaded", function () {
     const dnsLookupBtn = document.getElementById("nt-dns-lookup-btn");
     const dnsResultEl = document.getElementById("nt-dns-result");
 
-    if (!clientIpEl) return; // Tool not present
-
     async function fetchClientIpInfo() {
       try {
-        const response = await fetch("https://ipapi.co/json/");
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
+        const data = await (await fetch("https://ipapi.co/json/")).json();
         clientIpEl.value = data.ip || "N/A";
-        ipLocationEl.value = `${data.city || ""}, ${data.region || ""}, ${
-          data.country_name || ""
-        } (ISP: ${data.org || "N/A"})`;
-      } catch (error) {
-        console.error("Error fetching client IP info:", error);
+        ipLocationEl.value = `${data.city || ""}, ${data.country_name || ""}`;
+      } catch (e) {
         clientIpEl.value = "Error";
-        ipLocationEl.value = "Could not fetch location data.";
+        ipLocationEl.value = "Could not fetch data.";
       }
     }
     fetchClientIpInfo();
 
     ipLookupBtn.addEventListener("click", async () => {
       const query = ipLookupInput.value.trim();
-      if (!query) {
-        ipLookupResultEl.innerHTML =
-          '<p class="text-red-500 dark:text-red-400">Please enter an IP address or domain.</p>';
-        return;
-      }
-      ipLookupResultEl.innerHTML = "<p>Looking up...</p>";
+      if (!query) return;
+      ipLookupResultEl.innerHTML = "Looking up...";
       try {
-        const response = await fetch(
-          `https://ipapi.co/${encodeURIComponent(query)}/json/`
-        );
-        if (!response.ok) {
-          const errorData = await response
-            .json()
-            .catch(() => ({ error: true, reason: "Unknown error" }));
-          throw new Error(
-            errorData.reason || `HTTP error! Status: ${response.status}`
-          );
-        }
-        const data = await response.json();
-        if (data.error) {
-          ipLookupResultEl.innerHTML = `<p class="text-red-500 dark:text-red-400">${data.reason}</p>`;
-        } else {
-          let html = `<strong>IP:</strong> ${data.ip}<br>`;
-          html += `<strong>Hostname:</strong> ${data.hostname || "N/A"}<br>`;
-          html += `<strong>City:</strong> ${data.city || "N/A"}<br>`;
-          html += `<strong>Region:</strong> ${data.region || "N/A"}<br>`;
-          html += `<strong>Country:</strong> ${data.country_name || "N/A"} (${
-            data.country_code || ""
-          })<br>`;
-          html += `<strong>Continent:</strong> ${
-            data.continent_code || "N/A"
-          }<br>`;
-          html += `<strong>Latitude:</strong> ${data.latitude || "N/A"}<br>`;
-          html += `<strong>Longitude:</strong> ${data.longitude || "N/A"}<br>`;
-          html += `<strong>Timezone:</strong> ${data.timezone || "N/A"}<br>`;
-          html += `<strong>UTC Offset:</strong> ${
-            data.utc_offset || "N/A"
-          }<br>`;
-          html += `<strong>ASN:</strong> ${data.asn || "N/A"}<br>`;
-          html += `<strong>Organization:</strong> ${data.org || "N/A"}`;
-          ipLookupResultEl.innerHTML = html;
-        }
-      } catch (error) {
-        ipLookupResultEl.innerHTML = `<p class="text-red-500 dark:text-red-400">Error: ${error.message}</p>`;
+        const data = await (
+          await fetch(`https://ipapi.co/${encodeURIComponent(query)}/json/`)
+        ).json();
+        if (data.error) throw new Error(data.reason);
+        ipLookupResultEl.innerHTML = Object.entries(data)
+          .map(([k, v]) => `<strong>${k}:</strong> ${v}`)
+          .join("<br>");
+      } catch (e) {
+        ipLookupResultEl.innerHTML = `<p class="text-red-400">Error: ${e.message}</p>`;
       }
     });
 
     dnsLookupBtn.addEventListener("click", async () => {
-      const domain = dnsInput.value.trim();
-      const recordType = dnsRecordTypeSelect.value;
-      if (!domain) {
-        dnsResultEl.innerHTML =
-          '<p class="text-red-500 dark:text-red-400">Please enter a domain name.</p>';
-        return;
-      }
-      dnsResultEl.innerHTML = "<p>Querying DNS...</p>";
+      const domain = dnsInput.value.trim(),
+        recordType = dnsRecordTypeSelect.value;
+      if (!domain) return;
+      dnsResultEl.innerHTML = "Querying...";
       try {
-        const response = await fetch(
+        const res = await fetch(
           `https://cloudflare-dns.com/dns-query?name=${encodeURIComponent(
             domain
           )}&type=${recordType}`,
-          {
-            headers: { accept: "application/dns-json" },
-          }
+          { headers: { accept: "application/dns-json" } }
         );
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-
-        if (data.Status !== 0) {
-          // 0 is NOERROR
-          dnsResultEl.innerHTML = `<p class="text-red-500 dark:text-red-400">DNS Query Failed (Status: ${data.Status})</p>`;
-          return;
-        }
-
-        if (data.Answer && data.Answer.length > 0) {
-          let html = `<strong>${recordType} Records for ${escapeHtml(
-            domain
-          )}:</strong><br>`;
-          data.Answer.forEach((ans) => {
-            html += `• ${escapeHtml(ans.data)} (TTL: ${ans.TTL})<br>`;
-          });
-          dnsResultEl.innerHTML = html;
+        const data = await res.json();
+        if (data.Status !== 0)
+          throw new Error(`DNS Query Failed (Status: ${data.Status})`);
+        if (data.Answer) {
+          dnsResultEl.innerHTML = data.Answer.map(
+            (ans) => `• ${ans.data} (TTL: ${ans.TTL})`
+          ).join("<br>");
         } else {
-          dnsResultEl.innerHTML = `<p>No ${recordType} records found for ${escapeHtml(
-            domain
-          )}.</p>`;
+          dnsResultEl.textContent = "No records found.";
         }
-      } catch (error) {
-        dnsResultEl.innerHTML = `<p class="text-red-500 dark:text-red-400">DNS Lookup Error: ${error.message}</p>`;
+      } catch (e) {
+        dnsResultEl.innerHTML = `<p class="text-red-400">Error: ${e.message}</p>`;
       }
     });
   }
