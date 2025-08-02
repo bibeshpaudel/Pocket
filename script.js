@@ -565,7 +565,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let originalFile = null;
 
     uploadArea.addEventListener("click", () => imageUpload.click());
-    selectImgBtn.addEventListener("click", () => imageUpload.click());
+    //selectImgBtn.addEventListener("click", () => imageUpload.click());
     qualitySlider.addEventListener(
       "input",
       () => (qualityValue.textContent = qualitySlider.value)
@@ -630,7 +630,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let originalImageFile = null;
 
     uploadArea.addEventListener("click", () => imageUpload.click());
-    selectImgBtn.addEventListener("click", () => imageUpload.click());
+    //selectImgBtn.addEventListener("click", () => imageUpload.click());
 
     imageUpload.addEventListener("change", (e) => {
       const file = e.target.files[0];
