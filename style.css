@@ -270,13 +270,13 @@ pre[class*="language-"] {
 }
 
 .diff-output-pane ins {
-  background-color: rgb(0, 254, 100);
+  background-color: rgb(45, 119, 74);
   text-decoration: none;
   border-radius: 3px;
 }
 
 .diff-output-pane del {
-  background-color: rgb(255, 2, 23);
+  background-color: #91323a;
   text-decoration: none;
   border-radius: 3px;
 }
@@ -314,4 +314,5 @@ pre[class*="language-"] {
 .pin-modal-item:last-child {
   border-bottom: none;
 }
+
 
