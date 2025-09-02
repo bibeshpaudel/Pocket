@@ -395,6 +395,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "base64Converter",
         "textCompare",
         "hashGenerator",
+        "regexTester",
+        "uuidGenerator",
+        "aesEncrypt",
       ];
 
       if (savedPins) {

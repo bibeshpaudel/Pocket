@@ -15,6 +15,19 @@ body {
   color: #e2e8f0;
 }
 
+textarea,
+input,
+select {
+  background-color: #1f2937;
+  color: white;
+  border: 1px solid #4b5563;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-family: monospace;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out, background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
 .tool-card {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.05);
